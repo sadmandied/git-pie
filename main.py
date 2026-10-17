@@ -10,11 +10,14 @@ import webbrowser
 import os
 import sys
 
+# Ensure UTF-8 output on Windows consoles
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
 PORT = 8080
 
 class CustomHTTPHandler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
-        # Enable CORS and caching headers for smooth WebGL asset handling
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
         super().end_headers()
@@ -40,10 +43,11 @@ def run():
 
     url = f"http://localhost:{port}"
     print("=" * 64)
-    print("  🏙️  GitCity 3D — Cyberpunk Repository Metropolis Visualizer")
+    print("  GitCity 3D - Cyberpunk Repository Metropolis Visualizer")
     print("=" * 64)
     print(f"[*] Local Server running at: {url}")
-    print("[*] Press Ctrl+C to terminate.")
+    print("[*] Opening default web browser...")
+    print("[*] Press Ctrl+C to stop.")
     print("=" * 64)
 
     webbrowser.open(url)
