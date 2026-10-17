@@ -1,10 +1,11 @@
 /**
- * GitCity 3D — Main Application Orchestrator
+ * GitCity — Main Application Orchestrator
+ * Studio lighting, hover telemetry, camera navigation, and timeline playback.
  */
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { gitHubService, LANGUAGE_PALETTE } from './github_api.js';
+import { gitHubService } from './github_api.js';
 import { CityBuilder } from './city_builder.js';
 import { cityAudio } from './audio.js';
 
@@ -17,115 +18,118 @@ class App {
     this.controls = null;
     this.cityBuilder = null;
 
-    // Raycasting & Interaction
+    // Interaction & Raycasting
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
+    this.hoveredBuilding = null;
     this.selectedBuilding = null;
     this.highlightBox = null;
 
-    // Camera target for smooth gliding
+    // Tooltip Element
+    this.tooltip = document.getElementById('hover-tooltip');
+
+    // Smooth Camera Targets
     this.targetCameraPos = null;
     this.targetLookAt = null;
 
-    // Cinematic Drone Tour Mode
+    // Cinematic Tour
     this.isCinematic = false;
     this.cinematicAngle = 0;
 
-    // Timeline / Time Machine
+    // Timeline
     this.currentRepoData = null;
     this.isPlayingTimeline = false;
     this.timelineProgress = 1.0;
     this.timelineSpeed = 1.0;
-    this.timelineAnimId = null;
 
     this.clock = new THREE.Clock();
   }
 
   async init() {
-    this.setupThreeScene();
-    this.setupLighting();
-    this.setupSelectionHighlight();
+    this.setupScene();
+    this.setupStudioLighting();
+    this.setupSelectionIndicator();
     this.setupEventListeners();
 
     this.cityBuilder = new CityBuilder(this.scene);
 
-    // Initial load with showcase repository
     const defaultRepo = 'sadmandied/CoworkingSpaceBookingSystem';
     await this.loadRepository(defaultRepo);
 
-    // Start render loop
     this.animate();
   }
 
-  setupThreeScene() {
-    // 1. Scene with atmospheric cyberpunk fog
+  setupScene() {
+    // 1. Scene with subtle studio depth fog
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x06070a);
-    this.scene.fog = new THREE.FogExp2(0x06070a, 0.0022);
+    this.scene.background = new THREE.Color(0x090a0f);
+    this.scene.fog = new THREE.FogExp2(0x090a0f, 0.0025);
 
     // 2. Camera
     this.camera = new THREE.PerspectiveCamera(
-      50,
+      45,
       window.innerWidth / window.innerHeight,
       1,
-      2500
+      2000
     );
-    this.camera.position.set(160, 140, 210);
+    this.camera.position.set(150, 130, 190);
 
-    // 3. Renderer
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    // 3. Renderer with high-end tone mapping & soft shadows
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.15;
+    this.renderer.toneMappingExposure = 1.1;
     this.container.appendChild(this.renderer.domElement);
 
-    // 4. Orbit Controls
+    // 4. Orbit Controls (Weighted smooth damping)
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
-    this.controls.dampingFactor = 0.05;
-    this.controls.maxPolarAngle = Math.PI / 2 - 0.04; // Don't go below horizon floor
+    this.controls.dampingFactor = 0.06;
+    this.controls.maxPolarAngle = Math.PI / 2 - 0.05;
     this.controls.minDistance = 20;
-    this.controls.maxDistance = 800;
-    this.controls.target.set(0, 20, 0);
+    this.controls.maxDistance = 650;
+    this.controls.target.set(0, 15, 0);
   }
 
-  setupLighting() {
-    // Ambient cyberpunk glow
-    const ambient = new THREE.AmbientLight(0x18243b, 1.2);
-    this.scene.add(ambient);
+  setupStudioLighting() {
+    // Soft architectural ambient fill
+    const hemiLight = new THREE.HemisphereLight(0x2d3748, 0x090a0f, 0.9);
+    this.scene.add(hemiLight);
 
-    // Directional Key Light with shadows
-    const dirLight = new THREE.DirectionalLight(0x00f3ff, 1.4);
-    dirLight.position.set(180, 250, 150);
-    dirLight.castShadow = true;
-    dirLight.shadow.mapSize.width = 2048;
-    dirLight.shadow.mapSize.height = 2048;
-    dirLight.shadow.camera.near = 10;
-    dirLight.shadow.camera.far = 800;
-    const d = 250;
-    dirLight.shadow.camera.left = -d;
-    dirLight.shadow.camera.right = d;
-    dirLight.shadow.camera.top = d;
-    dirLight.shadow.camera.bottom = -d;
-    this.scene.add(dirLight);
+    // Key architectural sunlight
+    const sunLight = new THREE.DirectionalLight(0xfff6ea, 1.4);
+    sunLight.position.set(160, 220, 140);
+    sunLight.castShadow = true;
+    sunLight.shadow.mapSize.width = 2048;
+    sunLight.shadow.mapSize.height = 2048;
+    sunLight.shadow.camera.near = 20;
+    sunLight.shadow.camera.far = 700;
+    const d = 220;
+    sunLight.shadow.camera.left = -d;
+    sunLight.shadow.camera.right = d;
+    sunLight.shadow.camera.top = d;
+    sunLight.shadow.camera.bottom = -d;
+    sunLight.shadow.bias = -0.0003;
+    this.scene.add(sunLight);
 
-    // Secondary Neon Pink rim light
-    const pinkRim = new THREE.DirectionalLight(0xff007f, 1.0);
-    pinkRim.position.set(-180, 160, -140);
-    this.scene.add(pinkRim);
+    // Cool blue-gray rim fill light
+    const rimLight = new THREE.DirectionalLight(0x7dd3fc, 0.4);
+    rimLight.position.set(-160, 120, -140);
+    this.scene.add(rimLight);
   }
 
-  setupSelectionHighlight() {
-    const geo = new THREE.BoxGeometry(7.2, 1, 7.2);
+  setupSelectionIndicator() {
+    // Subtle crisp bounding wireframe for active selection
+    const geo = new THREE.BoxGeometry(6.6, 1, 6.6);
     const edges = new THREE.EdgesGeometry(geo);
     const mat = new THREE.LineBasicMaterial({
-      color: 0x00f3ff,
-      linewidth: 3,
+      color: 0x38bdf8,
+      linewidth: 2,
       transparent: true,
-      opacity: 0.95
+      opacity: 0.9
     });
     this.highlightBox = new THREE.LineSegments(edges, mat);
     this.highlightBox.visible = false;
@@ -133,7 +137,7 @@ class App {
   }
 
   async loadRepository(repoSlug) {
-    this.showLoading(true, `Connecting to GitHub API for ${repoSlug}...`);
+    this.showLoading(true, `Querying tree for ${repoSlug}...`);
     this.closeInspector();
 
     try {
@@ -146,20 +150,17 @@ class App {
       this.setProgress(95);
 
       this.updateHudStats(data);
-      this.updateLegend(data);
       this.initTimeline(data);
-
-      cityAudio.playConstructPulse();
 
       setTimeout(() => {
         this.setProgress(100);
         this.showLoading(false);
         this.resetCameraOverview();
-      }, 350);
+      }, 250);
 
     } catch (err) {
-      console.error('Error loading repository:', err);
-      alert(`Could not build city: ${err.message}. If you have reached GitHub's 60 req/hr rate limit, click the Settings icon to add a token or select a preset.`);
+      console.error('Failed to load repo:', err);
+      alert(`Could not load repository: ${err.message}. If you hit rate limits, enter a GitHub token via API Settings or select a preset.`);
       this.showLoading(false);
     }
   }
@@ -167,29 +168,7 @@ class App {
   updateHudStats(data) {
     document.getElementById('stat-skyscrapers').textContent = data.totalFiles.toLocaleString();
     document.getElementById('stat-districts').textContent = data.districts.length.toLocaleString();
-    document.getElementById('stat-loc').textContent = data.totalSizeKB.toLocaleString();
     document.getElementById('stat-dominant').textContent = data.dominantLanguage;
-    document.getElementById('stat-current-repo').textContent = data.repoSlug;
-  }
-
-  updateLegend(data) {
-    const legendEl = document.getElementById('legend-items');
-    legendEl.innerHTML = '';
-
-    const sortedLangs = Object.entries(data.languageDistribution)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 8); // Top 8 languages
-
-    for (const [langName, count] of sortedLangs) {
-      const palette = Object.values(LANGUAGE_PALETTE).find(p => p.name === langName) || { color: '#64748b' };
-      const item = document.createElement('div');
-      item.className = 'legend-pill';
-      item.innerHTML = `
-        <span class="legend-color-dot" style="background-color: ${palette.color}; color: ${palette.color};"></span>
-        <span>${langName} (${count})</span>
-      `;
-      legendEl.appendChild(item);
-    }
   }
 
   initTimeline(data) {
@@ -206,13 +185,69 @@ class App {
     }
   }
 
-  // Handle building click
-  onPointerDown(event) {
-    // Only left click
-    if (event.button !== 0) return;
-
+  onPointerMove(event) {
     this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    // Position hover tooltip
+    this.tooltip.style.left = `${event.clientX}px`;
+    this.tooltip.style.top = `${event.clientY}px`;
+
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+    const intersects = this.raycaster.intersectObjects(this.cityBuilder.buildings);
+
+    if (intersects.length > 0) {
+      const hit = intersects[0].object;
+      if (this.hoveredBuilding !== hit) {
+        this.clearHover();
+        this.hoveredBuilding = hit;
+        this.applyHover(hit);
+      }
+      this.showTooltip(hit.userData);
+      document.body.style.cursor = 'pointer';
+    } else {
+      if (this.hoveredBuilding) {
+        this.clearHover();
+        this.hoveredBuilding = null;
+      }
+      this.hideTooltip();
+      document.body.style.cursor = 'default';
+    }
+  }
+
+  applyHover(mesh) {
+    // Elevate slightly and brighten top crown emissive
+    mesh.position.y = 2.4;
+    const crown = mesh.material[2];
+    if (crown && crown.emissiveIntensity !== undefined) {
+      crown.emissiveIntensity = 0.5;
+    }
+  }
+
+  clearHover() {
+    if (this.hoveredBuilding) {
+      this.hoveredBuilding.position.y = 1.8;
+      const crown = this.hoveredBuilding.material[2];
+      if (crown && crown.emissiveIntensity !== undefined) {
+        crown.emissiveIntensity = 0.18;
+      }
+    }
+  }
+
+  showTooltip(d) {
+    document.getElementById('tooltip-filename').textContent = d.filename;
+    document.getElementById('tooltip-lang').textContent = d.language.name;
+    document.getElementById('tooltip-lang').style.color = d.language.color;
+    document.getElementById('tooltip-loc').textContent = `~${d.loc} LOC`;
+    this.tooltip.classList.remove('hidden');
+  }
+
+  hideTooltip() {
+    this.tooltip.classList.add('hidden');
+  }
+
+  onPointerDown(event) {
+    if (event.button !== 0) return;
 
     this.raycaster.setFromCamera(this.mouse, this.camera);
     const intersects = this.raycaster.intersectObjects(this.cityBuilder.buildings);
@@ -226,35 +261,31 @@ class App {
   selectBuilding(mesh) {
     this.selectedBuilding = mesh;
     const d = mesh.userData;
-
-    // Highlight Box
     const h = d.targetHeight;
+
+    // Highlight wireframe
     this.highlightBox.scale.set(1, h, 1);
-    this.highlightBox.position.set(mesh.position.x, mesh.position.y + h / 2, mesh.position.z);
+    this.highlightBox.position.set(mesh.position.x, 1.8 + h / 2, mesh.position.z);
     this.highlightBox.visible = true;
 
-    // Audio chirp
-    cityAudio.playBuildingSelect();
+    cityAudio.playSelect();
 
-    // Populate Inspector UI
-    const ext = d.filename.split('.').pop().toUpperCase();
-    document.getElementById('inspect-icon').textContent = ext.substring(0, 3) || 'DOC';
+    // Populate clean inspector
     document.getElementById('inspect-filename').textContent = d.filename;
     document.getElementById('inspect-path').textContent = d.path;
+    document.getElementById('inspect-indicator').style.backgroundColor = d.language.color;
     document.getElementById('inspect-lang').textContent = d.language.name;
-    document.getElementById('inspect-lang').style.color = d.language.color;
     document.getElementById('inspect-size').textContent = `${(d.size / 1024).toFixed(1)} KB`;
-    document.getElementById('inspect-loc').textContent = `~${d.loc.toLocaleString()} LOC`;
-    document.getElementById('inspect-height').textContent = `${Math.round(h)}m`;
+    document.getElementById('inspect-loc').textContent = d.loc.toLocaleString();
     document.getElementById('inspect-district').textContent = d.district;
     document.getElementById('inspect-github-link').href = d.url;
 
     document.getElementById('inspector-drawer').classList.remove('hidden');
 
-    // Smooth camera glide to inspect the skyscraper
-    const camOffset = new THREE.Vector3(25, h * 0.7 + 15, 30);
+    // Smooth camera framing glide
+    const camOffset = new THREE.Vector3(26, h * 0.6 + 18, 30);
     this.targetCameraPos = mesh.position.clone().add(camOffset);
-    this.targetLookAt = new THREE.Vector3(mesh.position.x, h * 0.5, mesh.position.z);
+    this.targetLookAt = new THREE.Vector3(mesh.position.x, h * 0.45, mesh.position.z);
     this.isCinematic = false;
     document.getElementById('btn-cinematic').classList.remove('active');
   }
@@ -267,7 +298,7 @@ class App {
 
   resetCameraOverview() {
     this.closeInspector();
-    this.targetCameraPos = new THREE.Vector3(160, 150, 220);
+    this.targetCameraPos = new THREE.Vector3(150, 130, 190);
     this.targetLookAt = new THREE.Vector3(0, 15, 0);
     this.isCinematic = false;
     document.getElementById('btn-cinematic').classList.remove('active');
@@ -284,12 +315,11 @@ class App {
     }
   }
 
-  // Commit Time-Machine Playback
   toggleTimelinePlayback() {
     this.isPlayingTimeline = !this.isPlayingTimeline;
     const icon = document.getElementById('icon-play');
     if (this.isPlayingTimeline) {
-      icon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+      icon.innerHTML = '<rect x="6" y="4" width="3" height="16"></rect><rect x="15" y="4" width="3" height="16"></rect>';
       if (this.timelineProgress >= 1.0) {
         this.timelineProgress = 0.05;
       }
@@ -305,14 +335,18 @@ class App {
       this.renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
+    window.addEventListener('pointermove', (e) => this.onPointerMove(e));
     this.container.addEventListener('pointerdown', (e) => this.onPointerDown(e));
 
-    // Search & Build
+    // Search input
     const input = document.getElementById('repo-input');
     const btnBuild = document.getElementById('btn-build');
     const doBuild = () => {
       const val = input.value.trim();
-      if (val) this.loadRepository(val);
+      if (val) {
+        document.querySelectorAll('.preset-chip').forEach(c => c.classList.remove('active'));
+        this.loadRepository(val);
+      }
     };
 
     btnBuild.addEventListener('click', doBuild);
@@ -320,26 +354,18 @@ class App {
       if (e.key === 'Enter') doBuild();
     });
 
-    // Presets dropdown
-    const btnPresets = document.getElementById('btn-presets');
-    const menu = document.getElementById('presets-menu');
-    btnPresets.addEventListener('click', (e) => {
-      e.stopPropagation();
-      menu.classList.toggle('hidden');
-    });
-
-    document.querySelectorAll('.preset-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const repo = item.getAttribute('data-repo');
+    // Preset Chips
+    document.querySelectorAll('.preset-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.preset-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const repo = chip.getAttribute('data-repo');
         input.value = repo;
-        menu.classList.add('hidden');
         this.loadRepository(repo);
       });
     });
 
-    document.addEventListener('click', () => menu.classList.add('hidden'));
-
-    // Cinematic & Camera Controls
+    // Camera actions
     document.getElementById('btn-cinematic').addEventListener('click', () => this.toggleCinematicTour());
     document.getElementById('btn-reset-cam').addEventListener('click', () => this.resetCameraOverview());
     document.getElementById('btn-close-inspector').addEventListener('click', () => this.closeInspector());
@@ -351,12 +377,13 @@ class App {
       btnAudio.classList.toggle('active', active);
     });
 
-    // Timeline Scrubber & Speed
+    // Timeline Scrubber
     const slider = document.getElementById('timeline-slider');
     slider.addEventListener('input', (e) => {
       this.timelineProgress = parseFloat(e.target.value) / 100;
       this.cityBuilder.setEvolutionProgress(this.timelineProgress);
       this.updateTimelineMeta();
+      cityAudio.playTimelineStep();
     });
 
     document.getElementById('btn-timeline-play').addEventListener('click', () => this.toggleTimelinePlayback());
@@ -382,13 +409,11 @@ class App {
     document.getElementById('btn-save-token').addEventListener('click', () => {
       gitHubService.setToken(tokenInput.value);
       tokenModal.classList.add('hidden');
-      alert('GitHub token saved securely to browser LocalStorage.');
     });
     document.getElementById('btn-clear-token').addEventListener('click', () => {
       gitHubService.setToken('');
       tokenInput.value = '';
       tokenModal.classList.add('hidden');
-      alert('Token removed.');
     });
   }
 
@@ -422,14 +447,10 @@ class App {
     requestAnimationFrame(() => this.animate());
 
     const delta = this.clock.getDelta();
-    const time = this.clock.getElapsedTime();
 
-    // 1. Update City animations (beacons, data stream traffic)
-    this.cityBuilder.update(delta, time);
-
-    // 2. Timeline playback progression
+    // Timeline playback
     if (this.isPlayingTimeline) {
-      this.timelineProgress += delta * 0.12 * this.timelineSpeed;
+      this.timelineProgress += delta * 0.1 * this.timelineSpeed;
       if (this.timelineProgress >= 1.0) {
         this.timelineProgress = 1.0;
         this.toggleTimelinePlayback();
@@ -439,24 +460,23 @@ class App {
       this.updateTimelineMeta();
     }
 
-    // 3. Smooth Camera Gliding
+    // Camera Gliding
     if (this.targetCameraPos && this.targetLookAt) {
-      this.camera.position.lerp(this.targetCameraPos, 0.045);
-      this.controls.target.lerp(this.targetLookAt, 0.045);
+      this.camera.position.lerp(this.targetCameraPos, 0.05);
+      this.controls.target.lerp(this.targetLookAt, 0.05);
 
-      if (this.camera.position.distanceTo(this.targetCameraPos) < 1.0) {
+      if (this.camera.position.distanceTo(this.targetCameraPos) < 0.6) {
         this.targetCameraPos = null;
         this.targetLookAt = null;
       }
     } else if (this.isCinematic) {
-      // Cinematic Drone Tour Orbit
-      this.cinematicAngle += delta * 0.15;
-      const radius = 220;
-      const altitude = 110 + Math.sin(this.cinematicAngle * 0.5) * 40;
+      this.cinematicAngle += delta * 0.12;
+      const radius = 210;
+      const altitude = 110 + Math.sin(this.cinematicAngle * 0.4) * 35;
       this.camera.position.x = Math.sin(this.cinematicAngle) * radius;
       this.camera.position.z = Math.cos(this.cinematicAngle) * radius;
       this.camera.position.y = altitude;
-      this.controls.target.set(0, 18, 0);
+      this.controls.target.set(0, 15, 0);
     }
 
     this.controls.update();
@@ -464,7 +484,6 @@ class App {
   }
 }
 
-// Instantiate and start GitCity 3D
 window.addEventListener('DOMContentLoaded', () => {
   const app = new App();
   app.init();

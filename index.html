@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GitCity 3D — Cyberpunk Repository Metropolis Visualizer</title>
-  <meta name="description" content="Transform any GitHub codebase into an interactive 3D cyberpunk metropolis. Explore folders as districts, files as skyscrapers, and watch evolution over time.">
+  <title>GitCity — 3D Codebase Cartography</title>
+  <meta name="description" content="Transform any GitHub repository into an interactive 3D architectural city. Explore folders as districts, files as skyscrapers, and visualize codebase evolution.">
 
-  <!-- Google Fonts -->
+  <!-- Clean Professional Typography: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/style.css">
 
@@ -24,243 +24,188 @@
   </script>
 </head>
 <body>
-  <!-- 3D Canvas Container -->
+  <!-- 3D Canvas Viewport -->
   <div id="canvas-container"></div>
 
-  <!-- Cyberpunk Scanlines & Vignette Overlay -->
-  <div class="crt-overlay"></div>
-
-  <!-- Header Navigation & Search -->
-  <header class="hud-header">
-    <div class="brand">
-      <div class="logo-hex">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+  <!-- Minimal Top Header Bar -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 21h18M5 21V7l8-4v18M13 11l6 3v7M9 9v.01M9 13v.01M9 17v.01M17 17v.01"/>
         </svg>
+        <span class="brand-name">GitCity</span>
       </div>
-      <div class="brand-text">
-        <span class="brand-title">GitCity<span class="brand-glow">3D</span></span>
-        <span class="brand-subtitle">Repo Metropolis Visualizer</span>
+
+      <!-- Quick Preset Chips -->
+      <div class="preset-chips">
+        <button class="preset-chip active" data-repo="sadmandied/CoworkingSpaceBookingSystem">
+          <span>CoworkingSpace</span>
+        </button>
+        <button class="preset-chip" data-repo="expressjs/express">
+          <span>Express</span>
+        </button>
+        <button class="preset-chip" data-repo="pallets/flask">
+          <span>Flask</span>
+        </button>
+        <button class="preset-chip" data-repo="facebook/react">
+          <span>React</span>
+        </button>
       </div>
     </div>
 
     <!-- Repository Search Bar -->
-    <div class="repo-search-bar">
-      <div class="input-wrapper">
-        <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <input type="text" id="repo-input" placeholder="e.g. sadmandied/CoworkingSpaceBookingSystem or facebook/react" autocomplete="off" spellcheck="false" value="sadmandied/CoworkingSpaceBookingSystem">
-      </div>
-      <button id="btn-build" class="btn-neon primary">
-        <span>Construct City</span>
+    <div class="search-command">
+      <svg class="search-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" id="repo-input" placeholder="github-owner/repo-name" autocomplete="off" spellcheck="false" value="sadmandied/CoworkingSpaceBookingSystem">
+      <button id="btn-build" class="btn-primary">
+        <span>Load</span>
       </button>
-
-      <!-- Preset Repositories Dropdown -->
-      <div class="preset-dropdown">
-        <button id="btn-presets" class="btn-neon secondary">
-          <span>Presets ▼</span>
-        </button>
-        <div id="presets-menu" class="dropdown-menu hidden">
-          <div class="dropdown-header">Featured Repositories</div>
-          <button class="preset-item" data-repo="sadmandied/CoworkingSpaceBookingSystem">
-            <span class="preset-name">sadmandied/CoworkingSpaceBookingSystem</span>
-            <span class="preset-tag">Java + Vue</span>
-          </button>
-          <button class="preset-item" data-repo="expressjs/express">
-            <span class="preset-name">expressjs/express</span>
-            <span class="preset-tag">Node.js</span>
-          </button>
-          <button class="preset-item" data-repo="pallets/flask">
-            <span class="preset-name">pallets/flask</span>
-            <span class="preset-tag">Python</span>
-          </button>
-          <button class="preset-item" data-repo="facebook/react">
-            <span class="preset-name">facebook/react</span>
-            <span class="preset-tag">React Megacity</span>
-          </button>
-          <button class="preset-item" data-repo="mrdoob/three.js">
-            <span class="preset-name">mrdoob/three.js</span>
-            <span class="preset-tag">WebGL 3D</span>
-          </button>
-        </div>
-      </div>
     </div>
 
-    <!-- Controls Toolbar -->
-    <div class="controls-toolbar">
-      <button id="btn-cinematic" class="btn-icon" title="Cinematic Drone Flight">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-          <polygon points="5 3 19 12 5 21 5 3"></polygon>
-        </svg>
-        <span>Drone Tour</span>
-      </button>
-      <button id="btn-reset-cam" class="btn-icon" title="Reset Camera Overview">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
-          <path d="M3 3v5h5"></path>
-        </svg>
-      </button>
-      <button id="btn-audio" class="btn-icon" title="Toggle Synth Soundscape">
-        <svg id="icon-audio" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-        </svg>
-      </button>
-      <button id="btn-token" class="btn-icon" title="GitHub API Settings">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3"></circle>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-        </svg>
-      </button>
+    <!-- Right Controls & Overview -->
+    <div class="header-right">
+      <!-- Quick Telemetry Pill -->
+      <div class="metrics-pill">
+        <span id="stat-skyscrapers" class="metric-num">0</span> <span class="metric-lbl">files</span>
+        <span class="metric-sep">/</span>
+        <span id="stat-districts" class="metric-num">0</span> <span class="metric-lbl">districts</span>
+        <span class="metric-sep">/</span>
+        <span id="stat-dominant" class="metric-tag">-</span>
+      </div>
+
+      <div class="view-actions">
+        <button id="btn-cinematic" class="btn-subtle" title="Cinematic Orbit Tour">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="10 8 16 12 10 16 10 8"></polygon>
+          </svg>
+          <span>Tour</span>
+        </button>
+        <button id="btn-reset-cam" class="btn-subtle-icon" title="Reset Camera">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+          </svg>
+        </button>
+        <button id="btn-audio" class="btn-subtle-icon" title="Toggle Sound Feedback">
+          <svg id="icon-audio" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        </button>
+        <button id="btn-token" class="btn-subtle-icon" title="API Settings">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- City Statistics HUD (Top Right) -->
-  <aside class="hud-stats-card">
-    <div class="stats-header">
-      <span class="stats-title">METROPOLIS TELEMETRY</span>
-      <span class="live-dot"></span>
+  <!-- Clean Hover Tooltip (Follows Cursor) -->
+  <div id="hover-tooltip" class="hover-tooltip hidden">
+    <div class="tooltip-file" id="tooltip-filename">file.ts</div>
+    <div class="tooltip-meta">
+      <span id="tooltip-lang" class="tooltip-badge">TypeScript</span>
+      <span id="tooltip-loc" class="tooltip-dim">284 LOC</span>
     </div>
-    <div class="stats-grid">
-      <div class="stat-item">
-        <span class="stat-value" id="stat-skyscrapers">0</span>
-        <span class="stat-label">Skyscrapers (Files)</span>
+  </div>
+
+  <!-- Inspector Popover (Bottom Left or Right) -->
+  <aside id="inspector-drawer" class="file-inspector hidden">
+    <div class="inspector-top">
+      <div class="file-identity">
+        <span class="file-lang-indicator" id="inspect-indicator"></span>
+        <span class="file-name" id="inspect-filename">filename.js</span>
       </div>
-      <div class="stat-item">
-        <span class="stat-value" id="stat-districts">0</span>
-        <span class="stat-label">Districts (Folders)</span>
+      <button id="btn-close-inspector" class="btn-dismiss">&times;</button>
+    </div>
+
+    <div class="file-path" id="inspect-path">src/components/filename.js</div>
+
+    <div class="metrics-row">
+      <div class="metric-block">
+        <span class="m-val" id="inspect-size">0 KB</span>
+        <span class="m-key">Size</span>
       </div>
-      <div class="stat-item">
-        <span class="stat-value" id="stat-loc">0</span>
-        <span class="stat-label">Total Code Size (KB)</span>
+      <div class="metric-block">
+        <span class="m-val" id="inspect-loc">0</span>
+        <span class="m-key">Est. LOC</span>
       </div>
-      <div class="stat-item">
-        <span class="stat-value" id="stat-dominant">-</span>
-        <span class="stat-label">Dominant Tech</span>
+      <div class="metric-block">
+        <span class="m-val" id="inspect-lang">JS</span>
+        <span class="m-key">Language</span>
       </div>
     </div>
-    <div class="stats-divider"></div>
-    <div class="stat-status-row">
-      <span class="label">Target:</span>
-      <span class="value" id="stat-current-repo">None</span>
+
+    <div class="inspector-footer">
+      <span class="district-badge" id="inspect-district">src/components</span>
+      <a id="inspect-github-link" href="#" target="_blank" rel="noopener noreferrer" class="link-github">
+        <span>View on GitHub</span>
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/>
+        </svg>
+      </a>
     </div>
   </aside>
 
-  <!-- Language Color Key (Bottom Left) -->
-  <aside class="hud-legend">
-    <div class="legend-title">ARCHITECTURE KEY</div>
-    <div class="legend-grid" id="legend-items">
-      <!-- Generated dynamically based on loaded repo -->
-    </div>
-  </aside>
-
-  <!-- Interactive Building Inspector Sidebar (Right Side) -->
-  <aside id="inspector-drawer" class="inspector-drawer hidden">
-    <div class="inspector-header">
-      <div class="inspector-badge">SKYSCRAPER INTEL</div>
-      <button id="btn-close-inspector" class="btn-close">&times;</button>
-    </div>
-    <div class="inspector-body">
-      <div class="file-icon-box" id="inspect-icon">JS</div>
-      <h2 id="inspect-filename" class="inspect-title">filename.js</h2>
-      <div id="inspect-path" class="inspect-path">src/components/filename.js</div>
-
-      <div class="inspect-stats">
-        <div class="inspect-stat-row">
-          <span class="term-dim">Language</span>
-          <span id="inspect-lang" class="term-val text-cyan">JavaScript</span>
-        </div>
-        <div class="inspect-stat-row">
-          <span class="term-dim">File Size</span>
-          <span id="inspect-size" class="term-val">14.2 KB</span>
-        </div>
-        <div class="inspect-stat-row">
-          <span class="term-dim">Est. Lines of Code</span>
-          <span id="inspect-loc" class="term-val">420 LOC</span>
-        </div>
-        <div class="inspect-stat-row">
-          <span class="term-dim">Building Height</span>
-          <span id="inspect-height" class="term-val">84 Stories</span>
-        </div>
-        <div class="inspect-stat-row">
-          <span class="term-dim">District Zone</span>
-          <span id="inspect-district" class="term-val text-yellow">components/</span>
-        </div>
-      </div>
-
-      <div class="inspector-actions">
-        <a id="inspect-github-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-neon full-width">
-          <span>View Source on GitHub ↗</span>
-        </a>
-      </div>
-    </div>
-  </aside>
-
-  <!-- Time Machine / Evolution Scrubber HUD (Bottom Center) -->
-  <footer class="hud-timeline">
-    <div class="timeline-controls">
-      <button id="btn-timeline-play" class="btn-play" title="Play Commit Evolution">
-        <svg id="icon-play" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+  <!-- Clean Bottom Timeline -->
+  <footer class="app-timeline">
+    <div class="timeline-bar">
+      <button id="btn-timeline-play" class="timeline-play-btn" title="Play commit history">
+        <svg id="icon-play" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
           <polygon points="5 3 19 12 5 21 5 3"></polygon>
         </svg>
       </button>
-      <div class="timeline-track-wrapper">
-        <div class="timeline-meta">
-          <div class="timeline-label">
-            <span class="chrono-tag">CHRONO-MACHINE</span>
-            <span id="timeline-commit-date" class="commit-date">Present Day</span>
-          </div>
-          <div id="timeline-commit-msg" class="commit-msg">Watching Full Repository Architecture</div>
-        </div>
+
+      <div class="timeline-info">
+        <span class="timeline-date" id="timeline-commit-date">Present</span>
+        <span class="timeline-msg" id="timeline-commit-msg">Full Repository State</span>
+      </div>
+
+      <div class="timeline-track">
         <input type="range" id="timeline-slider" min="0" max="100" value="100" step="1">
       </div>
-      <div class="timeline-speed">
+
+      <div class="speed-selector">
         <button class="btn-speed active" data-speed="1">1x</button>
         <button class="btn-speed" data-speed="2">2x</button>
-        <button class="btn-speed" data-speed="5">5x</button>
       </div>
     </div>
   </footer>
 
-  <!-- Holographic Loading Overlay -->
+  <!-- Minimal Loading Screen -->
   <div id="loading-overlay" class="loading-overlay">
-    <div class="loading-content">
-      <div class="scanner-ring">
-        <div class="inner-pulse"></div>
-      </div>
-      <h2 class="scanner-title">CONSTRUCTING METROPOLIS</h2>
-      <p id="loading-status" class="scanner-status">Querying GitHub API neural tree...</p>
-      <div class="progress-bar-container">
-        <div id="progress-bar" class="progress-bar"></div>
+    <div class="loading-box">
+      <div class="loading-spinner"></div>
+      <span id="loading-status" class="loading-label">Loading repository tree...</span>
+      <div class="loading-bar">
+        <div id="progress-bar" class="loading-fill"></div>
       </div>
     </div>
   </div>
 
-  <!-- Settings / Token Modal -->
+  <!-- Clean API Settings Modal -->
   <div id="token-modal" class="modal-overlay hidden">
     <div class="modal-card">
-      <div class="modal-header">
-        <h3>GitHub API Authentication</h3>
-        <button id="btn-close-modal" class="btn-close">&times;</button>
+      <div class="modal-top">
+        <h4>GitHub Authentication</h4>
+        <button id="btn-close-modal" class="btn-dismiss">&times;</button>
       </div>
-      <div class="modal-body">
-        <p class="modal-desc">
-          Without a token, GitHub limits unauthenticated API requests to 60/hour. Adding a personal read-only token elevates your quota to <strong>5,000 requests/hour</strong>.
-        </p>
-        <p class="modal-note text-cyan">
-          Your token stays strictly inside your browser's LocalStorage and is never transmitted to any third-party server.
-        </p>
-        <div class="form-group">
-          <label for="github-token-input">Personal Access Token (classic or fine-grained with public_repo scope)</label>
-          <input type="password" id="github-token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
-        </div>
-        <div class="modal-actions">
-          <button id="btn-save-token" class="btn-neon primary">Save Token</button>
-          <button id="btn-clear-token" class="btn-neon danger">Clear Saved Token</button>
-        </div>
+      <p class="modal-body-text">
+        Optional personal access token to elevate GitHub API rate limits from 60 to 5,000 requests/hour. Stored locally in your browser.
+      </p>
+      <div class="input-field">
+        <input type="password" id="github-token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+      </div>
+      <div class="modal-buttons">
+        <button id="btn-clear-token" class="btn-ghost">Clear</button>
+        <button id="btn-save-token" class="btn-primary">Save Token</button>
       </div>
     </div>
   </div>
