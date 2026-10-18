@@ -368,9 +368,9 @@ class GitPieApp {
     });
 
     // 4. Recipe Mode Selector (Languages / Folders / Files)
-    document.querySelectorAll('.mode-btn').forEach(btn => {
+    document.querySelectorAll('.mode-pill').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.mode-pill').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         this.currentMode = btn.getAttribute('data-mode');
         this.applyCurrentModeSlices();
@@ -418,11 +418,11 @@ class GitPieApp {
       } else if (e.key === 'ArrowLeft') {
         this.pieEngine.cycleSlice(-1);
       } else if (e.key === '1') {
-        document.querySelector('.mode-btn[data-mode="languages"]')?.click();
+        document.querySelector('.mode-pill[data-mode="languages"]')?.click();
       } else if (e.key === '2') {
-        document.querySelector('.mode-btn[data-mode="folders"]')?.click();
+        document.querySelector('.mode-pill[data-mode="folders"]')?.click();
       } else if (e.key === '3') {
-        document.querySelector('.mode-btn[data-mode="files"]')?.click();
+        document.querySelector('.mode-pill[data-mode="files"]')?.click();
       } else if (e.key === 'b' || e.key === 'B') {
         e.preventDefault();
         document.getElementById('btn-eat-slice')?.click();

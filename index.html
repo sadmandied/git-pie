@@ -3,25 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GitPie! — The 1930s Cuphead Codebase Bakery</title>
-  <meta name="description" content="An authentic 1930s Fleischer / Cuphead rubber-hose cartoon pie visualizer for GitHub codebases. No neon, no sci-fi — just delicious cartoon pies, rubber-hose animations, and code recipes!">
+  <title>GitPie! — The 1930s Codebase Bakery</title>
+  <meta name="description" content="An authentic 1930s Fleischer / Cuphead rubber-hose cartoon pie visualizer for GitHub codebases.">
 
-  <!-- Vintage 1930s Cartoon Fonts -->
+  <!-- Vintage 1930s Cartoon & Diner Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka+One&family=Patrick+Hand&family=Special+Elite&family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka+One&family=Patrick+Hand&family=Special+Elite&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=5.0">
+  <link rel="stylesheet" href="css/style.css?v=6.0">
 </head>
 <body>
-  <!-- Vintage 1930s Film Grain & Projector Scratches Overlay -->
-  <div class="vintage-film-grain" aria-hidden="true"></div>
+  <!-- Vintage 1930s Film Vignette -->
   <div class="vintage-vignette" aria-hidden="true"></div>
 
-  <div class="app-layout">
-    <!-- Top Cartoon Header Banner -->
-    <header class="bakery-header">
-      <div class="brand-sign">
+  <div class="theater-stage">
+    <!-- Top Vintage Marquee Header -->
+    <header class="stage-header">
+      <div class="brand-marquee">
         <div class="brand-ribbon">
           <span class="ribbon-star">★</span>
           <h1 class="brand-title">GitPie!</h1>
@@ -30,33 +29,30 @@
         <div class="brand-tagline">THE 1930s CODEBASE BAKERY &amp; PIE PARLOR</div>
       </div>
 
-      <!-- Sadman's Repositories Dropdown (Circled Header Section) -->
-      <div class="my-repos-dropdown" id="repos-dropdown-container">
-        <div class="pantry-label">CHEF'S REPO PANTRY:</div>
-        <button id="btn-repos-dropdown" class="cartoon-dropdown-btn" title="Choose from Sadman's repositories" aria-expanded="false" aria-haspopup="true">
-          <svg class="dropdown-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Sadman's Repositories Dropdown (Exact Circled Area) -->
+      <div class="pantry-dropdown-wrapper" id="repos-dropdown-container">
+        <button id="btn-repos-dropdown" class="pantry-dropdown-btn" title="Choose from Sadman's repositories" aria-expanded="false" aria-haspopup="true">
+          <svg class="icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-            <line x1="8" y1="6" x2="16" y2="6"/>
-            <line x1="8" y1="10" x2="14" y2="10"/>
           </svg>
-          <span id="selected-repo-label" class="selected-repo-text">CoworkingSpaceBookingSystem</span>
-          <svg class="dropdown-arrow-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <span id="selected-repo-label" class="selected-repo-name">CoworkingSpaceBookingSystem</span>
+          <svg class="arrow-svg" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
             <path d="M7 10l5 5 5-5z"/>
           </svg>
         </button>
-        <div id="repos-menu" class="cartoon-dropdown-menu hidden" role="menu">
-          <div class="dropdown-menu-header">SADMAN'S REPOSITORIES</div>
-          <div id="repos-list" class="dropdown-items">
-            <!-- Dynamically populated with sadmandied repositories -->
+        <div id="repos-menu" class="pantry-menu hidden" role="menu">
+          <div class="pantry-menu-title">SADMAN'S REPOSITORIES</div>
+          <div id="repos-list" class="pantry-menu-items">
+            <!-- Dynamically populated with Sadman's repos -->
           </div>
         </div>
       </div>
 
-      <!-- Header Tools -->
-      <div class="header-tools">
-        <button id="btn-spin" class="cartoon-btn secondary" title="Give the Pie a Spin! (Hotkey: Spacebar)">
-          <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Spin Wheel Button -->
+      <div class="stage-actions">
+        <button id="btn-spin" class="stage-btn secondary" title="Give the Pie a Spin! (Hotkey: Spacebar)">
+          <svg class="icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/>
             <path d="M12 2v4"/>
             <path d="M12 18v4"/>
@@ -64,234 +60,209 @@
             <path d="M16.24 16.24l2.83 2.83"/>
             <path d="M2 12h4"/>
             <path d="M18 12h4"/>
-            <circle cx="12" cy="12" r="2" fill="currentColor"/>
           </svg>
           <span>Spin Wheel!</span>
         </button>
       </div>
     </header>
 
-    <!-- Main Content Area -->
-    <main class="bakery-stage">
-      <!-- Left / Center: The Giant Interactive Cartoon Pie Arena -->
+    <!-- Main Theatrical Stage (Unified, No Nested Cards) -->
+    <main class="stage-content">
+      <!-- Left Column: The Grand Pie Platter & Mascot -->
       <section class="pie-arena">
-        <!-- View Mode Selector (Languages / Folders / Files) -->
-        <div class="view-mode-selector">
-          <span class="mode-label">RECIPE MODE:</span>
-          <button class="mode-btn active" data-mode="languages" title="Slice by programming languages (Hotkey: 1)">
-            <svg class="mode-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-.55.06-1.08.17-1.6L12 12l5.6 7.47c-1.63.35-3.35.53-5.6.53z"/>
-            </svg>
-            <span>Languages</span>
+        <!-- Recipe Mode Switcher -->
+        <div class="mode-ribbon-bar">
+          <button class="mode-pill active" data-mode="languages" title="Slice by programming languages (Hotkey: 1)">
+            <span>🥧 Languages</span>
           </button>
-          <button class="mode-btn" data-mode="folders" title="Slice by folder directories (Hotkey: 2)">
-            <svg class="mode-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-            </svg>
-            <span>Folders</span>
+          <button class="mode-pill" data-mode="folders" title="Slice by folder directories (Hotkey: 2)">
+            <span>📁 Folders</span>
           </button>
-          <button class="mode-btn" data-mode="files" title="Slice by top individual files (Hotkey: 3)">
-            <svg class="mode-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-              <line x1="16" y1="13" x2="8" y2="13"/>
-              <line x1="16" y1="17" x2="8" y2="17"/>
-              <polyline points="10 9 9 9 8 9"/>
-            </svg>
-            <span>Top Files</span>
+          <button class="mode-pill" data-mode="files" title="Slice by top individual files (Hotkey: 3)">
+            <span>📄 Top Files</span>
           </button>
         </div>
 
-        <!-- The Cartoon Kitchen Table Platter & Mascot -->
-        <div class="platter-wrapper">
-          <!-- Animated Rubberhose Chef Git Mascot -->
-          <div class="chef-actor-card" id="chef-actor">
+        <!-- The Pie Platter & Mascot Actor -->
+        <div class="arena-centerpiece">
+          <!-- Animated 1930s Rubberhose Chef Git Mascot -->
+          <div class="chef-actor" id="chef-actor">
             <div class="chef-speech-bubble" id="chef-speech-bubble">
-              <span class="speech-tail"></span>
+              <span class="bubble-arrow"></span>
               <p id="chef-speech-text">Welcome to the Bakery, Sadman! Let's slice this codebase!</p>
             </div>
 
-            <!-- Authentic 1930s Fleischer/Cuphead Rubberhose SVG Mascot -->
-            <svg class="chef-mascot-svg" id="chef-mascot-svg" viewBox="0 0 160 210" width="130" height="170" aria-label="Chef Git mascot">
+            <svg class="chef-svg" id="chef-mascot-svg" viewBox="0 0 160 210" width="125" height="165" aria-label="Chef Git mascot">
               <!-- Legs -->
-              <path d="M 64 150 Q 58 175 52 188" fill="none" stroke="#1f1712" stroke-width="8" stroke-linecap="round"/>
-              <path d="M 96 150 Q 102 175 108 188" fill="none" stroke="#1f1712" stroke-width="8" stroke-linecap="round"/>
+              <path d="M 64 150 Q 58 175 52 188" fill="none" stroke="#1c130d" stroke-width="8" stroke-linecap="round"/>
+              <path d="M 96 150 Q 102 175 108 188" fill="none" stroke="#1c130d" stroke-width="8" stroke-linecap="round"/>
               <!-- Cartoon Clown Boots -->
-              <ellipse cx="44" cy="190" rx="16" ry="8" fill="#5d4037" stroke="#1f1712" stroke-width="3.5"/>
+              <ellipse cx="44" cy="190" rx="16" ry="8" fill="#5d4037" stroke="#1c130d" stroke-width="3.5"/>
               <ellipse cx="41" cy="188" rx="5" ry="2.5" fill="#ffffff" opacity="0.4"/>
-              <ellipse cx="116" cy="190" rx="16" ry="8" fill="#5d4037" stroke="#1f1712" stroke-width="3.5"/>
+              <ellipse cx="116" cy="190" rx="16" ry="8" fill="#5d4037" stroke="#1c130d" stroke-width="3.5"/>
               <ellipse cx="113" cy="188" rx="5" ry="2.5" fill="#ffffff" opacity="0.4"/>
               <!-- Body with Baker Apron -->
-              <ellipse cx="80" cy="132" rx="26" ry="24" fill="#2c3e50" stroke="#1f1712" stroke-width="3.5"/>
-              <path d="M 58 122 C 58 150 102 150 102 122 Z" fill="#fafafa" stroke="#1f1712" stroke-width="3"/>
-              <circle cx="70" cy="130" r="3" fill="#f1c40f" stroke="#1f1712" stroke-width="1.5"/>
-              <circle cx="90" cy="130" r="3" fill="#f1c40f" stroke="#1f1712" stroke-width="1.5"/>
+              <ellipse cx="80" cy="132" rx="26" ry="24" fill="#2c3e50" stroke="#1c130d" stroke-width="3.5"/>
+              <path d="M 58 122 C 58 150 102 150 102 122 Z" fill="#fafafa" stroke="#1c130d" stroke-width="3"/>
+              <circle cx="70" cy="130" r="3" fill="#f1c40f" stroke="#1c130d" stroke-width="1.5"/>
+              <circle cx="90" cy="130" r="3" fill="#f1c40f" stroke="#1c130d" stroke-width="1.5"/>
               <!-- Red Knotted Neckerchief -->
-              <path d="M 66 104 Q 80 112 94 104 Q 85 120 80 116 Q 75 120 66 104 Z" fill="#d63031" stroke="#1f1712" stroke-width="3"/>
-              <circle cx="80" cy="108" r="3.5" fill="#c0392b" stroke="#1f1712" stroke-width="1.5"/>
+              <path d="M 66 104 Q 80 112 94 104 Q 85 120 80 116 Q 75 120 66 104 Z" fill="#c0392b" stroke="#1c130d" stroke-width="3"/>
+              <circle cx="80" cy="108" r="3.5" fill="#962d22" stroke="#1c130d" stroke-width="1.5"/>
               <!-- Left Rubberhose Arm on Hip -->
-              <path d="M 58 118 Q 36 128 46 148" fill="none" stroke="#1f1712" stroke-width="7" stroke-linecap="round"/>
-              <ellipse cx="48" cy="148" rx="8" ry="7" fill="#ffffff" stroke="#1f1712" stroke-width="2.8"/>
+              <path d="M 58 118 Q 36 128 46 148" fill="none" stroke="#1c130d" stroke-width="7" stroke-linecap="round"/>
+              <ellipse cx="48" cy="148" rx="8" ry="7" fill="#ffffff" stroke="#1c130d" stroke-width="2.8"/>
               <!-- Head -->
-              <ellipse cx="80" cy="82" rx="26" ry="23" fill="#ffeaa7" stroke="#1f1712" stroke-width="3.5"/>
+              <ellipse cx="80" cy="82" rx="26" ry="23" fill="#ffeaa7" stroke="#1c130d" stroke-width="3.5"/>
               <!-- Rosy Gouache Cheeks -->
               <ellipse cx="63" cy="88" rx="6" ry="3.5" fill="#ff7675" opacity="0.6"/>
               <ellipse cx="97" cy="88" rx="6" ry="3.5" fill="#ff7675" opacity="0.6"/>
               <!-- 1930s Pac-Man Pie-Cut Eyes -->
-              <ellipse cx="71" cy="76" rx="6" ry="8" fill="#ffffff" stroke="#1f1712" stroke-width="2.5"/>
-              <ellipse cx="89" cy="76" rx="6" ry="8" fill="#ffffff" stroke="#1f1712" stroke-width="2.5"/>
-              <path id="chef-pupil-left" d="M 71 72 A 4 5.5 0 1 0 74 80 L 71 76 Z" fill="#1f1712"/>
-              <path id="chef-pupil-right" d="M 89 72 A 4 5.5 0 1 0 92 80 L 89 76 Z" fill="#1f1712"/>
-              <!-- Joyous Rubberhose Smile with Teeth -->
-              <path d="M 66 90 Q 80 106 94 90" fill="none" stroke="#1f1712" stroke-width="3.5" stroke-linecap="round"/>
-              <path d="M 69 92 Q 80 102 91 92 Q 80 96 69 92 Z" fill="#ffffff" stroke="#1f1712" stroke-width="1.5"/>
+              <ellipse cx="71" cy="76" rx="6" ry="8" fill="#ffffff" stroke="#1c130d" stroke-width="2.5"/>
+              <ellipse cx="89" cy="76" rx="6" ry="8" fill="#ffffff" stroke="#1c130d" stroke-width="2.5"/>
+              <path id="chef-pupil-left" d="M 71 72 A 4 5.5 0 1 0 74 80 L 71 76 Z" fill="#1c130d"/>
+              <path id="chef-pupil-right" d="M 89 72 A 4 5.5 0 1 0 92 80 L 89 76 Z" fill="#1c130d"/>
+              <!-- Wide Rubberhose Smile with Teeth -->
+              <path d="M 66 90 Q 80 106 94 90" fill="none" stroke="#1c130d" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M 69 92 Q 80 102 91 92 Q 80 96 69 92 Z" fill="#ffffff" stroke="#1c130d" stroke-width="1.5"/>
               <!-- Puffy White Chef Hat (Toque) -->
-              <path d="M 62 64 C 44 54 46 28 66 30 C 70 16 90 16 96 28 C 112 25 116 50 98 64 Z" fill="#ffffff" stroke="#1f1712" stroke-width="3.5"/>
-              <path d="M 59 63 L 101 63 L 98 70 L 62 70 Z" fill="#f5f6fa" stroke="#1f1712" stroke-width="2.5"/>
+              <path d="M 62 64 C 44 54 46 28 66 30 C 70 16 90 16 96 28 C 112 25 116 50 98 64 Z" fill="#ffffff" stroke="#1c130d" stroke-width="3.5"/>
+              <path d="M 59 63 L 101 63 L 98 70 L 62 70 Z" fill="#f5f6fa" stroke="#1c130d" stroke-width="2.5"/>
               <!-- Right Arm Holding Rolling Pin -->
-              <path d="M 102 118 Q 124 118 126 98" fill="none" stroke="#1f1712" stroke-width="7" stroke-linecap="round"/>
-              <!-- Rolling Pin -->
-              <rect x="118" y="48" width="12" height="74" rx="5" fill="#e58e26" stroke="#1f1712" stroke-width="2.8" transform="rotate(18 124 85)"/>
-              <rect x="122" y="36" width="5" height="16" rx="2" fill="#b06713" stroke="#1f1712" stroke-width="2" transform="rotate(18 124 85)"/>
-              <rect x="122" y="118" width="5" height="16" rx="2" fill="#b06713" stroke="#1f1712" stroke-width="2" transform="rotate(18 124 85)"/>
-              <circle cx="126" cy="98" r="8" fill="#ffffff" stroke="#1f1712" stroke-width="2.8"/>
+              <path d="M 102 118 Q 124 118 126 98" fill="none" stroke="#1c130d" stroke-width="7" stroke-linecap="round"/>
+              <rect x="118" y="48" width="12" height="74" rx="5" fill="#e58e26" stroke="#1c130d" stroke-width="2.8" transform="rotate(18 124 85)"/>
+              <rect x="122" y="36" width="5" height="16" rx="2" fill="#b06713" stroke="#1c130d" stroke-width="2" transform="rotate(18 124 85)"/>
+              <rect x="122" y="118" width="5" height="16" rx="2" fill="#b06713" stroke="#1c130d" stroke-width="2" transform="rotate(18 124 85)"/>
+              <circle cx="126" cy="98" r="8" fill="#ffffff" stroke="#1c130d" stroke-width="2.8"/>
             </svg>
           </div>
 
-          <!-- Giant Interactive Pie Canvas -->
-          <div class="canvas-centerpiece">
+          <!-- The Giant Interactive Pie Canvas -->
+          <div class="pie-canvas-stage">
             <canvas id="pie-canvas" aria-label="Interactive Codebase Pie Chart"></canvas>
           </div>
         </div>
 
-        <!-- Flavor Palette: Interactive Clickable Legend (Solves Readability 100%) -->
-        <div class="legend-container">
-          <div class="legend-header">FLAVOR PALETTE (CLICK OR HOVER ANY SLICE):</div>
-          <div id="pie-legend-bar" class="pie-legend-bar">
-            <!-- Populated dynamically with high-contrast clickable flavor pills -->
+        <!-- Flavor Ribbon: High-Contrast Clickable Legend Bar -->
+        <div class="flavor-ribbon-container">
+          <div id="pie-legend-bar" class="flavor-ribbon">
+            <!-- Dynamically populated with crisp clickable flavor badges -->
           </div>
         </div>
 
-        <div class="pie-hint">
+        <div class="stage-footer-hint">
           <span>👉 Hover or click any slice &bull; Drag to spin the wheel &bull; Spacebar = Spin &bull; B = Take a Bite!</span>
         </div>
       </section>
 
-      <!-- Right Side: Vintage Recipe Blackboard (Inspector) -->
-      <aside class="recipe-chalkboard" aria-label="Recipe details">
-        <div class="chalkboard-frame">
-          <div class="chalkboard-inner">
-            <div class="chalk-header">
-              <span class="chalk-pin">✦</span>
-              <h2 id="recipe-title" class="chalk-title">SELECT A SLICE</h2>
-              <span class="chalk-pin">✦</span>
+      <!-- Right Column: Vintage 1930s Diner Guest Check & Recipe Card -->
+      <aside class="guest-check-panel" aria-label="Recipe Order Details">
+        <div class="diner-check">
+          <!-- Perforated top receipt edge -->
+          <div class="check-perforation"></div>
+
+          <div class="check-header">
+            <span class="check-stamp-red">ORDER #1930</span>
+            <span class="check-table-stamp">TABLE: GIT</span>
+          </div>
+
+          <!-- Recipe Title -->
+          <h2 id="recipe-title" class="check-recipe-title">JAVA / JSP CHERRY TART</h2>
+          <div id="recipe-flavor" class="check-recipe-flavor">Fresh batch mixed with 13 source ingredients</div>
+
+          <!-- Stamped Stats Row -->
+          <div class="check-stamp-grid">
+            <div class="stamp-box red">
+              <span class="stamp-val" id="recipe-loc">1,406</span>
+              <span class="stamp-label">LINES OF CODE</span>
             </div>
-
-            <div class="chalk-subtitle" id="recipe-flavor">Hover or click a pie slice to view its recipe!</div>
-
-            <!-- Recipe Stats Grid -->
-            <div class="chalk-metrics">
-              <div class="metric-chalk">
-                <span class="metric-val" id="recipe-loc">-</span>
-                <span class="metric-name">Lines of Code</span>
-              </div>
-              <div class="metric-chalk">
-                <span class="metric-val" id="recipe-pct">-</span>
-                <span class="metric-name">Pie Share</span>
-              </div>
-              <div class="metric-chalk">
-                <span class="metric-val" id="recipe-files-count">-</span>
-                <span class="metric-name">Files Mixed In</span>
-              </div>
+            <div class="stamp-box black">
+              <span class="stamp-val" id="recipe-pct">58.6%</span>
+              <span class="stamp-label">PIE SHARE</span>
             </div>
+            <div class="stamp-box blue">
+              <span class="stamp-val" id="recipe-files-count">13</span>
+              <span class="stamp-label">FILES MIXED IN</span>
+            </div>
+          </div>
 
-            <!-- Interactive Slice Actions -->
-            <div class="chalk-actions-row">
-              <button id="btn-eat-slice" class="chalk-action-btn" title="Take a cartoon chomp out of this slice!">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                  <path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/>
+          <!-- Action Buttons -->
+          <div class="check-actions">
+            <button id="btn-eat-slice" class="diner-btn" title="Take a cartoon chomp out of this slice!">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/>
+              </svg>
+              <span>Take a Bite!</span>
+            </button>
+            <button id="btn-copy-badge" class="diner-btn" title="Copy Markdown badge for your GitHub README">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 16H5V5h2v3h10V5h2v14z"/>
+              </svg>
+              <span>Copy Badge</span>
+            </button>
+          </div>
+
+          <!-- Baker's Handwritten Note -->
+          <div class="baker-handwritten-note">
+            <span class="note-quote">“</span>
+            <p id="baker-notes-text">Piping hot codebase ready for serving! Click any slice or flavor pill to inspect the recipe.</p>
+          </div>
+
+          <!-- Diner Receipt Ingredients List -->
+          <div class="check-items-section">
+            <div class="check-search-row">
+              <span class="check-section-title">LINE ITEMS (FILES):</span>
+              <div class="check-search-box">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
-                <span>Take a Bite!</span>
-              </button>
-              <button id="btn-copy-badge" class="chalk-action-btn" title="Copy Markdown badge for your GitHub README">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                  <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 16H5V5h2v3h10V5h2v14z"/>
-                </svg>
-                <span>Copy Badge</span>
-              </button>
-            </div>
-
-            <!-- Baker's Tasting Notes Box -->
-            <div class="baker-notes-card">
-              <div class="notes-header">👨‍🍳 BAKER'S TASTING NOTES:</div>
-              <p id="baker-notes-text" class="notes-body">Piping hot codebase ready for serving! Click any slice or flavor pill to inspect the recipe.</p>
-            </div>
-
-            <div class="chalk-divider">~ ✦ ~</div>
-
-            <!-- Ingredients / File List with Search Filter -->
-            <div class="ingredients-box">
-              <div class="ingredients-header-row">
-                <span class="ingredients-title">FRESH INGREDIENTS:</span>
-                <div class="search-input-box">
-                  <svg class="search-icon-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <circle cx="11" cy="11" r="8"/>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                  </svg>
-                  <input type="text" id="ingredient-search" placeholder="Filter files..." autocomplete="off">
-                </div>
+                <input type="text" id="ingredient-search" placeholder="Filter..." autocomplete="off">
               </div>
-              <ul id="ingredients-list" class="ingredients-list">
-                <li class="empty-hint">Click a slice on the pie to inspect individual source files!</li>
-              </ul>
             </div>
 
-            <div class="chalk-footer">
-              <span id="recipe-repo-tag" class="repo-tag">Repo: sadmandied/CoworkingSpaceBookingSystem</span>
-            </div>
+            <ul id="ingredients-list" class="receipt-items-list">
+              <!-- Dynamically populated line items -->
+            </ul>
+          </div>
+
+          <div class="check-footer">
+            <span id="recipe-repo-tag" class="check-repo-tag">REPO: sadmandied/CoworkingSpaceBookingSystem</span>
+            <span class="check-paid-stamp">THANK YOU!</span>
           </div>
         </div>
       </aside>
     </main>
 
     <!-- Bottom Baker's Order Counter -->
-    <footer class="bakery-footer">
-      <div class="oven-console">
-        <div class="oven-label">ORDER ANY REPO:</div>
-        <div class="order-input-wrapper">
-          <input type="text" id="repo-input" placeholder="github-owner/repo-name (e.g. sadmandied/CoworkingSpaceBookingSystem)" value="sadmandied/CoworkingSpaceBookingSystem" autocomplete="off" spellcheck="false">
-          <button id="btn-bake" class="cartoon-btn primary">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-              <path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.784 1.399 8.163-7.333-3.856-7.333 3.856 1.399-8.163-5.934-5.784 8.2-1.192zm0 5.702l-2.074 4.202-4.636.674 3.355 3.27-.792 4.615 4.147-2.18 4.147 2.18-.792-4.615 3.355-3.27-4.636-.674z"/>
-            </svg>
-            <span>BAKE IT!</span>
+    <footer class="stage-footer">
+      <div class="counter-console">
+        <label for="repo-input" class="counter-label">ORDER ANY REPO:</label>
+        <div class="counter-input-row">
+          <input type="text" id="repo-input" placeholder="github-owner/repo-name" value="sadmandied/CoworkingSpaceBookingSystem" autocomplete="off" spellcheck="false">
+          <button id="btn-bake" class="stage-btn primary">
+            <span>Bake It!</span>
           </button>
         </div>
 
-        <!-- Grand Total Telemetry Badge -->
-        <div class="grand-total-tag">
-          <span id="stat-total-loc" class="stat-highlight">0</span> LOC Total &bull;
-          <span id="stat-total-files" class="stat-highlight">0</span> Files &bull;
-          <span id="stat-total-kb" class="stat-highlight">0</span> KB
+        <div class="counter-stats">
+          <span id="stat-total-loc" class="stat-num">0</span> LOC &bull;
+          <span id="stat-total-files" class="stat-num">0</span> Files &bull;
+          <span id="stat-total-kb" class="stat-num">0</span> KB
         </div>
       </div>
     </footer>
   </div>
 
-  <!-- Comic "CHOMP!" Popup Effect Container -->
+  <!-- Comic "CHOMP!" Popup Effect -->
   <div id="comic-chomp-burst" class="comic-chomp-burst hidden" aria-hidden="true">
     <span>CHOMP!</span>
   </div>
 
-  <!-- Baking In Progress Cartoon Overlay -->
+  <!-- Baking Loading Overlay -->
   <div id="baking-overlay" class="baking-overlay hidden" role="status" aria-live="polite">
     <div class="baking-card">
-      <div class="baking-stove">
-        <div class="steam-puff p1">✦</div>
-        <div class="steam-puff p2">✦</div>
-        <div class="steam-puff p3">✦</div>
-        <div class="pot-circle">🥧</div>
-      </div>
+      <div class="stove-circle">🥧</div>
       <h2 class="baking-title">MIXING THE BATTER!</h2>
       <p id="baking-status" class="baking-desc">Gathering GitHub code ingredients from the pantry...</p>
     </div>
@@ -303,6 +274,6 @@
   </div>
 
   <!-- Main Application Script (ES Module) -->
-  <script type="module" src="js/app.js?v=5.0"></script>
+  <script type="module" src="js/app.js?v=6.0"></script>
 </body>
 </html>

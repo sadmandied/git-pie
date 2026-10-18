@@ -1,13 +1,14 @@
 /**
- * GitPie! — Authentic 1930s Cuphead / Fleischer Cartoon Pie Engine (v5.1)
+ * GitPie! — Authentic 1930s Cuphead / Fleischer Cartoon Pie Engine (v6.0)
  *
- * Visual improvements:
- * - Continuous, seamless wavy scalloped pastry crust (no beaded circles!)
- * - Classic 1930s vintage diner porcelain plate with cobalt concentric rims (no clock ticks!)
- * - Golden butter-crust center medallion with crisp cartoon steam vents & curling steam puffs
- * - Smooth squash & stretch slice pop-out
- * - Clean, 100% horizontal comic placards on major slices
- * - Flapper ticker needle
+ * Craft Enhancements:
+ * - Hand-painted vintage porcelain diner plate with cobalt pinstripes
+ * - Continuous golden-baked scalloped pastry crust with fork-crimp indents
+ * - Luscious gouache fruit filling with glossy reflection highlights
+ * - Vintage silver pie server (spatula) sliding out beneath lifted slices
+ * - Stepped 12fps/24fps cartoon breathing & steam physics
+ * - Upright horizontal letterpress badges on dominant slices
+ * - Carnival flapper ticker needle
  */
 
 export class PieCanvasEngine {
@@ -66,7 +67,6 @@ export class PieCanvasEngine {
     this.height = rect.height;
     this.centerX = this.width / 2;
     this.centerY = this.height / 2;
-    // Spaced for plate rim and popout offsets
     this.radius = Math.min(this.width, this.height) * 0.32;
   }
 
@@ -81,7 +81,7 @@ export class PieCanvasEngine {
     this.hoveredSlice = null;
     this.selectedSlice = null;
     this.rotation = 0;
-    this.angularVelocity = 0.06;
+    this.angularVelocity = 0.05;
   }
 
   initEvents() {
@@ -138,7 +138,7 @@ export class PieCanvasEngine {
     const dist = Math.hypot(dx, dy);
 
     let found = null;
-    if (dist <= this.radius + 35 && dist >= 15) {
+    if (dist <= this.radius + 40 && dist >= 16) {
       let mouseAngle = Math.atan2(dy, dx) - this.rotation;
       mouseAngle = (mouseAngle % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
 
@@ -198,7 +198,7 @@ export class PieCanvasEngine {
   selectSlice(slice) {
     this.selectedSlice = slice;
     this.slices.forEach(s => {
-      s.targetOffset = (s === slice) ? 24 : 0;
+      s.targetOffset = (s === slice) ? 25 : 0;
       if (s === slice) s.wobble = 10;
     });
 
@@ -220,16 +220,16 @@ export class PieCanvasEngine {
     if (!slice) return;
 
     slice.bites = (slice.bites || 0) + 1;
-    slice.wobble = 12;
+    slice.wobble = 14;
 
     const midAngle = (slice.startAngle + slice.endAngle) / 2 + this.rotation;
     const r = this.radius * 0.75;
     const bx = this.centerX + Math.cos(midAngle) * r;
     const by = this.centerY + Math.sin(midAngle) * r;
 
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 22; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const speed = 2 + Math.random() * 6;
+      const speed = 2 + Math.random() * 6.5;
       this.crumbs.push({
         x: bx,
         y: by,
@@ -277,7 +277,7 @@ export class PieCanvasEngine {
     // Slices offset
     this.slices.forEach(slice => {
       const target = (slice === this.hoveredSlice && !this.selectedSlice) ? 14 :
-                     (slice === this.selectedSlice) ? 24 : 0;
+                     (slice === this.selectedSlice) ? 25 : 0;
       slice.targetOffset = target;
       slice.currentOffset += (slice.targetOffset - slice.currentOffset) * 0.22;
 
@@ -339,14 +339,15 @@ export class PieCanvasEngine {
     ctx.translate(this.centerX, this.centerY);
     ctx.rotate(this.rotation);
 
-    // Shadows of popped slices
+    // First pass: Cast shadows & silver pie server underneath lifted slices
     this.slices.forEach(slice => {
-      if (slice.currentOffset > 2) {
+      if (slice.currentOffset > 3) {
+        this.drawSilverPieServer(ctx, slice);
         this.drawSliceShadow(ctx, slice);
       }
     });
 
-    // Draw Slices
+    // Second pass: Draw Slices
     this.slices.forEach(slice => {
       this.drawPieSlice(ctx, slice);
     });
@@ -369,44 +370,90 @@ export class PieCanvasEngine {
   drawPorcelainPlate(ctx) {
     const cx = this.centerX;
     const cy = this.centerY;
-    const r = this.radius + 30;
+    const r = this.radius + 32;
 
-    // Solid comic drop shadow
+    // Ambient plate shadow
     ctx.beginPath();
-    ctx.arc(cx + 6, cy + 10, r, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(31, 23, 18, 0.2)';
+    ctx.arc(cx, cy + 8, r + 2, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(28, 19, 13, 0.15)';
     ctx.fill();
 
     // Warm ivory porcelain plate body
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.fillStyle = '#fdfbf7';
+    ctx.fillStyle = '#fdfaf2';
     ctx.fill();
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = '#1f1712';
+    ctx.lineWidth = 3.5;
+    ctx.strokeStyle = '#1c130d';
     ctx.stroke();
 
-    // Classic 1930s diner cobalt/teal pinstripe rims
+    // Classic 1930s diner cobalt pinstripes
     ctx.beginPath();
     ctx.arc(cx, cy, r - 7, 0, Math.PI * 2);
     ctx.lineWidth = 2.5;
-    ctx.strokeStyle = '#0984e3';
+    ctx.strokeStyle = '#1e3799';
     ctx.stroke();
 
     ctx.beginPath();
     ctx.arc(cx, cy, r - 12, 0, Math.PI * 2);
     ctx.lineWidth = 1.2;
-    ctx.strokeStyle = '#74b9ff';
+    ctx.strokeStyle = '#4a69bd';
     ctx.stroke();
 
     // Inner plate well
     ctx.beginPath();
     ctx.arc(cx, cy, r - 20, 0, Math.PI * 2);
-    ctx.fillStyle = '#f7f1e3';
+    ctx.fillStyle = '#f6f0e2';
     ctx.fill();
     ctx.lineWidth = 1.5;
-    ctx.strokeStyle = '#e0d5be';
+    ctx.strokeStyle = '#ded4be';
     ctx.stroke();
+  }
+
+  drawSilverPieServer(ctx, slice) {
+    const midAngle = (slice.startAngle + slice.endAngle) / 2;
+    const offset = slice.currentOffset;
+    const r = this.radius;
+
+    ctx.save();
+    ctx.rotate(midAngle);
+
+    // Silver spatula head sliding under slice
+    ctx.beginPath();
+    ctx.moveTo(offset - 10, -12);
+    ctx.lineTo(r + offset + 12, -26);
+    ctx.lineTo(r + offset + 12, 26);
+    ctx.lineTo(offset - 10, 12);
+    ctx.closePath();
+
+    // Silver metallic gradient
+    const silverGrad = ctx.createLinearGradient(0, -20, 0, 20);
+    silverGrad.addColorStop(0, '#f1f2f6');
+    silverGrad.addColorStop(0.5, '#ced6e0');
+    silverGrad.addColorStop(1, '#a4b0be');
+    ctx.fillStyle = silverGrad;
+    ctx.fill();
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = '#1c130d';
+    ctx.stroke();
+
+    // Wooden server handle
+    ctx.beginPath();
+    ctx.rect(r + offset + 12, -6, 42, 12);
+    ctx.fillStyle = '#795548';
+    ctx.fill();
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = '#1c130d';
+    ctx.stroke();
+
+    // Handle brass rivets
+    ctx.fillStyle = '#f1c40f';
+    ctx.beginPath();
+    ctx.arc(r + offset + 22, 0, 2.5, 0, Math.PI * 2);
+    ctx.arc(r + offset + 40, 0, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
   }
 
   drawSliceShadow(ctx, slice) {
@@ -416,12 +463,12 @@ export class PieCanvasEngine {
     const oy = Math.sin(midAngle) * offset;
 
     ctx.save();
-    ctx.translate(ox + 5, oy + 7);
+    ctx.translate(ox + 4, oy + 6);
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.arc(0, 0, this.radius, slice.startAngle, slice.endAngle);
     ctx.closePath();
-    ctx.fillStyle = 'rgba(31, 23, 18, 0.25)';
+    ctx.fillStyle = 'rgba(28, 19, 13, 0.22)';
     ctx.fill();
     ctx.restore();
   }
@@ -447,13 +494,13 @@ export class PieCanvasEngine {
     const grad = ctx.createRadialGradient(0, 0, 10, 0, 0, r);
     grad.addColorStop(0, slice.lang.color);
     grad.addColorStop(0.85, slice.lang.color);
-    grad.addColorStop(1, slice.lang.darkColor || '#1f1712');
+    grad.addColorStop(1, slice.lang.darkColor || '#1c130d');
     ctx.fillStyle = grad;
     ctx.fill();
 
     // Inked contour
     ctx.lineWidth = 3.5;
-    ctx.strokeStyle = '#1f1712';
+    ctx.strokeStyle = '#1c130d';
     ctx.lineJoin = 'round';
     ctx.stroke();
 
@@ -487,10 +534,6 @@ export class PieCanvasEngine {
     ctx.restore();
   }
 
-  /**
-   * Draws a smooth, continuous undulating scalloped wave for the pastry crust rim.
-   * Eliminates the "ring of beads" look completely!
-   */
   drawContinuousScallopCrust(ctx, startAngle, endAngle, r) {
     const span = endAngle - startAngle;
     const scallops = Math.max(1, Math.round(span * 8.5));
@@ -503,17 +546,14 @@ export class PieCanvasEngine {
     const innerR = r - 10;
     const outerR = r + 6;
 
-    // Start at inner start point
     ctx.moveTo(Math.cos(startAngle) * innerR, Math.sin(startAngle) * innerR);
     ctx.lineTo(Math.cos(startAngle) * outerR, Math.sin(startAngle) * outerR);
 
-    // Loop through scallops using smooth bezier arcs
     for (let i = 0; i < scallops; i++) {
       const aStart = startAngle + i * step;
       const aMid = aStart + step / 2;
       const aEnd = aStart + step;
 
-      // Peak of the scallop
       const peakR = outerR + 4;
       const px = Math.cos(aMid) * peakR;
       const py = Math.sin(aMid) * peakR;
@@ -524,10 +564,7 @@ export class PieCanvasEngine {
       ctx.quadraticCurveTo(px, py, endX, endY);
     }
 
-    // Connect back inward
     ctx.lineTo(Math.cos(endAngle) * innerR, Math.sin(endAngle) * innerR);
-
-    // Arc back along inner radius
     ctx.arc(0, 0, innerR, endAngle, startAngle, true);
     ctx.closePath();
 
@@ -541,7 +578,7 @@ export class PieCanvasEngine {
 
     // Solid ink border
     ctx.lineWidth = 3;
-    ctx.strokeStyle = '#1f1712';
+    ctx.strokeStyle = '#1c130d';
     ctx.lineJoin = 'round';
     ctx.stroke();
 
@@ -571,8 +608,8 @@ export class PieCanvasEngine {
     ctx.translate(bx, by);
     ctx.rotate(angle + Math.PI / 2);
 
-    ctx.fillStyle = '#f7f1e3';
-    ctx.strokeStyle = '#1f1712';
+    ctx.fillStyle = '#f6f0e2';
+    ctx.strokeStyle = '#1c130d';
     ctx.lineWidth = 3.5;
 
     [-12, 0, 12].forEach(offset => {
@@ -603,17 +640,17 @@ export class PieCanvasEngine {
     const badgeW = Math.max(76, textWidth + 18);
     const badgeH = 24;
 
-    // Solid comic pill shadow
-    ctx.fillStyle = 'rgba(31, 23, 18, 0.35)';
+    // Solid badge shadow
+    ctx.fillStyle = 'rgba(28, 19, 13, 0.25)';
     ctx.beginPath();
-    if (ctx.roundRect) ctx.roundRect(-badgeW / 2 + 2, -badgeH / 2 + 3, badgeW, badgeH, 12);
-    else ctx.rect(-badgeW / 2 + 2, -badgeH / 2 + 3, badgeW, badgeH);
+    if (ctx.roundRect) ctx.roundRect(-badgeW / 2 + 2, -badgeH / 2 + 2, badgeW, badgeH, 12);
+    else ctx.rect(-badgeW / 2 + 2, -badgeH / 2 + 2, badgeW, badgeH);
     ctx.fill();
 
     // Solid white comic pill badge
     ctx.fillStyle = '#ffffff';
-    ctx.strokeStyle = '#1f1712';
-    ctx.lineWidth = 2.8;
+    ctx.strokeStyle = '#1c130d';
+    ctx.lineWidth = 2.5;
 
     ctx.beginPath();
     if (ctx.roundRect) ctx.roundRect(-badgeW / 2, -badgeH / 2, badgeW, badgeH, 12);
@@ -624,7 +661,7 @@ export class PieCanvasEngine {
     // High contrast black text
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#1f1712';
+    ctx.fillStyle = '#1c130d';
     ctx.fillText(text, 0, 1);
 
     ctx.restore();
@@ -643,7 +680,7 @@ export class PieCanvasEngine {
     ctx.fillStyle = btnGrad;
     ctx.fill();
     ctx.lineWidth = 3.5;
-    ctx.strokeStyle = '#1f1712';
+    ctx.strokeStyle = '#1c130d';
     ctx.stroke();
 
     // 4 Classic decorative curved cartoon steam vents
@@ -664,7 +701,7 @@ export class PieCanvasEngine {
     ctx.fillStyle = '#fceecb';
     ctx.fill();
     ctx.lineWidth = 1.8;
-    ctx.strokeStyle = '#1f1712';
+    ctx.strokeStyle = '#1c130d';
     ctx.stroke();
   }
 
@@ -675,8 +712,8 @@ export class PieCanvasEngine {
       ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
       ctx.fill();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = `rgba(31, 23, 18, ${p.alpha * 0.4})`;
+      ctx.lineWidth = 1.8;
+      ctx.strokeStyle = `rgba(28, 19, 13, ${p.alpha * 0.4})`;
       ctx.stroke();
       ctx.restore();
     });
@@ -696,7 +733,7 @@ export class PieCanvasEngine {
     ctx.lineTo(-8, -6);
     ctx.lineTo(8, -6);
     ctx.closePath();
-    ctx.fillStyle = 'rgba(31, 23, 18, 0.28)';
+    ctx.fillStyle = 'rgba(28, 19, 13, 0.22)';
     ctx.fill();
 
     // Flapper needle arrow
@@ -705,10 +742,10 @@ export class PieCanvasEngine {
     ctx.lineTo(-7, -7);
     ctx.lineTo(7, -7);
     ctx.closePath();
-    ctx.fillStyle = '#d63031';
+    ctx.fillStyle = '#c0392b';
     ctx.fill();
     ctx.lineWidth = 2.5;
-    ctx.strokeStyle = '#1f1712';
+    ctx.strokeStyle = '#1c130d';
     ctx.stroke();
 
     // Brass pin
@@ -717,7 +754,7 @@ export class PieCanvasEngine {
     ctx.fillStyle = '#f1c40f';
     ctx.fill();
     ctx.lineWidth = 2;
-    ctx.strokeStyle = '#1f1712';
+    ctx.strokeStyle = '#1c130d';
     ctx.stroke();
 
     ctx.restore();
@@ -745,7 +782,7 @@ export class PieCanvasEngine {
       ctx.fillStyle = c.color;
       ctx.fill();
       ctx.lineWidth = 1.5;
-      ctx.strokeStyle = '#1f1712';
+      ctx.strokeStyle = '#1c130d';
       ctx.stroke();
 
       ctx.restore();
