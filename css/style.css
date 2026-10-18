@@ -356,6 +356,10 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
+  background: radial-gradient(circle at 50% 45%, #fffdf8 0%, #faecd5 60%, #eed8b8 100%);
+  border: 4px solid var(--ink-black);
+  border-radius: 36px;
+  box-shadow: 6px 6px 0px var(--ink-black), inset 0 0 24px rgba(121, 85, 72, 0.15);
 }
 
 #pie-canvas {
@@ -368,18 +372,19 @@ html, body {
   font-family: var(--font-typewriter);
   font-size: 0.85rem;
   color: #795548;
-  background: rgba(255, 255, 255, 0.7);
-  border: 2px dashed #b89f82;
-  border-radius: 12px;
-  padding: 4px 12px;
-  margin-top: 6px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 2.5px dashed #b89f82;
+  border-radius: 14px;
+  padding: 5px 14px;
+  margin-top: 8px;
+  box-shadow: 2px 2px 0px var(--ink-black);
 }
 
 /* Right Recipe Blackboard */
 .recipe-chalkboard {
-  width: 380px;
+  width: 390px;
   height: 100%;
-  max-height: 520px;
+  max-height: 530px;
   display: flex;
   flex-direction: column;
 }
@@ -387,25 +392,25 @@ html, body {
 .chalkboard-frame {
   width: 100%;
   height: 100%;
-  background: var(--chalkboard-frame);
-  border: 4px solid var(--ink-black);
-  border-radius: 18px;
-  padding: 10px;
-  box-shadow: 6px 6px 0px var(--ink-black);
+  background: #4e342e;
+  border: 4.5px solid var(--ink-black);
+  border-radius: 22px;
+  padding: 12px;
+  box-shadow: 7px 7px 0px var(--ink-black);
 }
 
 .chalkboard-inner {
   width: 100%;
   height: 100%;
-  background: var(--chalkboard-bg);
-  border: 2px solid #141c18;
-  border-radius: 10px;
+  background: radial-gradient(circle at 40% 30%, #24382c 0%, #16241c 100%);
+  border: 2px dashed rgba(255, 255, 255, 0.22);
+  border-radius: 12px;
   padding: 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   color: #e8f5e9;
-  box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.7);
 }
 
 .chalk-header {
@@ -417,10 +422,10 @@ html, body {
 
 .chalk-title {
   font-family: var(--font-title);
-  font-size: 1.5rem;
+  font-size: 1.55rem;
   letter-spacing: 1.5px;
   color: var(--cartoon-yellow);
-  text-shadow: 2px 2px 0px #000;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.7), 2px 2px 0px #000;
   text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
