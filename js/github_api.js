@@ -1,29 +1,29 @@
 /**
- * GitPie — GitHub REST API Service & Cartoon Recipe Data
+ * GitPie — GitHub REST API Service & Codebase Metrics Engine
  */
 
 export const LANGUAGE_PALETTE = {
-  java:       { name: 'Java / JSP',   flavor: 'Cherry Tart',        color: '#d63031', darkColor: '#a71d2a' },
-  javascript: { name: 'JavaScript',   flavor: 'Lemon Meringue',     color: '#fbc531', darkColor: '#c29712' },
-  typescript: { name: 'TypeScript',   flavor: 'Blueberry Pie',      color: '#0984e3', darkColor: '#075ca0' },
-  python:     { name: 'Python',       flavor: 'Key Lime Pie',       color: '#00b894', darkColor: '#00876c' },
-  sql:        { name: 'SQL',          flavor: 'Butterscotch Crumb', color: '#e58e26', darkColor: '#b06713' },
-  html:       { name: 'HTML',         flavor: 'Pumpkin Cobbler',    color: '#e17055', darkColor: '#b94e36' },
-  css:        { name: 'CSS',          flavor: 'Plum Custard',       color: '#6c5ce7', darkColor: '#4d3ec2' },
-  scss:       { name: 'SCSS',         flavor: 'Strawberry Glaze',   color: '#e84393', darkColor: '#b8276f' },
-  vue:        { name: 'Vue',          flavor: 'Pistachio Pastry',   color: '#20bf6b', darkColor: '#148f4e' },
-  xml:        { name: 'XML / Config', flavor: 'Sugar Wafers',       color: '#a29bfe', darkColor: '#6c5ce7' },
-  json:       { name: 'JSON',         flavor: 'Sweet Icing',        color: '#fd79a8', darkColor: '#d63031' },
-  markdown:   { name: 'Markdown',     flavor: 'Vanilla Cookie',     color: '#74b9ff', darkColor: '#4b8ec9' },
-  rust:       { name: 'Rust',         flavor: 'Cinnamon Crisp',     color: '#e67e22', darkColor: '#b35d10' },
-  go:         { name: 'Go',           flavor: 'Mint Sorbet',        color: '#00cec9', darkColor: '#009794' },
-  c:          { name: 'C',            flavor: 'Blackberry Tart',    color: '#34495e', darkColor: '#1f2d3a' },
-  cpp:        { name: 'C++',          flavor: 'Raspberry Danish',   color: '#e84393', darkColor: '#cf4675' },
-  csharp:     { name: 'C#',           flavor: 'Apple Turn-over',    color: '#2ed573', darkColor: '#1d9e52' },
-  yaml:       { name: 'YAML / Props', flavor: 'Caramel Macaron',    color: '#f39c12', darkColor: '#be7406' },
-  shell:      { name: 'Shell Script', flavor: 'Gingerbread Crust',  color: '#8395a7', darkColor: '#576574' },
-  docker:     { name: 'Dockerfile',   flavor: 'Frosted Cupcake',    color: '#4b7bec', darkColor: '#2b56b8' },
-  other:      { name: 'Other Code',   flavor: 'Mystery Doughnut',   color: '#a5b1c2', darkColor: '#778ca3' }
+  java:       { name: 'Java / JSP',   category: 'Backend & Enterprise',     color: '#d63031', darkColor: '#a71d2a' },
+  javascript: { name: 'JavaScript',   category: 'Frontend & Fullstack',     color: '#fbc531', darkColor: '#c29712' },
+  typescript: { name: 'TypeScript',   category: 'Typed Architecture',       color: '#0984e3', darkColor: '#075ca0' },
+  python:     { name: 'Python',       category: 'Scripting & AI Systems',   color: '#00b894', darkColor: '#00876c' },
+  sql:        { name: 'SQL',          category: 'Relational Database',      color: '#e58e26', darkColor: '#b06713' },
+  html:       { name: 'HTML',         category: 'Markup & Structure',       color: '#e17055', darkColor: '#b94e36' },
+  css:        { name: 'CSS',          category: 'Stylesheets & Presentation', color: '#6c5ce7', darkColor: '#4d3ec2' },
+  scss:       { name: 'SCSS',         category: 'Preprocessed Styling',     color: '#e84393', darkColor: '#b8276f' },
+  vue:        { name: 'Vue',          category: 'Reactive UI Components',   color: '#20bf6b', darkColor: '#148f4e' },
+  xml:        { name: 'XML / Config', category: 'Configuration & Build',    color: '#a29bfe', darkColor: '#6c5ce7' },
+  json:       { name: 'JSON',         category: 'Structured Data',          color: '#fd79a8', darkColor: '#d63031' },
+  markdown:   { name: 'Markdown',     category: 'Documentation',            color: '#74b9ff', darkColor: '#4b8ec9' },
+  rust:       { name: 'Rust',         category: 'Systems & Performance',    color: '#e67e22', darkColor: '#b35d10' },
+  go:         { name: 'Go',           category: 'Concurrency & Services',   color: '#00cec9', darkColor: '#009794' },
+  c:          { name: 'C',            category: 'Low-Level Systems',        color: '#34495e', darkColor: '#1f2d3a' },
+  cpp:        { name: 'C++',          category: 'High Performance Systems', color: '#e84393', darkColor: '#cf4675' },
+  csharp:     { name: 'C#',           category: '.NET Framework',           color: '#2ed573', darkColor: '#1d9e52' },
+  yaml:       { name: 'YAML / Props', category: 'DevOps & Configurations',  color: '#f39c12', darkColor: '#be7406' },
+  shell:      { name: 'Shell Script', category: 'Automation & Scripts',     color: '#8395a7', darkColor: '#576574' },
+  docker:     { name: 'Dockerfile',   category: 'Containers & Infrastructure', color: '#4b7bec', darkColor: '#2b56b8' },
+  other:      { name: 'Other Code',   category: 'Miscellaneous Assets',     color: '#a5b1c2', darkColor: '#778ca3' }
 };
 
 const BINARY_EXTENSIONS = new Set([
@@ -251,7 +251,7 @@ export class GitHubService {
       if (!folderTotals[fName]) {
         const color = folderColors[Object.keys(folderTotals).length % folderColors.length];
         folderTotals[fName] = {
-          lang: { name: fName, flavor: 'Folder Crust', color: color },
+          lang: { name: fName, category: 'Directory Architecture', color: color },
           loc: 0,
           bytes: 0,
           files: []
@@ -269,7 +269,7 @@ export class GitHubService {
     const topFiles = sortedFiles.slice(0, 8);
     const remainingFiles = sortedFiles.slice(8);
     const fileSlices = topFiles.map(f => ({
-      lang: { name: f.filename, flavor: `${f.language.name} Pastry`, color: f.language.color },
+      lang: { name: f.filename, category: `${f.language.name} File`, color: f.language.color },
       loc: f.loc,
       bytes: f.size,
       files: [f]
@@ -277,7 +277,7 @@ export class GitHubService {
     if (remainingFiles.length > 0) {
       const otherLoc = remainingFiles.reduce((acc, f) => acc + f.loc, 0);
       fileSlices.push({
-        lang: { name: 'Other Files', flavor: 'Assorted Treats', color: '#a5b1c2' },
+        lang: { name: 'Other Files', category: 'Remaining Source Files', color: '#a5b1c2' },
         loc: otherLoc,
         bytes: remainingFiles.reduce((acc, f) => acc + f.size, 0),
         files: remainingFiles
@@ -289,14 +289,14 @@ export class GitHubService {
       ? commits.map(c => ({
           sha: c.sha ? c.sha.substring(0, 7) : 'head',
           date: c.commit?.author?.date || new Date().toISOString(),
-          message: c.commit?.message?.split('\n')[0] || 'Bake new ingredients',
-          author: c.commit?.author?.name || 'Chef'
+          message: c.commit?.message?.split('\n')[0] || 'Update repository codebase',
+          author: c.commit?.author?.name || 'Developer'
         })).reverse()
       : this.generateSyntheticCommits(repoSlug);
 
     return {
       repoSlug,
-      description: repoMeta?.description || 'Freshly baked codebase pie',
+      description: repoMeta?.description || 'Repository Codebase Breakdown',
       files,
       folders: Array.from(folders),
       slices,
@@ -321,12 +321,18 @@ export class GitHubService {
   }
 
   generateSyntheticCommits(repoSlug) {
-    const dates = ['Batch 1: Yeast & Flour', 'Batch 2: Add Sugar', 'Batch 3: Mix Batter', 'Batch 4: Into The Oven!', 'Fresh Out Of The Oven'];
-    return dates.map((d, i) => ({
-      sha: `pie#${i + 1}`,
-      date: `193${i}-06-12`,
-      message: d,
-      author: repoSlug.split('/')[0] || 'Master Baker'
+    const messages = [
+      'Initial repository commit and architecture setup',
+      'Implement core service and domain models',
+      'Optimize database queries and storage schemas',
+      'Refine UI layout and component interactions',
+      'Production release, build configs, and documentation'
+    ];
+    return messages.map((m, i) => ({
+      sha: `c#${i + 1}`,
+      date: new Date(Date.now() - (5 - i) * 86400000 * 7).toISOString(),
+      message: m,
+      author: repoSlug.split('/')[0] || 'Developer'
     }));
   }
 

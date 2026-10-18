@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GitPie — Minimal Codebase Visualizer</title>
-  <meta name="description" content="A minimal, elegant interactive pie visualizer for GitHub codebases.">
+  <title>GitPie — Precision GitHub Codebase Visualizer</title>
+  <meta name="description" content="A minimalist, precision interactive codebase visualizer for GitHub repositories.">
 
   <!-- Distinctive Artisan & Geometric Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -189,17 +189,12 @@
     </footer>
   </div>
 
-  <!-- Comic "CHOMP!" Burst -->
-  <div id="comic-chomp-burst" class="comic-chomp-burst hidden" aria-hidden="true">
-    <span>CHOMP!</span>
-  </div>
-
   <!-- Loading Overlay -->
   <div id="baking-overlay" class="baking-overlay hidden" role="status" aria-live="polite">
     <div class="baking-card">
       <div class="spinner-circle"></div>
-      <h2 class="baking-title">Mixing Ingredients</h2>
-      <p id="baking-status" class="baking-desc">Gathering repository files...</p>
+      <h2 class="baking-title" id="loading-title">Analyzing Codebase</h2>
+      <p id="baking-status" class="baking-desc">Gathering repository files and metrics...</p>
     </div>
   </div>
 
@@ -208,13 +203,6 @@
     <span id="toast-text">Badge Copied to Clipboard</span>
   </div>
 
-  <!-- Fallback containers for backwards-compatibility in app.js -->
-  <div style="display: none;" aria-hidden="true">
-    <div id="chef-actor"></div>
-    <div id="chef-speech-bubble"><p id="chef-speech-text"></p></div>
-    <svg><g id="chef-pupil-left"></g><g id="chef-pupil-right"></g></svg>
-  </div>
-
-  <script type="module" src="js/app.js?v=7.0"></script>
+  <script type="module" src="js/app.js?v=8.0"></script>
 </body>
 </html>

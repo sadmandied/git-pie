@@ -1,7 +1,7 @@
 /**
- * GitPie! — Main Application Orchestrator (v5.0)
- * Coordinates the Cuphead Cartoon Pie Canvas, GitHub API, Flavor Palette Legend,
- * Chef Git Mascot Interactions, and Vintage Recipe Blackboard.
+ * GitPie — Main Application Orchestrator
+ * Coordinates the Precision Donut Canvas, GitHub API, Language Palette Legend,
+ * and Codebase Inspection Panel.
  */
 
 import { gitHubService } from './github_api.js';
@@ -15,81 +15,33 @@ class GitPieApp {
     this.selectedSlice = null;
     this.userRepos = [];
     this.currentMode = 'languages'; // 'languages' | 'folders' | 'files'
-
-    // Chef speech quotes
-    this.chefQuotes = {
-      welcome: "Welcome to the Bakery, Sadman! Let's slice this codebase!",
-      spin: "Round and round she goes! A wallop of flavor in every spin!",
-      bite: "CHOMP! Delicious refactored code! Save room for dessert!",
-      java: "Golly! That's a hearty slice of Java Cherry! Robust and full-bodied!",
-      js: "Lemon Meringue JavaScript! Tangy and full of lively async callbacks!",
-      ts: "Blueberry TypeScript! Typed to absolute sweet perfection!",
-      python: "Key Lime Python! Clean, readable, and smoothly indented!",
-      sql: "Butterscotch SQL! Rich relational layers baked to a golden crust!",
-      html: "Pumpkin Cobbler HTML! The structural crust holding everything together!",
-      css: "Plum Custard CSS! Beautiful styling and elegant presentation!",
-      xml: "Sugar Wafer XML! Crispy configuration and metadata sweetness!",
-      generic: "Fresh out of the oven! Click any slice to inspect its source files!"
-    };
   }
 
   async init() {
-    // 1. Initialize Pie Canvas Engine
+    // 1. Initialize Precision Donut Canvas Engine
     this.pieEngine = new PieCanvasEngine(
       this.canvas,
       (slice) => this.onSliceSelected(slice),
       (slice) => this.onSliceHover(slice)
     );
 
-    // 2. Setup Mascot Eye Tracking & Speech
-    this.setupMascotInteractions();
-
-    // 3. Setup UI Event Listeners
+    // 2. Setup UI Event Listeners
     this.setupEventListeners();
 
-    // 4. Start Render Loop immediately so canvas starts rendering right away
+    // 3. Start Render Loop immediately so canvas renders smoothly from frame 1
     this.loop();
 
-    // 5. Load Sadman's Repositories into the Dropdown
+    // 4. Load Sadman's Repositories into the Dropdown
     await this.loadUserRepositories();
 
-    // 6. Load Default Showcase Repository (CoworkingSpaceBookingSystem)
+    // 5. Load Default Showcase Repository (CoworkingSpaceBookingSystem)
     const defaultRepo = 'sadmandied/CoworkingSpaceBookingSystem';
-    await this.bakeRepository(defaultRepo);
-  }
-
-  setupMascotInteractions() {
-    const leftPupil = document.getElementById('chef-pupil-left');
-    const rightPupil = document.getElementById('chef-pupil-right');
-
-    window.addEventListener('mousemove', (e) => {
-      if (!leftPupil || !rightPupil) return;
-      const rect = this.canvas.getBoundingClientRect();
-      const dx = (e.clientX - (rect.left + rect.width / 2)) * 0.008;
-      const dy = (e.clientY - (rect.top + rect.height / 2)) * 0.008;
-
-      const clampX = Math.max(-2.5, Math.min(2.5, dx));
-      const clampY = Math.max(-3, Math.min(3, dy));
-
-      leftPupil.setAttribute('transform', `translate(${clampX}, ${clampY})`);
-      rightPupil.setAttribute('transform', `translate(${clampX}, ${clampY})`);
-    });
-  }
-
-  setChefSpeech(text) {
-    const speechEl = document.getElementById('chef-speech-text');
-    const bubbleEl = document.getElementById('chef-speech-bubble');
-    if (!speechEl || !bubbleEl) return;
-
-    speechEl.textContent = text;
-    bubbleEl.classList.remove('speech-pop');
-    void bubbleEl.offsetWidth; // Trigger reflow for CSS animation
-    bubbleEl.classList.add('speech-pop');
+    await this.analyzeRepository(defaultRepo);
   }
 
   async loadUserRepositories() {
     const listContainer = document.getElementById('repos-list');
-    listContainer.innerHTML = '<div style="padding: 12px; color: #795548; font-family: var(--font-hand); text-align: center;">Fetching Sadman\'s pantry...</div>';
+    listContainer.innerHTML = '<div style="padding: 12px; color: var(--ink-secondary); font-size: 0.82rem; text-align: center;">Loading Sadman\'s repositories...</div>';
 
     try {
       this.userRepos = await gitHubService.fetchUserRepositories('sadmandied');
@@ -122,7 +74,7 @@ class GitPieApp {
 
           const repoSlug = repo.fullName || `sadmandied/${repo.name}`;
           document.getElementById('repo-input').value = repoSlug;
-          this.bakeRepository(repoSlug);
+          this.analyzeRepository(repoSlug);
         });
 
         listContainer.appendChild(item);
@@ -132,9 +84,13 @@ class GitPieApp {
     }
   }
 
+  // Alias for backwards compatibility
   async bakeRepository(repoSlug) {
-    this.showBakingOverlay(true, `Mixing code ingredients for ${repoSlug}...`);
-    this.setChefSpeech(`Stirring up a fresh batch for ${repoSlug.split('/')[1] || repoSlug}!`);
+    return this.analyzeRepository(repoSlug);
+  }
+
+  async analyzeRepository(repoSlug) {
+    this.showLoadingOverlay(true, `Analyzing codebase for ${repoSlug}...`);
 
     try {
       const data = await gitHubService.fetchRepository(repoSlug);
@@ -154,13 +110,13 @@ class GitPieApp {
       document.getElementById('selected-repo-label').textContent = shortName;
 
       setTimeout(() => {
-        this.showBakingOverlay(false);
+        this.showLoadingOverlay(false);
       }, 400);
 
     } catch (err) {
-      console.error('Baking failed:', err);
-      alert(`Oven malfunction: ${err.message}`);
-      this.showBakingOverlay(false);
+      console.error('Analysis failed:', err);
+      alert(`Repository analysis error: ${err.message}`);
+      this.showLoadingOverlay(false);
     }
   }
 
@@ -204,13 +160,13 @@ class GitPieApp {
 
       pill.addEventListener('mouseenter', () => {
         this.pieEngine.hoveredSlice = slice;
-        this.updateRecipeChalkboard(slice, false);
+        this.updateInspectionPanel(slice, false);
       });
 
       pill.addEventListener('mouseleave', () => {
         if (this.selectedSlice) {
           this.pieEngine.hoveredSlice = null;
-          this.updateRecipeChalkboard(this.selectedSlice, false);
+          this.updateInspectionPanel(this.selectedSlice, false);
         }
       });
 
@@ -228,14 +184,14 @@ class GitPieApp {
 
   onSliceHover(slice) {
     if (!slice) return;
-    this.updateRecipeChalkboard(slice, false);
+    this.updateInspectionPanel(slice, false);
   }
 
   onSliceSelected(slice) {
     this.selectedSlice = slice;
-    this.updateRecipeChalkboard(slice, true);
+    this.updateInspectionPanel(slice, true);
 
-    // Update active state in Flavor Palette
+    // Update active state in Palette
     const pills = document.querySelectorAll('.flavor-pill');
     const slices = (this.currentMode === 'folders' && this.currentData.folderSlices) ? this.currentData.folderSlices :
                    (this.currentMode === 'files' && this.currentData.fileSlices) ? this.currentData.fileSlices :
@@ -244,18 +200,14 @@ class GitPieApp {
     pills.forEach((p, i) => {
       p.classList.toggle('active', i === idx);
     });
-
-    // Dynamic Chef Speech
-    const langKey = slice.lang.key || slice.lang.name.toLowerCase();
-    if (this.chefQuotes[langKey]) {
-      this.setChefSpeech(this.chefQuotes[langKey]);
-    } else {
-      const pct = (slice.percentage * 100).toFixed(0);
-      this.setChefSpeech(`A generous ${pct}% slice of ${slice.lang.name}! Mixed with care!`);
-    }
   }
 
+  // Alias for backwards compatibility
   updateRecipeChalkboard(slice, clearFilter = true) {
+    return this.updateInspectionPanel(slice, clearFilter);
+  }
+
+  updateInspectionPanel(slice, clearFilter = true) {
     if (!slice) return;
 
     // Inspection Panel Title & Subtitle
@@ -271,7 +223,7 @@ class GitPieApp {
     // Inspection Summary Note
     const notesEl = document.getElementById('baker-notes-text');
     if (notesEl) {
-      notesEl.textContent = this.generateBakerNotes(slice);
+      notesEl.textContent = this.generateSummaryNotes(slice);
     }
 
     // Clear search input if selected freshly
@@ -280,12 +232,12 @@ class GitPieApp {
       searchInput.value = '';
     }
 
-    // Render file ingredients list
+    // Render file list
     const filterQuery = searchInput ? searchInput.value : '';
-    this.renderIngredientsList(slice.files, filterQuery);
+    this.renderFilesList(slice.files, filterQuery);
   }
 
-  generateBakerNotes(slice) {
+  generateSummaryNotes(slice) {
     const pct = slice.percentage * 100;
     if (pct > 50) {
       return `Primary technology component representing ${pct.toFixed(1)}% of total codebase volume.`;
@@ -298,15 +250,27 @@ class GitPieApp {
     }
   }
 
+  // Alias for backwards compatibility
   renderIngredientsList(files, query = '') {
+    return this.renderFilesList(files, query);
+  }
+
+  renderFilesList(files, query = '') {
     const listEl = document.getElementById('ingredients-list');
+    if (!listEl) return;
     listEl.innerHTML = '';
 
-    const cleanQuery = query.toLowerCase().trim();
-    const filtered = files.filter(f => !cleanQuery || f.path.toLowerCase().includes(cleanQuery));
+    if (!files || files.length === 0) {
+      listEl.innerHTML = '<li class="empty-hint">No source files available for this selection.</li>';
+      return;
+    }
+
+    const filtered = query.trim()
+      ? files.filter(f => f.path.toLowerCase().includes(query.toLowerCase()) || f.filename.toLowerCase().includes(query.toLowerCase()))
+      : files;
 
     if (filtered.length === 0) {
-      listEl.innerHTML = `<li class="empty-hint">No ingredients matching "${query}"!</li>`;
+      listEl.innerHTML = `<li class="empty-hint">No files matching "${query}"</li>`;
       return;
     }
 
@@ -332,24 +296,24 @@ class GitPieApp {
       const more = document.createElement('li');
       more.className = 'ingredient-item';
       more.style.justifyContent = 'center';
-      more.innerHTML = `<em>...and ${filtered.length - 35} more ingredients!</em>`;
+      more.innerHTML = `<em>...and ${filtered.length - 35} more files</em>`;
       listEl.appendChild(more);
     }
   }
 
   setupEventListeners() {
-    // 1. Order input & button (manual entry)
+    // 1. Analyze input & button (manual entry)
     const input = document.getElementById('repo-input');
     const btnBake = document.getElementById('btn-bake');
 
-    const handleBake = () => {
+    const handleAnalyze = () => {
       const val = input.value.trim();
-      if (val) this.bakeRepository(val);
+      if (val) this.analyzeRepository(val);
     };
 
-    btnBake.addEventListener('click', handleBake);
+    btnBake.addEventListener('click', handleAnalyze);
     input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') handleBake();
+      if (e.key === 'Enter') handleAnalyze();
     });
 
     // 2. Dropdown Menu Toggle
@@ -370,13 +334,12 @@ class GitPieApp {
       }
     });
 
-    // 3. Spin The Pie Wheel button
+    // 3. Spin The Donut Wheel button
     document.getElementById('btn-spin').addEventListener('click', () => {
       this.pieEngine.angularVelocity = 0.28 + Math.random() * 0.25;
-      this.setChefSpeech(this.chefQuotes.spin);
     });
 
-    // 4. Recipe Mode Selector (Languages / Folders / Files)
+    // 4. View Mode Selector (Languages / Folders / Files)
     document.querySelectorAll('.mode-pill').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.mode-pill').forEach(b => b.classList.remove('active'));
@@ -386,30 +349,28 @@ class GitPieApp {
       });
     });
 
-    // 5. Take a Bite button (with comic popup)
+    // 5. Highlight Slice button
     document.getElementById('btn-eat-slice').addEventListener('click', () => {
       if (this.pieEngine && this.selectedSlice) {
         this.pieEngine.takeBite(this.selectedSlice);
-        this.triggerComicChomp();
-        this.setChefSpeech(this.chefQuotes.bite);
       }
     });
 
     // 6. Copy Markdown Badge button
     document.getElementById('btn-copy-badge').addEventListener('click', () => {
       const repoSlug = this.currentData ? this.currentData.repoSlug : 'sadmandied/CoworkingSpaceBookingSystem';
-      const badgeMarkdown = `[![Baked with GitPie](https://img.shields.io/badge/Baked%20with-GitPie%20🥧-d63031?style=for-the-badge)](https://sadmandied.github.io/git-pie/)`;
+      const badgeMarkdown = `[![Visualized with GitPie](https://img.shields.io/badge/Visualized%20with-GitPie-1a1614?style=for-the-badge)](https://sadmandied.github.io/git-pie/)`;
       navigator.clipboard.writeText(badgeMarkdown).then(() => {
         this.showToast('Markdown Badge Copied to Clipboard!');
       });
     });
 
-    // 7. Ingredient search filter
+    // 7. File search filter
     const searchInput = document.getElementById('ingredient-search');
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
         if (this.selectedSlice && this.selectedSlice.files) {
-          this.renderIngredientsList(this.selectedSlice.files, e.target.value);
+          this.renderFilesList(this.selectedSlice.files, e.target.value);
         }
       });
     }
@@ -427,7 +388,6 @@ class GitPieApp {
       } else if (e.code === 'Space') {
         e.preventDefault();
         this.pieEngine.angularVelocity = 0.32 + Math.random() * 0.25;
-        this.setChefSpeech(this.chefQuotes.spin);
       } else if (e.key === 'ArrowRight') {
         this.pieEngine.cycleSlice(1);
       } else if (e.key === 'ArrowLeft') {
@@ -438,29 +398,23 @@ class GitPieApp {
         document.querySelector('.mode-pill[data-mode="folders"]')?.click();
       } else if (e.key === '3') {
         document.querySelector('.mode-pill[data-mode="files"]')?.click();
-      } else if (e.key === 'b' || e.key === 'B') {
+      } else if (e.key === 'b' || e.key === 'B' || e.key === 'h' || e.key === 'H') {
         e.preventDefault();
         document.getElementById('btn-eat-slice')?.click();
       }
     });
   }
 
-  triggerComicChomp() {
-    const burst = document.getElementById('comic-chomp-burst');
-    if (!burst) return;
-    burst.classList.remove('hidden');
-    burst.classList.remove('pop-anim');
-    void burst.offsetWidth;
-    burst.classList.add('pop-anim');
-
-    setTimeout(() => {
-      burst.classList.add('hidden');
-    }, 700);
+  // Alias for backwards compatibility
+  showBakingOverlay(show, message = '') {
+    return this.showLoadingOverlay(show, message);
   }
 
-  showBakingOverlay(show, message = '') {
+  showLoadingOverlay(show, message = '') {
     const overlay = document.getElementById('baking-overlay');
     const statusText = document.getElementById('baking-status');
+    if (!overlay) return;
+
     if (show) {
       if (message && statusText) statusText.textContent = message;
       overlay.classList.remove('hidden');
@@ -472,6 +426,7 @@ class GitPieApp {
   showToast(message) {
     const toast = document.getElementById('cartoon-toast');
     const textEl = document.getElementById('toast-text');
+    if (!toast || !textEl) return;
     textEl.textContent = message;
     toast.classList.remove('hidden');
     setTimeout(() => toast.classList.add('hidden'), 2500);

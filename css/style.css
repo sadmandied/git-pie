@@ -834,38 +834,7 @@ button {
   color: var(--ink-primary);
 }
 
-/* Comic "CHOMP!" Popup Effect */
-.comic-chomp-burst {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  background: var(--accent-gold-soft);
-  color: var(--accent-crimson);
-  font-family: var(--font-serif);
-  font-size: 2.8rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  padding: 12px 36px;
-  border: 2px solid var(--accent-crimson);
-  border-radius: 20px;
-  box-shadow: 0 12px 32px rgba(35, 25, 15, 0.2);
-  pointer-events: none;
-  z-index: 500;
-}
-
-.comic-chomp-burst.pop-anim {
-  animation: chompZoom 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes chompZoom {
-  0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
-  40% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
-  70% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0; }
-}
-
-/* Baking Loading Overlay */
+/* Analysis Loading Overlay */
 .baking-overlay {
   position: fixed;
   top: 0;
