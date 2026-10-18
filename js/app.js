@@ -47,15 +47,15 @@ class GitPieApp {
     // 3. Setup UI Event Listeners
     this.setupEventListeners();
 
-    // 4. Load Sadman's Repositories into the Dropdown
+    // 4. Start Render Loop immediately so canvas starts rendering right away
+    this.loop();
+
+    // 5. Load Sadman's Repositories into the Dropdown
     await this.loadUserRepositories();
 
-    // 5. Load Default Showcase Repository (CoworkingSpaceBookingSystem)
+    // 6. Load Default Showcase Repository (CoworkingSpaceBookingSystem)
     const defaultRepo = 'sadmandied/CoworkingSpaceBookingSystem';
     await this.bakeRepository(defaultRepo);
-
-    // 6. Start 60fps Cartoon Render Loop
-    this.loop();
   }
 
   setupMascotInteractions() {
@@ -258,16 +258,17 @@ class GitPieApp {
   updateRecipeChalkboard(slice, clearFilter = true) {
     if (!slice) return;
 
-    // Blackboard Title & Flavor
-    document.getElementById('recipe-title').textContent = (slice.lang.name + ' ' + (slice.lang.flavor || '')).toUpperCase();
-    document.getElementById('recipe-flavor').textContent = `A fresh batch made with ${slice.files.length} source ingredients!`;
+    // Inspection Panel Title & Subtitle
+    document.getElementById('recipe-title').textContent = (slice.lang.name || '').toUpperCase();
+    const count = slice.files ? slice.files.length : 0;
+    document.getElementById('recipe-flavor').textContent = `${count} source file${count === 1 ? '' : 's'} · ${slice.loc.toLocaleString()} lines of code`;
 
     // Metrics
     document.getElementById('recipe-loc').textContent = slice.loc.toLocaleString();
     document.getElementById('recipe-pct').textContent = `${(slice.percentage * 100).toFixed(1)}%`;
-    document.getElementById('recipe-files-count').textContent = slice.files.length.toLocaleString();
+    document.getElementById('recipe-files-count').textContent = count.toLocaleString();
 
-    // Baker's Tasting Notes
+    // Inspection Summary Note
     const notesEl = document.getElementById('baker-notes-text');
     if (notesEl) {
       notesEl.textContent = this.generateBakerNotes(slice);
@@ -287,13 +288,13 @@ class GitPieApp {
   generateBakerNotes(slice) {
     const pct = slice.percentage * 100;
     if (pct > 50) {
-      return `Dominant codebase ingredient! Comprising over ${pct.toFixed(0)}% of the entire parlor's recipes. Baked with heavy flavor!`;
+      return `Primary technology component representing ${pct.toFixed(1)}% of total codebase volume.`;
     } else if (pct > 20) {
-      return `A substantial code filling! Balanced nicely against the other ingredients for maximum architectural stability.`;
+      return `Core functional module delivering substantial architecture and operational logic (${pct.toFixed(1)}% share).`;
     } else if (pct > 5) {
-      return `A delightful seasoning layer! Adds distinct texture and functionality to the project pastry.`;
+      return `Supporting module contributing ${pct.toFixed(1)}% of total line count with targeted integration scope.`;
     } else {
-      return `A light powdered-sugar sprinkle! Small but essential configuration spice.`;
+      return `Lightweight configuration or utility layer representing ${pct.toFixed(1)}% of project files.`;
     }
   }
 

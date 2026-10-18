@@ -85,12 +85,12 @@
 
         <!-- Quiet Interactive Hint -->
         <div class="stage-footer-hint">
-          <span>Click any slice to inspect &bull; Spacebar to spin &bull; Press B to take a bite</span>
+          <span>Click any slice to inspect &bull; Drag to rotate &bull; Spacebar to spin</span>
         </div>
       </section>
 
       <!-- Right Column: Minimalist Recipe Inspection Card -->
-      <aside class="guest-check-panel" aria-label="Recipe Details">
+      <aside class="guest-check-panel" aria-label="Codebase Inspection Details">
         <div class="diner-check">
           <!-- Card Header -->
           <div class="check-header">
@@ -101,7 +101,7 @@
           <!-- Recipe Title & Subtitle -->
           <div class="check-title-block">
             <h2 id="recipe-title" class="check-recipe-title">JAVA / JSP</h2>
-            <div id="recipe-flavor" class="check-recipe-flavor">Cherry Tart &bull; 13 source ingredients</div>
+            <div id="recipe-flavor" class="check-recipe-flavor">13 source files · 1,406 lines of code</div>
           </div>
 
           <!-- Metrics Row -->
@@ -112,21 +112,22 @@
             </div>
             <div class="stamp-box">
               <span class="stamp-val" id="recipe-pct">58.6%</span>
-              <span class="stamp-label">PIE SHARE</span>
+              <span class="stamp-label">CODE SHARE</span>
             </div>
             <div class="stamp-box">
               <span class="stamp-val" id="recipe-files-count">13</span>
-              <span class="stamp-label">FILES MIXED</span>
+              <span class="stamp-label">SOURCE FILES</span>
             </div>
           </div>
 
           <!-- Action Buttons -->
           <div class="check-actions">
-            <button id="btn-eat-slice" class="diner-btn" title="Take a cartoon bite!">
+            <button id="btn-eat-slice" class="diner-btn" title="Highlight this slice">
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M18 2v20M14 2v6a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3V2M6 2v8a4 4 0 0 0 4 4v8M6 2h4"/>
+                <circle cx="12" cy="12" r="10"/>
+                <circle cx="12" cy="12" r="4"/>
               </svg>
-              <span>Take a Bite</span>
+              <span>Highlight Slice</span>
             </button>
             <button id="btn-copy-badge" class="diner-btn secondary" title="Copy Markdown badge for GitHub">
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -139,7 +140,7 @@
 
           <!-- Baker's Tasting Note -->
           <div class="baker-handwritten-note">
-            <p id="baker-notes-text">Piping hot codebase ready for serving! Click any slice or flavor badge to inspect.</p>
+            <p id="baker-notes-text">Codebase loaded and ready for inspection. Click any slice or legend pill to inspect source files.</p>
           </div>
 
           <!-- Ingredient File List -->
@@ -172,10 +173,10 @@
     <footer class="app-footer">
       <div class="counter-console">
         <div class="counter-input-row">
-          <label for="repo-input" class="counter-label">Order Any Repo:</label>
+          <label for="repo-input" class="counter-label">Analyze Repo:</label>
           <input type="text" id="repo-input" placeholder="github-owner/repo-name" value="sadmandied/CoworkingSpaceBookingSystem" autocomplete="off" spellcheck="false">
           <button id="btn-bake" class="bake-btn">
-            <span>Bake It</span>
+            <span>Analyze</span>
           </button>
         </div>
 
