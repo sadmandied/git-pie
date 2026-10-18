@@ -132,17 +132,7 @@ class GitPieApp {
 
     // 3. Spin The Pie Wheel button
     document.getElementById('btn-spin').addEventListener('click', () => {
-      cartoonAudio.playBoing();
       this.pieEngine.angularVelocity = 0.25 + Math.random() * 0.25;
-    });
-
-    // 4. Audio Sound FX toggle
-    const btnAudio = document.getElementById('btn-audio');
-    const audioLabel = document.getElementById('audio-label');
-    btnAudio.addEventListener('click', () => {
-      const active = cartoonAudio.toggle();
-      btnAudio.classList.toggle('active', active);
-      audioLabel.textContent = active ? '🔊 Cartoon FX: ON' : '🔈 Cartoon FX: OFF';
     });
   }
 

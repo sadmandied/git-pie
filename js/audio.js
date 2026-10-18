@@ -6,7 +6,7 @@
 class CartoonAudio {
   constructor() {
     this.ctx = null;
-    this.enabled = true;
+    this.enabled = false;
   }
 
   init() {
