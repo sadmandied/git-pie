@@ -1,30 +1,28 @@
 /**
- * GitCity 3D — GitHub REST API Service & Tree Parser
+ * GitPie — GitHub REST API Service & Cartoon Recipe Data
  */
 
 export const LANGUAGE_PALETTE = {
-  javascript: { name: 'JavaScript', color: '#f7df1e', emissive: '#bda70b' },
-  typescript: { name: 'TypeScript', color: '#3178c6', emissive: '#1f538e' },
-  java:       { name: 'Java',       color: '#b07219', emissive: '#ff9800' },
-  python:     { name: 'Python',     color: '#3572A5', emissive: '#00d2ff' },
-  html:       { name: 'HTML',       color: '#e34c26', emissive: '#ff5722' },
-  css:        { name: 'CSS',        color: '#563d7c', emissive: '#a855f7' },
-  scss:       { name: 'SCSS',       color: '#c6538c', emissive: '#ec4899' },
-  vue:        { name: 'Vue',        color: '#41b883', emissive: '#10b981' },
-  json:       { name: 'JSON',       color: '#cbcb41', emissive: '#858585' },
-  markdown:   { name: 'Markdown',   color: '#0891b2', emissive: '#06b6d4' },
-  rust:       { name: 'Rust',       color: '#dea584', emissive: '#f97316' },
-  go:         { name: 'Go',         color: '#00ADD8', emissive: '#38bdf8' },
-  c:          { name: 'C',          color: '#555555', emissive: '#94a3b8' },
-  cpp:        { name: 'C++',        color: '#f34b7d', emissive: '#f43f5e' },
-  csharp:     { name: 'C#',         color: '#178600', emissive: '#22c55e' },
-  php:        { name: 'PHP',        color: '#4F5D95', emissive: '#6366f1' },
-  ruby:       { name: 'Ruby',       color: '#701516', emissive: '#ef4444' },
-  sql:        { name: 'SQL',        color: '#e38c00', emissive: '#fbbf24' },
-  shell:      { name: 'Shell',      color: '#89e051', emissive: '#84cc16' },
-  yaml:       { name: 'YAML',       color: '#cb171e', emissive: '#f43f5e' },
-  docker:     { name: 'Dockerfile', color: '#384d54', emissive: '#0284c7' },
-  other:      { name: 'Other',      color: '#64748b', emissive: '#475569' }
+  java:       { name: 'Java',       flavor: 'Cherry Tart',        color: '#d63031', darkColor: '#a71d2a' },
+  javascript: { name: 'JavaScript', flavor: 'Lemon Meringue',     color: '#fbc531', darkColor: '#c29712' },
+  typescript: { name: 'TypeScript', flavor: 'Blueberry Pie',      color: '#0984e3', darkColor: '#075ca0' },
+  python:     { name: 'Python',     flavor: 'Key Lime Pie',       color: '#00b894', darkColor: '#00876c' },
+  html:       { name: 'HTML',       flavor: 'Pumpkin Cobbler',    color: '#e17055', darkColor: '#b94e36' },
+  css:        { name: 'CSS',        flavor: 'Plum Custard',       color: '#6c5ce7', darkColor: '#4d3ec2' },
+  scss:       { name: 'SCSS',       flavor: 'Strawberry Glaze',   color: '#e84393', darkColor: '#b8276f' },
+  vue:        { name: 'Vue',        flavor: 'Pistachio Pastry',   color: '#20bf6b', darkColor: '#148f4e' },
+  json:       { name: 'JSON',       flavor: 'Sugar Wafer',        color: '#f8a5c2', darkColor: '#d6678b' },
+  markdown:   { name: 'Markdown',   flavor: 'Vanilla Cookie',     color: '#74b9ff', darkColor: '#4b8ec9' },
+  rust:       { name: 'Rust',       flavor: 'Cinnamon Crisp',     color: '#e67e22', darkColor: '#b35d10' },
+  go:         { name: 'Go',         flavor: 'Mint Sorbet',        color: '#00cec9', darkColor: '#009794' },
+  c:          { name: 'C',          flavor: 'Blackberry Tart',    color: '#34495e', darkColor: '#1f2d3a' },
+  cpp:        { name: 'C++',        flavor: 'Raspberry Danish',   color: '#fd79a8', darkColor: '#cf4675' },
+  csharp:     { name: 'C#',         flavor: 'Apple Turn-over',    color: '#2ed573', darkColor: '#1d9e52' },
+  sql:        { name: 'SQL',        flavor: 'Butterscotch Crumb', color: '#e58e26', darkColor: '#b06713' },
+  shell:      { name: 'Shell',      flavor: 'Gingerbread Crust',  color: '#8395a7', darkColor: '#576574' },
+  yaml:       { name: 'YAML',       flavor: 'Caramel Macaron',    color: '#f39c12', darkColor: '#be7406' },
+  docker:     { name: 'Dockerfile', flavor: 'Frosted Cupcake',    color: '#4b7bec', darkColor: '#2b56b8' },
+  other:      { name: 'Other',      flavor: 'Mystery Doughnut',   color: '#a5b1c2', darkColor: '#778ca3' }
 };
 
 const EXTENSION_MAP = {
@@ -42,8 +40,6 @@ const EXTENSION_MAP = {
   c: 'c', h: 'c',
   cpp: 'cpp', hpp: 'cpp', cc: 'cpp', cxx: 'cpp',
   cs: 'csharp',
-  php: 'php',
-  rb: 'ruby',
   sql: 'sql',
   sh: 'shell', bash: 'shell', zsh: 'shell',
   yml: 'yaml', yaml: 'yaml'
@@ -78,9 +74,7 @@ export class GitHubService {
   }
 
   getHeaders() {
-    const headers = {
-      'Accept': 'application/vnd.github.v3+json'
-    };
+    const headers = { 'Accept': 'application/vnd.github.v3+json' };
     if (this.token) {
       headers['Authorization'] = `token ${this.token}`;
     }
@@ -89,17 +83,15 @@ export class GitHubService {
 
   async fetchRepository(repoSlug) {
     const cleanSlug = repoSlug.replace(/^https?:\/\/github\.com\//, '').replace(/\/$/, '');
-    
-    // Check if user requested a preset that we can supply immediately or if rate-limited
+
     try {
-      // 1. Fetch repo metadata (default branch)
       const repoRes = await fetch(`https://api.github.com/repos/${cleanSlug}`, {
         headers: this.getHeaders()
       });
 
       if (!repoRes.ok) {
         if (repoRes.status === 403 || repoRes.status === 429) {
-          console.warn('GitHub API rate limit encountered. Falling back to offline dataset if preset available.');
+          console.warn('API rate limit. Falling back to preset.');
           return this.getFallbackData(cleanSlug, true);
         }
         throw new Error(`Repository error: HTTP ${repoRes.status}`);
@@ -108,7 +100,6 @@ export class GitHubService {
       const repoData = await repoRes.json();
       const defaultBranch = repoData.default_branch || 'main';
 
-      // 2. Fetch full tree recursively
       const treeRes = await fetch(`https://api.github.com/repos/${cleanSlug}/git/trees/${defaultBranch}?recursive=1`, {
         headers: this.getHeaders()
       });
@@ -119,209 +110,171 @@ export class GitHubService {
 
       const treeData = await treeRes.json();
 
-      // 3. Fetch recent commits for the time machine
       let commits = [];
       try {
-        const commitsRes = await fetch(`https://api.github.com/repos/${cleanSlug}/commits?per_page=30`, {
+        const commitsRes = await fetch(`https://api.github.com/repos/${cleanSlug}/commits?per_page=25`, {
           headers: this.getHeaders()
         });
-        if (commitsRes.ok) {
-          commits = await commitsRes.json();
-        }
-      } catch (e) {
-        console.warn('Could not fetch commits:', e);
-      }
+        if (commitsRes.ok) commits = await commitsRes.json();
+      } catch (e) {}
 
       return this.processTreeData(cleanSlug, repoData, treeData.tree, commits);
     } catch (err) {
-      console.warn('Online fetch failed:', err.message, '- attempting preset fallback');
-      const fallback = this.getFallbackData(cleanSlug, false);
-      if (fallback) return fallback;
-      throw err;
+      console.warn('Online fetch failed:', err.message, '- falling back to preset');
+      return this.getFallbackData(cleanSlug, false);
     }
   }
 
   processTreeData(repoSlug, repoMeta, rawTree, commits = []) {
     const files = [];
-    const directories = new Set();
-    const languageCounts = {};
-    let totalSize = 0;
+    const folders = new Set();
+    const languageTotals = {};
+    let totalBytes = 0;
 
     for (const item of rawTree) {
       if (item.type === 'blob') {
         const parts = item.path.split('/');
         const filename = parts.pop();
-        const district = parts.length > 0 ? parts.join('/') : 'root';
-        if (parts.length > 0) directories.add(district);
+        const folder = parts.length > 0 ? parts.join('/') : 'root';
+        if (parts.length > 0) folders.add(folder);
 
         const lang = detectLanguage(filename);
-        languageCounts[lang.name] = (languageCounts[lang.name] || 0) + 1;
+        const size = item.size || Math.floor(Math.random() * 6000 + 350);
+        const loc = Math.max(8, Math.round(size / 38));
 
-        const size = item.size || Math.floor(Math.random() * 8000 + 400);
-        totalSize += size;
+        totalBytes += size;
+        if (!languageTotals[lang.name]) {
+          languageTotals[lang.name] = {
+            lang: lang,
+            bytes: 0,
+            loc: 0,
+            fileCount: 0,
+            files: []
+          };
+        }
+        languageTotals[lang.name].bytes += size;
+        languageTotals[lang.name].loc += loc;
+        languageTotals[lang.name].fileCount += 1;
 
-        files.push({
+        const fileObj = {
           path: item.path,
           filename: filename,
-          district: district,
+          folder: folder,
           size: size,
-          loc: Math.max(12, Math.round(size / 38)), // ~38 bytes per line approx
+          loc: loc,
           language: lang,
-          sha: item.sha,
           url: `https://github.com/${repoSlug}/blob/${repoMeta.default_branch || 'main'}/${item.path}`
-        });
+        };
+
+        languageTotals[lang.name].files.push(fileObj);
+        files.push(fileObj);
       } else if (item.type === 'tree') {
-        directories.add(item.path);
+        folders.add(item.path);
       }
     }
 
-    // Determine dominant language
-    let dominantLang = 'None';
-    let maxCount = 0;
-    for (const [lang, count] of Object.entries(languageCounts)) {
-      if (count > maxCount) {
-        maxCount = count;
-        dominantLang = lang;
-      }
-    }
+    // Sort slices by LOC
+    const slices = Object.values(languageTotals).sort((a, b) => b.loc - a.loc);
+    const totalLoc = slices.reduce((acc, s) => acc + s.loc, 0);
 
-    // Process commits for timeline
-    const timelineCommits = (commits && commits.length > 0)
+    // Compute angles for pie slices
+    let currentAngle = -Math.PI / 2; // start at top (12 o'clock)
+    slices.forEach(slice => {
+      slice.percentage = totalLoc > 0 ? (slice.loc / totalLoc) : 0;
+      slice.startAngle = currentAngle;
+      slice.angle = slice.percentage * Math.PI * 2;
+      slice.endAngle = currentAngle + slice.angle;
+      currentAngle += slice.angle;
+    });
+
+    const parsedCommits = (commits && commits.length > 0)
       ? commits.map(c => ({
           sha: c.sha ? c.sha.substring(0, 7) : 'head',
           date: c.commit?.author?.date || new Date().toISOString(),
-          message: c.commit?.message?.split('\n')[0] || 'Update repository',
-          author: c.commit?.author?.name || 'Developer'
+          message: c.commit?.message?.split('\n')[0] || 'Bake new ingredients',
+          author: c.commit?.author?.name || 'Chef'
         })).reverse()
       : this.generateSyntheticCommits(repoSlug);
 
     return {
       repoSlug,
-      description: repoMeta?.description || 'Metropolis visualized in 3D',
-      defaultBranch: repoMeta?.default_branch || 'main',
+      description: repoMeta?.description || 'Freshly baked codebase pie',
       files,
-      districts: Array.from(directories),
-      dominantLanguage: dominantLang,
-      languageDistribution: languageCounts,
+      folders: Array.from(folders),
+      slices,
       totalFiles: files.length,
-      totalSizeKB: Math.round(totalSize / 1024),
-      commits: timelineCommits
+      totalLoc,
+      totalKB: Math.round(totalBytes / 1024),
+      commits: parsedCommits
     };
   }
 
   generateSyntheticCommits(repoSlug) {
-    const dates = [
-      '2026-01-10', '2026-02-14', '2026-03-22', '2026-05-18', '2026-07-04',
-      '2026-08-15', '2026-09-01', '2026-10-10', '2026-10-17'
-    ];
+    const dates = ['Batch 1: Yeast & Flour', 'Batch 2: Add Sugar', 'Batch 3: Mix Batter', 'Batch 4: Into The Oven!', 'Fresh Out Of The Oven'];
     return dates.map((d, i) => ({
-      sha: `c${(i + 1) * 111111}`,
-      date: d,
-      message: i === 0 ? 'Initial architecture setup' : `Sprint milestone #${i + 1} optimization and features`,
-      author: repoSlug.split('/')[0] || 'Lead Architect'
+      sha: `pie#${i + 1}`,
+      date: `193${i}-06-12`,
+      message: d,
+      author: repoSlug.split('/')[0] || 'Master Baker'
     }));
   }
 
-  getFallbackData(requestedSlug, wasRateLimited = false) {
-    // Built-in presets for offline or instant showcase:
-    if (requestedSlug.toLowerCase().includes('coworking') || requestedSlug.toLowerCase().includes('sadmandied')) {
-      return this.getCoworkingSpaceDataset();
-    }
+  getFallbackData(requestedSlug, isRateLimited = false) {
     if (requestedSlug.toLowerCase().includes('express')) {
       return this.getExpressDataset();
     }
-    // Default fallback to CoworkingSpaceBookingSystem
-    return this.getCoworkingSpaceDataset(wasRateLimited);
+    return this.getCoworkingSpaceDataset(isRateLimited);
   }
 
-  getCoworkingSpaceDataset(rateLimited = false) {
-    const rawFiles = [
-      // Backend - Java Controllers
+  getCoworkingSpaceDataset(isRateLimited = false) {
+    const files = [
+      // Java backend
       { path: 'src/main/java/com/coworking/Application.java', size: 1420 },
       { path: 'src/main/java/com/coworking/config/SecurityConfig.java', size: 4890 },
-      { path: 'src/main/java/com/coworking/config/CorsConfig.java', size: 1280 },
-      { path: 'src/main/java/com/coworking/config/DatabaseConfig.java', size: 3120 },
-      { path: 'src/main/java/com/coworking/controller/AuthController.java', size: 6850 },
-      { path: 'src/main/java/com/coworking/controller/BookingController.java', size: 12400 },
-      { path: 'src/main/java/com/coworking/controller/DeskController.java', size: 7600 },
-      { path: 'src/main/java/com/coworking/controller/PaymentController.java', size: 9800 },
-      { path: 'src/main/java/com/coworking/controller/UserController.java', size: 5400 },
-      // Models
-      { path: 'src/main/java/com/coworking/model/User.java', size: 4200 },
-      { path: 'src/main/java/com/coworking/model/Desk.java', size: 3800 },
-      { path: 'src/main/java/com/coworking/model/Booking.java', size: 5100 },
-      { path: 'src/main/java/com/coworking/model/Invoice.java', size: 4100 },
-      { path: 'src/main/java/com/coworking/model/Room.java', size: 3600 },
-      // Services
-      { path: 'src/main/java/com/coworking/service/BookingService.java', size: 14800 },
-      { path: 'src/main/java/com/coworking/service/PaymentService.java', size: 11200 },
-      { path: 'src/main/java/com/coworking/service/NotificationService.java', size: 6300 },
-      { path: 'src/main/java/com/coworking/service/AnalyticsService.java', size: 8400 },
-      // Repository
-      { path: 'src/main/java/com/coworking/repository/UserRepository.java', size: 2900 },
-      { path: 'src/main/java/com/coworking/repository/DeskRepository.java', size: 3200 },
+      { path: 'src/main/java/com/coworking/controller/BookingController.java', size: 14200 },
+      { path: 'src/main/java/com/coworking/controller/DeskController.java', size: 8600 },
+      { path: 'src/main/java/com/coworking/controller/PaymentController.java', size: 10400 },
+      { path: 'src/main/java/com/coworking/service/BookingService.java', size: 16800 },
+      { path: 'src/main/java/com/coworking/service/PaymentService.java', size: 12400 },
+      { path: 'src/main/java/com/coworking/model/Booking.java', size: 5200 },
+      { path: 'src/main/java/com/coworking/model/Desk.java', size: 4100 },
       { path: 'src/main/java/com/coworking/repository/BookingRepository.java', size: 4900 },
-      // Frontend Vue
-      { path: 'frontend/src/main.js', size: 1980 },
-      { path: 'frontend/src/App.vue', size: 3840 },
-      { path: 'frontend/src/views/DashboardView.vue', size: 12800 },
-      { path: 'frontend/src/views/FloorPlanView.vue', size: 18500 },
-      { path: 'frontend/src/views/BookingView.vue', size: 14200 },
-      { path: 'frontend/src/views/LoginView.vue', size: 6800 },
-      { path: 'frontend/src/components/DeskCard.vue', size: 5400 },
+      // Vue frontend
+      { path: 'frontend/src/App.vue', size: 4800 },
+      { path: 'frontend/src/views/FloorPlanView.vue', size: 21500 },
+      { path: 'frontend/src/views/DashboardView.vue', size: 14200 },
+      { path: 'frontend/src/views/BookingView.vue', size: 12800 },
+      { path: 'frontend/src/components/DeskCard.vue', size: 6400 },
       { path: 'frontend/src/components/CalendarPicker.vue', size: 8900 },
-      { path: 'frontend/src/components/PaymentModal.vue', size: 7600 },
-      { path: 'frontend/src/components/Navbar.vue', size: 4100 },
-      { path: 'frontend/src/router/index.js', size: 3200 },
-      { path: 'frontend/src/store/userStore.js', size: 4900 },
-      { path: 'frontend/src/store/bookingStore.js', size: 7100 },
-      { path: 'frontend/src/styles/main.css', size: 9800 },
-      { path: 'frontend/src/styles/cyberpunk-theme.css', size: 14500 },
-      // Database & Config
-      { path: 'database/schema.sql', size: 12000 },
-      { path: 'database/seed_desks.sql', size: 6400 },
-      { path: 'database/migrations/V1__init.sql', size: 8900 },
-      { path: 'pom.xml', size: 7800 },
-      { path: 'docker-compose.yml', size: 2100 },
-      { path: 'Dockerfile', size: 1800 },
-      { path: 'README.md', size: 8900 }
+      { path: 'frontend/src/router/index.js', size: 3400 },
+      { path: 'frontend/src/store/bookingStore.js', size: 7600 },
+      { path: 'frontend/src/styles/bakery-theme.css', size: 11200 },
+      // SQL & database
+      { path: 'database/schema.sql', size: 14200 },
+      { path: 'database/seed_desks.sql', size: 8900 },
+      { path: 'database/migrations/V1__init.sql', size: 9400 },
+      { path: 'docker-compose.yml', size: 2400 },
+      { path: 'README.md', size: 8200 }
     ];
-
-    const rawTree = rawFiles.map(f => ({ path: f.path, type: 'blob', size: f.size }));
-    const meta = {
-      description: 'Full-stack enterprise smart coworking & desk reservation ecosystem with interactive floor maps',
-      default_branch: 'main'
-    };
-
-    const result = this.processTreeData('sadmandied/CoworkingSpaceBookingSystem', meta, rawTree);
-    if (rateLimited) {
-      result.notice = 'GitHub API rate limit reached. Displaying pre-cached neural metropolis data.';
-    }
-    return result;
+    const rawTree = files.map(f => ({ path: f.path, type: 'blob', size: f.size }));
+    return this.processTreeData('sadmandied/CoworkingSpaceBookingSystem', { description: 'Smart Coworking & Desk Reservation Ecosystem' }, rawTree);
   }
 
   getExpressDataset() {
-    const rawFiles = [
-      { path: 'index.js', size: 3200 },
-      { path: 'lib/express.js', size: 5400 },
-      { path: 'lib/application.js', size: 18500 },
-      { path: 'lib/request.js', size: 14200 },
-      { path: 'lib/response.js', size: 24500 },
-      { path: 'lib/router/index.js', size: 22000 },
-      { path: 'lib/router/route.js', size: 8900 },
-      { path: 'lib/router/layer.js', size: 4800 },
-      { path: 'lib/middleware/init.js', size: 1900 },
-      { path: 'lib/middleware/query.js', size: 2400 },
-      { path: 'lib/view.js', size: 7800 },
-      { path: 'lib/utils.js', size: 6200 },
-      { path: 'test/app.test.js', size: 9400 },
-      { path: 'test/res.test.js', size: 11200 },
-      { path: 'test/req.test.js', size: 8900 },
-      { path: 'package.json', size: 2400 },
-      { path: 'Readme.md', size: 7100 }
+    const files = [
+      { path: 'lib/express.js', size: 6200 },
+      { path: 'lib/application.js', size: 22400 },
+      { path: 'lib/request.js', size: 16800 },
+      { path: 'lib/response.js', size: 28900 },
+      { path: 'lib/router/index.js', size: 24500 },
+      { path: 'lib/router/route.js', size: 9800 },
+      { path: 'lib/router/layer.js', size: 5400 },
+      { path: 'lib/middleware/init.js', size: 2400 },
+      { path: 'Readme.md', size: 8200 },
+      { path: 'package.json', size: 2400 }
     ];
-    const rawTree = rawFiles.map(f => ({ path: f.path, type: 'blob', size: f.size }));
-    return this.processTreeData('expressjs/express', { description: 'Fast, unopinionated, minimalist web framework for node.', default_branch: 'master' }, rawTree);
+    const rawTree = files.map(f => ({ path: f.path, type: 'blob', size: f.size }));
+    return this.processTreeData('expressjs/express', { description: 'Fast, unopinionated, minimalist web framework' }, rawTree);
   }
 }
 
