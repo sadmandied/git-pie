@@ -237,19 +237,53 @@ export class GitHubService {
       }
     }
 
-    // Sort slices by LOC descending
-    const slices = Object.values(languageTotals).sort((a, b) => b.loc - a.loc);
-    const totalLoc = slices.reduce((acc, s) => acc + s.loc, 0);
+    const totalLoc = files.reduce((acc, f) => acc + f.loc, 0);
 
-    // Compute angles for pie slices
-    let currentAngle = -Math.PI / 2; // start at top (12 o'clock)
-    slices.forEach(slice => {
-      slice.percentage = totalLoc > 0 ? (slice.loc / totalLoc) : 0;
-      slice.startAngle = currentAngle;
-      slice.angle = slice.percentage * Math.PI * 2;
-      slice.endAngle = currentAngle + slice.angle;
-      currentAngle += slice.angle;
+    // 1. Language Slices
+    const slices = Object.values(languageTotals).sort((a, b) => b.loc - a.loc);
+    this.assignSliceAngles(slices, totalLoc);
+
+    // 2. Folder Slices
+    const folderTotals = {};
+    const folderColors = ['#e17055', '#0984e3', '#00b894', '#fbc531', '#6c5ce7', '#d63031', '#20bf6b', '#e84393', '#e58e26'];
+    files.forEach((f, idx) => {
+      const fName = f.folder || 'root';
+      if (!folderTotals[fName]) {
+        const color = folderColors[Object.keys(folderTotals).length % folderColors.length];
+        folderTotals[fName] = {
+          lang: { name: fName, flavor: 'Folder Crust', color: color },
+          loc: 0,
+          bytes: 0,
+          files: []
+        };
+      }
+      folderTotals[fName].loc += f.loc;
+      folderTotals[fName].bytes += f.size;
+      folderTotals[fName].files.push(f);
     });
+    const folderSlices = Object.values(folderTotals).sort((a, b) => b.loc - a.loc);
+    this.assignSliceAngles(folderSlices, totalLoc);
+
+    // 3. Top Files Slices
+    const sortedFiles = [...files].sort((a, b) => b.loc - a.loc);
+    const topFiles = sortedFiles.slice(0, 8);
+    const remainingFiles = sortedFiles.slice(8);
+    const fileSlices = topFiles.map(f => ({
+      lang: { name: f.filename, flavor: `${f.language.name} Pastry`, color: f.language.color },
+      loc: f.loc,
+      bytes: f.size,
+      files: [f]
+    }));
+    if (remainingFiles.length > 0) {
+      const otherLoc = remainingFiles.reduce((acc, f) => acc + f.loc, 0);
+      fileSlices.push({
+        lang: { name: 'Other Files', flavor: 'Assorted Treats', color: '#a5b1c2' },
+        loc: otherLoc,
+        bytes: remainingFiles.reduce((acc, f) => acc + f.size, 0),
+        files: remainingFiles
+      });
+    }
+    this.assignSliceAngles(fileSlices, totalLoc);
 
     const parsedCommits = (commits && commits.length > 0)
       ? commits.map(c => ({
@@ -266,11 +300,24 @@ export class GitHubService {
       files,
       folders: Array.from(folders),
       slices,
+      folderSlices,
+      fileSlices,
       totalFiles: files.length,
       totalLoc,
       totalKB: Math.round(totalBytes / 1024),
       commits: parsedCommits
     };
+  }
+
+  assignSliceAngles(slicesList, totalLoc) {
+    let currentAngle = -Math.PI / 2;
+    slicesList.forEach(slice => {
+      slice.percentage = totalLoc > 0 ? (slice.loc / totalLoc) : 0;
+      slice.startAngle = currentAngle;
+      slice.angle = slice.percentage * Math.PI * 2;
+      slice.endAngle = currentAngle + slice.angle;
+      currentAngle += slice.angle;
+    });
   }
 
   generateSyntheticCommits(repoSlug) {

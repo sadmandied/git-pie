@@ -347,6 +347,11 @@ export class PieCanvasEngine {
     // 1930s Pie Crust Outer Scallops (Golden crimped crust)
     this.drawCrustScallops(ctx, slice.startAngle, slice.endAngle, r);
 
+    // Cartoon Bite Marks (Chomp cutout!)
+    if (slice.bites && slice.bites > 0) {
+      this.drawBiteMarks(ctx, midAngle, r);
+    }
+
     // Cuphead-style Cartoon Eyes only on big dominant slices (> 20%)
     if (slice.percentage >= 0.20) {
       this.drawCartoonEyes(ctx, midAngle, r * 0.44);
@@ -356,6 +361,49 @@ export class PieCanvasEngine {
     this.drawSliceLabel(ctx, slice, midAngle, r * 0.76);
 
     ctx.restore();
+  }
+
+  drawBiteMarks(ctx, angle, r) {
+    ctx.save();
+    const bx = Math.cos(angle) * (r - 2);
+    const by = Math.sin(angle) * (r - 2);
+    ctx.translate(bx, by);
+    ctx.rotate(angle + Math.PI / 2);
+
+    ctx.fillStyle = '#f0dfc8'; // matches plate tone
+    ctx.strokeStyle = '#1f1712';
+    ctx.lineWidth = 3;
+
+    [-12, 0, 12].forEach(offset => {
+      ctx.beginPath();
+      ctx.arc(offset, 0, 9, 0, Math.PI);
+      ctx.fill();
+      ctx.stroke();
+    });
+
+    ctx.restore();
+  }
+
+  takeBite(slice) {
+    const target = slice || this.selectedSlice || this.slices[0];
+    if (!target) return;
+
+    target.bites = (target.bites || 0) + 1;
+    target.currentOffset = 40;
+
+    const midAngle = (target.startAngle + target.endAngle) / 2 + this.rotation;
+    const bx = this.centerX + Math.cos(midAngle) * this.radius;
+    const by = this.centerY + Math.sin(midAngle) * this.radius;
+    this.spawnCrumbs(bx, by, target.lang.color);
+  }
+
+  cycleSlice(direction = 1) {
+    if (!this.slices || this.slices.length === 0) return;
+    let idx = this.slices.indexOf(this.selectedSlice);
+    if (idx === -1) idx = 0;
+    else idx = (idx + direction + this.slices.length) % this.slices.length;
+    this.selectedSlice = this.slices[idx];
+    if (this.onSliceSelected) this.onSliceSelected(this.selectedSlice);
   }
 
   drawCrustScallops(ctx, startAngle, endAngle, r) {

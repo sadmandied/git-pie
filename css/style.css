@@ -701,6 +701,206 @@ html, body {
   display: none !important;
 }
 
+/* Chef Git Mascot Character */
+.chef-mascot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: #fff;
+  border: 3px solid var(--ink-black);
+  border-radius: 50%;
+  box-shadow: 3px 3px 0px var(--ink-black);
+  margin-right: 6px;
+  animation: chefBob 0.6s infinite alternate ease-in-out;
+}
+
+@keyframes chefBob {
+  0% { transform: translateY(0) rotate(-3deg); }
+  100% { transform: translateY(-4px) rotate(3deg); }
+}
+
+.chef-hat {
+  position: absolute;
+  top: -16px;
+  font-size: 1.4rem;
+}
+
+.chef-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 24px;
+}
+
+.mascot-eye {
+  position: absolute;
+  top: -2px;
+  width: 5px;
+  height: 7px;
+  background: var(--ink-black);
+  border-radius: 50%;
+}
+
+.mascot-eye.left { left: 4px; }
+.mascot-eye.right { right: 4px; }
+
+.mascot-smile {
+  margin-top: 8px;
+  width: 12px;
+  height: 6px;
+  border-bottom: 2.5px solid var(--ink-black);
+  border-radius: 0 0 10px 10px;
+}
+
+.chef-pin {
+  position: absolute;
+  right: -8px;
+  bottom: -4px;
+  font-size: 1.1rem;
+  transform: rotate(30deg);
+}
+
+.brand-sign {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* View Mode Selector (Languages / Folders / Files) */
+.view-mode-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 3px solid var(--ink-black);
+  border-radius: 20px;
+  padding: 4px 12px;
+  box-shadow: 3px 3px 0px var(--ink-black);
+  margin-bottom: 6px;
+}
+
+.mode-label {
+  font-family: var(--font-title);
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+  color: #a04000;
+}
+
+.mode-btn {
+  background: #fdf6e2;
+  border: 2px solid var(--ink-black);
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-family: var(--font-comic);
+  font-size: 0.76rem;
+  color: var(--ink-black);
+  cursor: pointer;
+  box-shadow: 2px 2px 0px var(--ink-black);
+  transition-property: transform, background-color, color;
+  transition-duration: 120ms;
+  transition-timing-function: ease-out;
+}
+
+.mode-btn:hover {
+  background: var(--cartoon-yellow);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.mode-btn.active {
+  background: var(--cartoon-red);
+  color: #fff;
+}
+
+/* Chalk Actions Row */
+.chalk-actions-row {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0 4px 0;
+}
+
+.chalk-action-btn {
+  flex: 1;
+  background: #fdf6e2;
+  border: 2px solid var(--ink-black);
+  border-radius: 10px;
+  padding: 6px 8px;
+  font-family: var(--font-title);
+  font-size: 0.92rem;
+  letter-spacing: 1px;
+  color: var(--ink-black);
+  cursor: pointer;
+  box-shadow: 2px 2px 0px var(--ink-black);
+  transition-property: transform, background-color;
+  transition-duration: 120ms;
+}
+
+.chalk-action-btn:hover {
+  background: var(--cartoon-yellow);
+  transform: translateY(-2px);
+}
+
+.chalk-action-btn:active {
+  transform: translateY(2px);
+}
+
+/* Ingredients Filter Header */
+.ingredients-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  gap: 8px;
+}
+
+#ingredient-search {
+  width: 140px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  padding: 3px 8px;
+  font-family: var(--font-typewriter);
+  font-size: 0.72rem;
+  color: #fff;
+  outline: none;
+}
+
+#ingredient-search:focus {
+  border-color: var(--cartoon-yellow);
+  background: rgba(0, 0, 0, 0.6);
+}
+
+#ingredient-search::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Cartoon Toast Notification */
+.cartoon-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  background: #fff;
+  border: 4px solid var(--ink-black);
+  border-radius: 18px;
+  padding: 10px 22px;
+  box-shadow: 6px 6px 0px var(--ink-black);
+  font-family: var(--font-title);
+  font-size: 1.2rem;
+  letter-spacing: 1.5px;
+  color: var(--cartoon-green);
+  z-index: 300;
+  animation: toastBounce 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes toastBounce {
+  0% { transform: translateX(-50%) translateY(30px) scale(0.7); opacity: 0; }
+  100% { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+}
+
 /* Responsive adjustments */
 @media (max-width: 980px) {
   .bakery-stage {

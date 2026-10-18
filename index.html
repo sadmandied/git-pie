@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GitPie! — The Cuphead Codebase Bakery</title>
-  <meta name="description" content="A 1930s cartoon pie visualizer for GitHub codebases. No neon, no futuristic sci-fi — just delicious rubber-hose cartoon pies, ragtime tunes, and code recipes!">
+  <title>GitPie! — The 1930s Cuphead Codebase Bakery</title>
+  <meta name="description" content="A 1930s rubber-hose cartoon pie visualizer for GitHub codebases. No neon, no futuristic sci-fi — just delicious cartoon pies, interactive physics, and code recipes!">
 
   <!-- Vintage 1930s Cartoon Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka+One&family=Patrick+Hand&family=Special+Elite&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=3.3">
+  <link rel="stylesheet" href="css/style.css?v=4.0">
 </head>
 <body>
   <!-- Vintage 1930s Film Grain & Projector Scratches Overlay -->
@@ -22,12 +22,25 @@
     <!-- Top Cartoon Header Banner -->
     <header class="bakery-header">
       <div class="brand-sign">
-        <div class="brand-ribbon">
-          <span class="ribbon-star">★</span>
-          <h1 class="brand-title">GitPie!</h1>
-          <span class="ribbon-star">★</span>
+        <!-- Animated Rubber-Hose Chef Git Mascot -->
+        <div class="chef-mascot" id="chef-mascot" title="Chef Git at your service!">
+          <div class="chef-hat">👨‍🍳</div>
+          <div class="chef-face">
+            <div class="mascot-eye left"></div>
+            <div class="mascot-eye right"></div>
+            <div class="mascot-smile"></div>
+          </div>
+          <div class="chef-pin">🥖</div>
         </div>
-        <div class="brand-tagline">THE 1930s CODEBASE BAKERY &amp; PIE PARLOR</div>
+
+        <div class="brand-text-block">
+          <div class="brand-ribbon">
+            <span class="ribbon-star">★</span>
+            <h1 class="brand-title">GitPie!</h1>
+            <span class="ribbon-star">★</span>
+          </div>
+          <div class="brand-tagline">THE 1930s CODEBASE BAKERY &amp; PIE PARLOR</div>
+        </div>
       </div>
 
       <!-- Sadman's Repositories Dropdown (Circled Header Section) -->
@@ -47,7 +60,7 @@
 
       <!-- Header Tools -->
       <div class="header-tools">
-        <button id="btn-spin" class="cartoon-btn secondary" title="Give the Pie a Spin!">
+        <button id="btn-spin" class="cartoon-btn secondary" title="Give the Pie a Spin! (Hotkey: Spacebar)">
           <span>🎲 Spin Wheel!</span>
         </button>
       </div>
@@ -57,12 +70,26 @@
     <main class="bakery-stage">
       <!-- Left / Center: The Giant Interactive Cartoon Pie Canvas -->
       <div class="pie-arena">
+        <!-- View Mode Selector (Languages / Folders / Files) -->
+        <div class="view-mode-selector">
+          <span class="mode-label">RECIPE MODE:</span>
+          <button class="mode-btn active" data-mode="languages" title="Slice by programming languages (Hotkey: 1)">
+            <span>🥧 Languages</span>
+          </button>
+          <button class="mode-btn" data-mode="folders" title="Slice by folder directories (Hotkey: 2)">
+            <span>📁 Folders</span>
+          </button>
+          <button class="mode-btn" data-mode="files" title="Slice by top individual files (Hotkey: 3)">
+            <span>📄 Top Files</span>
+          </button>
+        </div>
+
         <div class="platter-wrapper">
           <canvas id="pie-canvas"></canvas>
         </div>
 
         <div class="pie-hint">
-          <span>👉 Click any slice to inspect files &bull; Drag to spin the pie wheel!</span>
+          <span>👉 Hover or click any slice &bull; Drag to spin the wheel &bull; Spacebar = Spin</span>
         </div>
       </div>
 
@@ -76,7 +103,7 @@
               <span class="chalk-pin">📌</span>
             </div>
 
-            <div class="chalk-subtitle" id="recipe-flavor">Hover or click a pie slice to view its code recipe!</div>
+            <div class="chalk-subtitle" id="recipe-flavor">Hover or click a pie slice to view its recipe!</div>
 
             <!-- Recipe Stats Grid -->
             <div class="chalk-metrics">
@@ -94,11 +121,24 @@
               </div>
             </div>
 
+            <!-- Interactive Slice Actions -->
+            <div class="chalk-actions-row">
+              <button id="btn-eat-slice" class="chalk-action-btn" title="Take a cartoon chomp out of this slice!">
+                <span>🍴 Take a Bite!</span>
+              </button>
+              <button id="btn-copy-badge" class="chalk-action-btn" title="Copy Markdown badge for your GitHub README">
+                <span>📋 Copy Badge</span>
+              </button>
+            </div>
+
             <div class="chalk-divider">~ * ~</div>
 
-            <!-- Ingredients / File List -->
+            <!-- Ingredients / File List with Search Filter -->
             <div class="ingredients-box">
-              <div class="ingredients-title">FRESH INGREDIENTS (FILES):</div>
+              <div class="ingredients-header-row">
+                <span class="ingredients-title">FRESH INGREDIENTS:</span>
+                <input type="text" id="ingredient-search" placeholder="🔍 Filter files..." autocomplete="off">
+              </div>
               <ul id="ingredients-list" class="ingredients-list">
                 <li class="empty-hint">Click a slice on the pie to inspect individual source files!</li>
               </ul>
@@ -115,7 +155,7 @@
     <!-- Bottom Baker's Order Counter -->
     <footer class="bakery-footer">
       <div class="oven-console">
-        <div class="oven-label">ORDER A FRESH REPO:</div>
+        <div class="oven-label">ORDER A REPO:</div>
         <div class="order-input-wrapper">
           <input type="text" id="repo-input" placeholder="github-owner/repo-name (e.g. sadmandied/CoworkingSpaceBookingSystem)" value="sadmandied/CoworkingSpaceBookingSystem" autocomplete="off" spellcheck="false">
           <button id="btn-bake" class="cartoon-btn primary">
@@ -147,7 +187,12 @@
     </div>
   </div>
 
+  <!-- Cartoon Toast Alert -->
+  <div id="cartoon-toast" class="cartoon-toast hidden">
+    <span id="toast-text">Markdown Badge Copied!</span>
+  </div>
+
   <!-- Main Application Script (ES Module) -->
-  <script type="module" src="js/app.js?v=3.3"></script>
+  <script type="module" src="js/app.js?v=4.0"></script>
 </body>
 </html>

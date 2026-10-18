@@ -1,6 +1,6 @@
 /**
  * GitPie! — Main Application Orchestrator
- * Coordinates the Cuphead Cartoon Pie Canvas, GitHub API recipe fetcher, and user repository dropdown.
+ * Coordinates the Cuphead Cartoon Pie Canvas, GitHub API, View Modes, and Interactive Recipe Book.
  */
 
 import { gitHubService } from './github_api.js';
@@ -13,14 +13,15 @@ class GitPieApp {
     this.currentData = null;
     this.selectedSlice = null;
     this.userRepos = [];
+    this.currentMode = 'languages'; // 'languages' | 'folders' | 'files'
   }
 
   async init() {
-    // 1. Initialize Pie Canvas Engine (supports both click and instant hover)
+    // 1. Initialize Pie Canvas Engine (supports click & hover)
     this.pieEngine = new PieCanvasEngine(
       this.canvas,
       (slice) => this.onSliceSelected(slice),
-      (slice) => this.onSliceSelected(slice)
+      (slice) => this.onSliceHover(slice)
     );
 
     // 2. Setup Event Listeners
@@ -83,8 +84,8 @@ class GitPieApp {
       const data = await gitHubService.fetchRepository(repoSlug);
       this.currentData = data;
 
-      // Update pie slices
-      this.pieEngine.setSlices(data.slices);
+      // Update pie slices for current mode
+      this.applyCurrentModeSlices();
 
       // Update grand totals
       document.getElementById('stat-total-loc').textContent = data.totalLoc.toLocaleString();
@@ -95,11 +96,6 @@ class GitPieApp {
       // Update dropdown label if matching
       const shortName = repoSlug.includes('/') ? repoSlug.split('/')[1] : repoSlug;
       document.getElementById('selected-repo-label').textContent = shortName;
-
-      // Auto-select largest pie slice for the chalkboard
-      if (data.slices.length > 0) {
-        this.onSliceSelected(data.slices[0]);
-      }
 
       setTimeout(() => {
         this.showBakingOverlay(false);
@@ -112,8 +108,34 @@ class GitPieApp {
     }
   }
 
+  applyCurrentModeSlices() {
+    if (!this.currentData) return;
+    let targetSlices = this.currentData.slices;
+    if (this.currentMode === 'folders' && this.currentData.folderSlices) {
+      targetSlices = this.currentData.folderSlices;
+    } else if (this.currentMode === 'files' && this.currentData.fileSlices) {
+      targetSlices = this.currentData.fileSlices;
+    }
+
+    this.pieEngine.setSlices(targetSlices);
+
+    if (targetSlices.length > 0) {
+      this.onSliceSelected(targetSlices[0]);
+    }
+  }
+
+  onSliceHover(slice) {
+    if (!slice) return;
+    this.updateRecipeChalkboard(slice, false);
+  }
+
   onSliceSelected(slice) {
     this.selectedSlice = slice;
+    this.updateRecipeChalkboard(slice, true);
+  }
+
+  updateRecipeChalkboard(slice, clearFilter = true) {
+    if (!slice) return;
 
     // Blackboard Title & Flavor
     document.getElementById('recipe-title').textContent = `${slice.lang.name.toUpperCase()} ${slice.lang.flavor.toUpperCase()}`;
@@ -124,11 +146,27 @@ class GitPieApp {
     document.getElementById('recipe-pct').textContent = `${(slice.percentage * 100).toFixed(1)}%`;
     document.getElementById('recipe-files-count').textContent = slice.files.length.toLocaleString();
 
-    // Ingredients / File List
+    if (clearFilter) {
+      const searchInput = document.getElementById('ingredient-search');
+      if (searchInput) searchInput.value = '';
+    }
+
+    this.renderIngredientsList(slice.files);
+  }
+
+  renderIngredientsList(files, filterTerm = '') {
     const listEl = document.getElementById('ingredients-list');
     listEl.innerHTML = '';
 
-    slice.files.slice(0, 30).forEach(file => {
+    const term = filterTerm.trim().toLowerCase();
+    const filtered = term ? files.filter(f => f.filename.toLowerCase().includes(term) || f.path.toLowerCase().includes(term)) : files;
+
+    if (filtered.length === 0) {
+      listEl.innerHTML = '<li class="empty-hint">No matching ingredients found in this slice!</li>';
+      return;
+    }
+
+    filtered.slice(0, 30).forEach(file => {
       const li = document.createElement('li');
       li.className = 'ingredient-item';
       li.innerHTML = `
@@ -140,25 +178,23 @@ class GitPieApp {
       listEl.appendChild(li);
     });
 
-    if (slice.files.length > 30) {
+    if (filtered.length > 30) {
       const more = document.createElement('li');
       more.className = 'ingredient-item';
       more.style.justifyContent = 'center';
-      more.innerHTML = `<em>...and ${slice.files.length - 30} more ingredients!</em>`;
+      more.innerHTML = `<em>...and ${filtered.length - 30} more ingredients!</em>`;
       listEl.appendChild(more);
     }
   }
 
   setupEventListeners() {
-    // 1. Bake input & button (for manual entry if desired)
+    // 1. Order input & button (manual entry)
     const input = document.getElementById('repo-input');
     const btnBake = document.getElementById('btn-bake');
 
     const handleBake = () => {
       const val = input.value.trim();
-      if (val) {
-        this.bakeRepository(val);
-      }
+      if (val) this.bakeRepository(val);
     };
 
     btnBake.addEventListener('click', handleBake);
@@ -183,8 +219,78 @@ class GitPieApp {
 
     // 3. Spin The Pie Wheel button
     document.getElementById('btn-spin').addEventListener('click', () => {
-      this.pieEngine.angularVelocity = 0.25 + Math.random() * 0.25;
+      this.pieEngine.angularVelocity = 0.28 + Math.random() * 0.28;
     });
+
+    // 4. Recipe Mode Selector (Languages / Folders / Files)
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.currentMode = btn.getAttribute('data-mode');
+        this.applyCurrentModeSlices();
+      });
+    });
+
+    // 5. Take a Bite button
+    document.getElementById('btn-eat-slice').addEventListener('click', () => {
+      if (this.pieEngine && this.selectedSlice) {
+        this.pieEngine.takeBite(this.selectedSlice);
+      }
+    });
+
+    // 6. Copy Markdown Badge button
+    document.getElementById('btn-copy-badge').addEventListener('click', () => {
+      const repoSlug = this.currentData ? this.currentData.repoSlug : 'sadmandied/CoworkingSpaceBookingSystem';
+      const badgeMarkdown = `[![Baked with GitPie](https://img.shields.io/badge/Baked%20with-GitPie%20🥧-d63031?style=for-the-badge)](https://sadmandied.github.io/git-pie/)`;
+      navigator.clipboard.writeText(badgeMarkdown).then(() => {
+        this.showToast('📋 Markdown Badge Copied!');
+      });
+    });
+
+    // 7. Ingredient search filter
+    const searchInput = document.getElementById('ingredient-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        if (this.selectedSlice && this.selectedSlice.files) {
+          this.renderIngredientsList(this.selectedSlice.files, e.target.value);
+        }
+      });
+    }
+
+    // 8. Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      // Ignore if user is typing in an input
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+      if (e.code === 'Space') {
+        e.preventDefault();
+        this.pieEngine.angularVelocity = 0.32 + Math.random() * 0.25;
+      } else if (e.key === 'ArrowRight') {
+        this.pieEngine.cycleSlice(1);
+      } else if (e.key === 'ArrowLeft') {
+        this.pieEngine.cycleSlice(-1);
+      } else if (e.key === '1') {
+        document.querySelector('.mode-btn[data-mode="languages"]')?.click();
+      } else if (e.key === '2') {
+        document.querySelector('.mode-btn[data-mode="folders"]')?.click();
+      } else if (e.key === '3') {
+        document.querySelector('.mode-btn[data-mode="files"]')?.click();
+      } else if (e.key === 'b' || e.key === 'B') {
+        e.preventDefault();
+        document.getElementById('repo-input').focus();
+      }
+    });
+  }
+
+  showToast(msg) {
+    const toast = document.getElementById('cartoon-toast');
+    const txt = document.getElementById('toast-text');
+    txt.textContent = msg;
+    toast.classList.remove('hidden');
+    setTimeout(() => {
+      toast.classList.add('hidden');
+    }, 2200);
   }
 
   showBakingOverlay(show, text = '') {
