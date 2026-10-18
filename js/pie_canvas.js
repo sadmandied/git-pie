@@ -6,10 +6,11 @@
 import { cartoonAudio } from './audio.js';
 
 export class PieCanvasEngine {
-  constructor(canvas, onSliceSelected) {
+  constructor(canvas, onSliceSelected, onSliceHover) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.onSliceSelected = onSliceSelected;
+    this.onSliceHover = onSliceHover;
 
     this.slices = [];
     this.hoveredSlice = null;
@@ -142,10 +143,13 @@ export class PieCanvasEngine {
 
     if (found !== this.hoveredSlice) {
       if (found) {
-        cartoonAudio.playPop();
         this.canvas.style.cursor = 'pointer';
+        if (this.onSliceHover) this.onSliceHover(found);
       } else {
         this.canvas.style.cursor = 'grab';
+        if (this.selectedSlice && this.onSliceHover) {
+          this.onSliceHover(this.selectedSlice);
+        }
       }
       this.hoveredSlice = found;
     }
@@ -343,13 +347,13 @@ export class PieCanvasEngine {
     // 1930s Pie Crust Outer Scallops (Golden crimped crust)
     this.drawCrustScallops(ctx, slice.startAngle, slice.endAngle, r);
 
-    // Cuphead-style Cartoon Eyes on large slices!
-    if (slice.percentage > 0.12) {
-      this.drawCartoonEyes(ctx, midAngle, r * 0.62);
+    // Cuphead-style Cartoon Eyes only on big dominant slices (> 20%)
+    if (slice.percentage >= 0.20) {
+      this.drawCartoonEyes(ctx, midAngle, r * 0.44);
     }
 
-    // Pie slice label text
-    this.drawSliceLabel(ctx, slice, midAngle, r * 0.78);
+    // Crisp horizontal comic label badge
+    this.drawSliceLabel(ctx, slice, midAngle, r * 0.76);
 
     ctx.restore();
   }
@@ -384,9 +388,9 @@ export class PieCanvasEngine {
     ctx.rotate(angle + Math.PI / 2);
 
     // Two big expressive cartoon eye whites
-    [-8, 8].forEach(xOffset => {
+    [-9, 9].forEach(xOffset => {
       ctx.beginPath();
-      ctx.ellipse(xOffset, 0, 7, 10, 0, 0, Math.PI * 2);
+      ctx.ellipse(xOffset, 0, 8, 11, 0, 0, Math.PI * 2);
       ctx.fillStyle = '#ffffff';
       ctx.fill();
       ctx.lineWidth = 2.5;
@@ -398,15 +402,15 @@ export class PieCanvasEngine {
       const lookY = Math.max(-4, Math.min(4, (this.mouseY - this.centerY) * 0.015));
 
       ctx.beginPath();
-      ctx.arc(xOffset + lookX, lookY, 4, 0, Math.PI * 2);
+      ctx.arc(xOffset + lookX, lookY, 4.5, 0, Math.PI * 2);
       ctx.fillStyle = '#1f1712';
       ctx.fill();
 
       // Pacman shine notch
       ctx.beginPath();
       ctx.moveTo(xOffset + lookX, lookY);
-      ctx.lineTo(xOffset + lookX + 3, lookY - 3);
-      ctx.lineTo(xOffset + lookX, lookY - 4);
+      ctx.lineTo(xOffset + lookX + 3.5, lookY - 3.5);
+      ctx.lineTo(xOffset + lookX, lookY - 4.5);
       ctx.fillStyle = '#ffffff';
       ctx.fill();
     });
@@ -415,26 +419,47 @@ export class PieCanvasEngine {
   }
 
   drawSliceLabel(ctx, slice, angle, dist) {
+    // Only draw label on slices that are wide enough (> 6% of the pie) to prevent collisions!
+    if (slice.percentage < 0.06) return;
+
     const lx = Math.cos(angle) * dist;
     const ly = Math.sin(angle) * dist;
 
     ctx.save();
     ctx.translate(lx, ly);
-    ctx.rotate(angle + (angle > Math.PI / 2 || angle < -Math.PI / 2 ? Math.PI : 0));
 
-    ctx.font = '900 13px "Bangers", cursive, sans-serif';
+    // Keep badge ALWAYS UPRIGHT and horizontal! (Undo rotation)
+    ctx.rotate(-this.rotation);
+
+    const pct = (slice.percentage * 100).toFixed(0);
+    const text = `${slice.lang.name} ${pct}%`;
+
+    ctx.font = '700 13px "Fredoka One", cursive, sans-serif';
+    const textWidth = ctx.measureText(text).width;
+    const padX = 10;
+    const padY = 4;
+    const badgeW = textWidth + padX * 2;
+    const badgeH = 24;
+
+    // Draw solid comic pill badge for 100% contrast & legibility
+    ctx.fillStyle = '#ffffff';
+    ctx.strokeStyle = '#1f1712';
+    ctx.lineWidth = 2.5;
+
+    ctx.beginPath();
+    if (ctx.roundRect) {
+      ctx.roundRect(-badgeW / 2, -badgeH / 2, badgeW, badgeH, 12);
+    } else {
+      ctx.rect(-badgeW / 2, -badgeH / 2, badgeW, badgeH);
+    }
+    ctx.fill();
+    ctx.stroke();
+
+    // Text inside badge (crystal clear)
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-
-    const text = `${slice.lang.name} ${(slice.percentage * 100).toFixed(0)}%`;
-
-    // Comic text outline
-    ctx.lineWidth = 3.5;
-    ctx.strokeStyle = '#1f1712';
-    ctx.strokeText(text, 0, 0);
-
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText(text, 0, 0);
+    ctx.fillStyle = '#1f1712';
+    ctx.fillText(text, 0, 1);
 
     ctx.restore();
   }

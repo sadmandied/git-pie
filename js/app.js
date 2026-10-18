@@ -16,8 +16,12 @@ class GitPieApp {
   }
 
   async init() {
-    // 1. Initialize Pie Canvas Engine
-    this.pieEngine = new PieCanvasEngine(this.canvas, (slice) => this.onSliceSelected(slice));
+    // 1. Initialize Pie Canvas Engine (supports both click and instant hover)
+    this.pieEngine = new PieCanvasEngine(
+      this.canvas,
+      (slice) => this.onSliceSelected(slice),
+      (slice) => this.onSliceSelected(slice)
+    );
 
     // 2. Setup Event Listeners
     this.setupEventListeners();
