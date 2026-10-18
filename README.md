@@ -1,4 +1,4 @@
-# 🥧 GitPie — Minimal & Precision GitHub Codebase Visualizer
+# GitPie — Minimal & Precision GitHub Codebase Visualizer
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![HTML5 Canvas](https://img.shields.io/badge/Canvas-Precision%20Donut%20Engine-1a1614.svg)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
@@ -46,7 +46,7 @@ python main.py
 | :--- | :--- |
 | **Inspect Slice** | Click or hover on any donut arc or legend pill |
 | **Rotate Wheel** | Click and drag the donut with your mouse or touch |
-| **Spin Wheel** | Press `Spacebar` or click **Spin Pie** |
+| **Spin Wheel** | Press `Spacebar` or click **Rotate** |
 | **Switch Modes** | Press `1` for Languages, `2` for Folders, `3` for Top Files |
 | **Cycle Slices** | Press `ArrowRight` (next) or `ArrowLeft` (previous) |
 | **Analyze Any Repo** | Enter any `owner/repo` (e.g. `expressjs/express`, `facebook/react`) in the bottom bar |

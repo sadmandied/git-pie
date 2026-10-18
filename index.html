@@ -43,37 +43,37 @@
         </div>
       </div>
 
-      <!-- Spin Wheel Action Button -->
+      <!-- Rotate Action Button -->
       <div class="header-actions">
-        <button id="btn-spin" class="minimal-btn" title="Spin the Pie Wheel (Hotkey: Spacebar)">
+        <button id="btn-spin" class="minimal-btn" title="Rotate Chart (Hotkey: Spacebar)">
           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
           </svg>
-          <span>Spin Pie</span>
+          <span>Rotate</span>
         </button>
       </div>
     </header>
 
     <!-- Main Workspace (Spacious 2-column layout) -->
     <main class="app-main">
-      <!-- Left Column: The Interactive Pie Chart -->
+      <!-- Left Column: The Interactive Chart -->
       <section class="pie-stage-section">
         <!-- Minimal Segmented Mode Switcher -->
         <div class="mode-ribbon-bar" role="tablist" aria-label="Display Modes">
-          <button class="mode-pill active" data-mode="languages" role="tab" aria-selected="true" title="Slice by programming languages (Hotkey: 1)">
+          <button class="mode-pill active" data-mode="languages" role="tab" aria-selected="true" title="View by programming languages (Hotkey: 1)">
             <span>Languages</span>
           </button>
-          <button class="mode-pill" data-mode="folders" role="tab" aria-selected="false" title="Slice by folder directories (Hotkey: 2)">
+          <button class="mode-pill" data-mode="folders" role="tab" aria-selected="false" title="View by folder directories (Hotkey: 2)">
             <span>Folders</span>
           </button>
-          <button class="mode-pill" data-mode="files" role="tab" aria-selected="false" title="Slice by top individual files (Hotkey: 3)">
+          <button class="mode-pill" data-mode="files" role="tab" aria-selected="false" title="View by top individual files (Hotkey: 3)">
             <span>Top Files</span>
           </button>
         </div>
 
-        <!-- The Pie Canvas Container (Centered, Breathable) -->
+        <!-- The Canvas Container (Centered, Breathable) -->
         <div class="pie-canvas-container">
-          <canvas id="pie-canvas" aria-label="Interactive Codebase Pie Chart"></canvas>
+          <canvas id="pie-canvas" aria-label="Interactive Codebase Donut Chart"></canvas>
         </div>
 
         <!-- Flavor Legend Pills -->
