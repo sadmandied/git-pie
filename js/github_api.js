@@ -3,47 +3,74 @@
  */
 
 export const LANGUAGE_PALETTE = {
-  java:       { name: 'Java',       flavor: 'Cherry Tart',        color: '#d63031', darkColor: '#a71d2a' },
-  javascript: { name: 'JavaScript', flavor: 'Lemon Meringue',     color: '#fbc531', darkColor: '#c29712' },
-  typescript: { name: 'TypeScript', flavor: 'Blueberry Pie',      color: '#0984e3', darkColor: '#075ca0' },
-  python:     { name: 'Python',     flavor: 'Key Lime Pie',       color: '#00b894', darkColor: '#00876c' },
-  html:       { name: 'HTML',       flavor: 'Pumpkin Cobbler',    color: '#e17055', darkColor: '#b94e36' },
-  css:        { name: 'CSS',        flavor: 'Plum Custard',       color: '#6c5ce7', darkColor: '#4d3ec2' },
-  scss:       { name: 'SCSS',       flavor: 'Strawberry Glaze',   color: '#e84393', darkColor: '#b8276f' },
-  vue:        { name: 'Vue',        flavor: 'Pistachio Pastry',   color: '#20bf6b', darkColor: '#148f4e' },
-  json:       { name: 'JSON',       flavor: 'Sugar Wafer',        color: '#f8a5c2', darkColor: '#d6678b' },
-  markdown:   { name: 'Markdown',   flavor: 'Vanilla Cookie',     color: '#74b9ff', darkColor: '#4b8ec9' },
-  rust:       { name: 'Rust',       flavor: 'Cinnamon Crisp',     color: '#e67e22', darkColor: '#b35d10' },
-  go:         { name: 'Go',         flavor: 'Mint Sorbet',        color: '#00cec9', darkColor: '#009794' },
-  c:          { name: 'C',          flavor: 'Blackberry Tart',    color: '#34495e', darkColor: '#1f2d3a' },
-  cpp:        { name: 'C++',        flavor: 'Raspberry Danish',   color: '#fd79a8', darkColor: '#cf4675' },
-  csharp:     { name: 'C#',         flavor: 'Apple Turn-over',    color: '#2ed573', darkColor: '#1d9e52' },
-  sql:        { name: 'SQL',        flavor: 'Butterscotch Crumb', color: '#e58e26', darkColor: '#b06713' },
-  shell:      { name: 'Shell',      flavor: 'Gingerbread Crust',  color: '#8395a7', darkColor: '#576574' },
-  yaml:       { name: 'YAML',       flavor: 'Caramel Macaron',    color: '#f39c12', darkColor: '#be7406' },
-  docker:     { name: 'Dockerfile', flavor: 'Frosted Cupcake',    color: '#4b7bec', darkColor: '#2b56b8' },
-  other:      { name: 'Other',      flavor: 'Mystery Doughnut',   color: '#a5b1c2', darkColor: '#778ca3' }
+  java:       { name: 'Java / JSP',   flavor: 'Cherry Tart',        color: '#d63031', darkColor: '#a71d2a' },
+  javascript: { name: 'JavaScript',   flavor: 'Lemon Meringue',     color: '#fbc531', darkColor: '#c29712' },
+  typescript: { name: 'TypeScript',   flavor: 'Blueberry Pie',      color: '#0984e3', darkColor: '#075ca0' },
+  python:     { name: 'Python',       flavor: 'Key Lime Pie',       color: '#00b894', darkColor: '#00876c' },
+  sql:        { name: 'SQL',          flavor: 'Butterscotch Crumb', color: '#e58e26', darkColor: '#b06713' },
+  html:       { name: 'HTML',         flavor: 'Pumpkin Cobbler',    color: '#e17055', darkColor: '#b94e36' },
+  css:        { name: 'CSS',          flavor: 'Plum Custard',       color: '#6c5ce7', darkColor: '#4d3ec2' },
+  scss:       { name: 'SCSS',         flavor: 'Strawberry Glaze',   color: '#e84393', darkColor: '#b8276f' },
+  vue:        { name: 'Vue',          flavor: 'Pistachio Pastry',   color: '#20bf6b', darkColor: '#148f4e' },
+  xml:        { name: 'XML / Config', flavor: 'Sugar Wafers',       color: '#a29bfe', darkColor: '#6c5ce7' },
+  json:       { name: 'JSON',         flavor: 'Sweet Icing',        color: '#fd79a8', darkColor: '#d63031' },
+  markdown:   { name: 'Markdown',     flavor: 'Vanilla Cookie',     color: '#74b9ff', darkColor: '#4b8ec9' },
+  rust:       { name: 'Rust',         flavor: 'Cinnamon Crisp',     color: '#e67e22', darkColor: '#b35d10' },
+  go:         { name: 'Go',           flavor: 'Mint Sorbet',        color: '#00cec9', darkColor: '#009794' },
+  c:          { name: 'C',            flavor: 'Blackberry Tart',    color: '#34495e', darkColor: '#1f2d3a' },
+  cpp:        { name: 'C++',          flavor: 'Raspberry Danish',   color: '#e84393', darkColor: '#cf4675' },
+  csharp:     { name: 'C#',           flavor: 'Apple Turn-over',    color: '#2ed573', darkColor: '#1d9e52' },
+  yaml:       { name: 'YAML / Props', flavor: 'Caramel Macaron',    color: '#f39c12', darkColor: '#be7406' },
+  shell:      { name: 'Shell Script', flavor: 'Gingerbread Crust',  color: '#8395a7', darkColor: '#576574' },
+  docker:     { name: 'Dockerfile',   flavor: 'Frosted Cupcake',    color: '#4b7bec', darkColor: '#2b56b8' },
+  other:      { name: 'Other Code',   flavor: 'Mystery Doughnut',   color: '#a5b1c2', darkColor: '#778ca3' }
 };
 
+const BINARY_EXTENSIONS = new Set([
+  'jar', 'war', 'ear', 'zip', 'tar', 'gz', '7z', 'rar',
+  'png', 'jpg', 'jpeg', 'gif', 'svg', 'ico', 'webp', 'bmp', 'tiff',
+  'mp3', 'wav', 'ogg', 'mp4', 'mov', 'webm', 'avi',
+  'class', 'exe', 'dll', 'so', 'dylib', 'bin', 'pdf',
+  'woff', 'woff2', 'ttf', 'eot', 'otf', 'mf'
+]);
+
 const EXTENSION_MAP = {
+  // Java & JSP
+  java: 'java', jsp: 'java', jspf: 'java', jspx: 'java',
+  // JavaScript & TypeScript
   js: 'javascript', jsx: 'javascript', mjs: 'javascript', cjs: 'javascript',
   ts: 'typescript', tsx: 'typescript',
-  java: 'java',
+  // Python
   py: 'python', pyw: 'python',
+  // Database SQL
+  sql: 'sql', ddl: 'sql', dml: 'sql',
+  // Web Markup & Styling
   html: 'html', htm: 'html',
   css: 'css', scss: 'scss', sass: 'scss', less: 'scss',
   vue: 'vue',
+  // XML & Config
+  xml: 'xml', xsd: 'xml', wsdl: 'xml', tld: 'xml', pom: 'xml',
+  properties: 'yaml', env: 'yaml', cfg: 'yaml', ini: 'yaml',
   json: 'json',
   md: 'markdown', markdown: 'markdown', mdown: 'markdown',
+  // Systems
   rs: 'rust',
   go: 'go',
   c: 'c', h: 'c',
   cpp: 'cpp', hpp: 'cpp', cc: 'cpp', cxx: 'cpp',
   cs: 'csharp',
-  sql: 'sql',
   sh: 'shell', bash: 'shell', zsh: 'shell',
   yml: 'yaml', yaml: 'yaml'
 };
+
+export function isBinaryFile(filename) {
+  const parts = filename.toLowerCase().split('.');
+  if (parts.length > 1) {
+    const ext = parts.pop();
+    if (BINARY_EXTENSIONS.has(ext)) return true;
+  }
+  return false;
+}
 
 export function detectLanguage(filename) {
   const lower = filename.toLowerCase();
@@ -79,6 +106,36 @@ export class GitHubService {
       headers['Authorization'] = `token ${this.token}`;
     }
     return headers;
+  }
+
+  async fetchUserRepositories(username = 'sadmandied') {
+    try {
+      const res = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`, {
+        headers: this.getHeaders()
+      });
+      if (res.ok) {
+        const repos = await res.json();
+        return repos.map(r => ({
+          name: r.name,
+          fullName: r.full_name,
+          description: r.description || '',
+          language: r.language || 'Code'
+        }));
+      }
+    } catch (e) {
+      console.warn('Could not fetch user repos from GitHub API:', e);
+    }
+
+    // Default known repositories for sadmandied
+    return [
+      { name: 'CoworkingSpaceBookingSystem', fullName: 'sadmandied/CoworkingSpaceBookingSystem', language: 'Java / JSP' },
+      { name: 'BloodDonationManagement', fullName: 'sadmandied/BloodDonationManagement', language: 'Java / SQL' },
+      { name: 'whatsapp-outreach-engine', fullName: 'sadmandied/whatsapp-outreach-engine', language: 'Python' },
+      { name: 'dead-noodles', fullName: 'sadmandied/dead-noodles', language: 'JavaScript' },
+      { name: 'terminal-dungeon', fullName: 'sadmandied/terminal-dungeon', language: 'JavaScript' },
+      { name: 'Sadman.Portfolio', fullName: 'sadmandied/Sadman.Portfolio', language: 'HTML / CSS' },
+      { name: 'git-pie', fullName: 'sadmandied/git-pie', language: 'JavaScript / HTML5' }
+    ];
   }
 
   async fetchRepository(repoSlug) {
@@ -135,12 +192,19 @@ export class GitHubService {
       if (item.type === 'blob') {
         const parts = item.path.split('/');
         const filename = parts.pop();
+
+        // Skip binary assets (images, jars, zips, binaries) so they don't skew the LOC pie!
+        if (isBinaryFile(filename)) {
+          continue;
+        }
+
         const folder = parts.length > 0 ? parts.join('/') : 'root';
         if (parts.length > 0) folders.add(folder);
 
         const lang = detectLanguage(filename);
-        const size = item.size || Math.floor(Math.random() * 6000 + 350);
-        const loc = Math.max(8, Math.round(size / 38));
+        const size = item.size || Math.floor(Math.random() * 4000 + 300);
+        // Realistic text lines of code: ~35 bytes per line, capped to avoid binary distortion
+        const loc = Math.max(4, Math.round(Math.min(size, 80000) / 35));
 
         totalBytes += size;
         if (!languageTotals[lang.name]) {
@@ -173,7 +237,7 @@ export class GitHubService {
       }
     }
 
-    // Sort slices by LOC
+    // Sort slices by LOC descending
     const slices = Object.values(languageTotals).sort((a, b) => b.loc - a.loc);
     const totalLoc = slices.reduce((acc, s) => acc + s.loc, 0);
 
@@ -220,61 +284,41 @@ export class GitHubService {
   }
 
   getFallbackData(requestedSlug, isRateLimited = false) {
-    if (requestedSlug.toLowerCase().includes('express')) {
-      return this.getExpressDataset();
-    }
     return this.getCoworkingSpaceDataset(isRateLimited);
   }
 
   getCoworkingSpaceDataset(isRateLimited = false) {
     const files = [
-      // Java backend
-      { path: 'src/main/java/com/coworking/Application.java', size: 1420 },
-      { path: 'src/main/java/com/coworking/config/SecurityConfig.java', size: 4890 },
-      { path: 'src/main/java/com/coworking/controller/BookingController.java', size: 14200 },
-      { path: 'src/main/java/com/coworking/controller/DeskController.java', size: 8600 },
-      { path: 'src/main/java/com/coworking/controller/PaymentController.java', size: 10400 },
-      { path: 'src/main/java/com/coworking/service/BookingService.java', size: 16800 },
-      { path: 'src/main/java/com/coworking/service/PaymentService.java', size: 12400 },
-      { path: 'src/main/java/com/coworking/model/Booking.java', size: 5200 },
-      { path: 'src/main/java/com/coworking/model/Desk.java', size: 4100 },
-      { path: 'src/main/java/com/coworking/repository/BookingRepository.java', size: 4900 },
-      // Vue frontend
-      { path: 'frontend/src/App.vue', size: 4800 },
-      { path: 'frontend/src/views/FloorPlanView.vue', size: 21500 },
-      { path: 'frontend/src/views/DashboardView.vue', size: 14200 },
-      { path: 'frontend/src/views/BookingView.vue', size: 12800 },
-      { path: 'frontend/src/components/DeskCard.vue', size: 6400 },
-      { path: 'frontend/src/components/CalendarPicker.vue', size: 8900 },
-      { path: 'frontend/src/router/index.js', size: 3400 },
-      { path: 'frontend/src/store/bookingStore.js', size: 7600 },
-      { path: 'frontend/src/styles/bakery-theme.css', size: 11200 },
-      // SQL & database
-      { path: 'database/schema.sql', size: 14200 },
-      { path: 'database/seed_desks.sql', size: 8900 },
-      { path: 'database/migrations/V1__init.sql', size: 9400 },
-      { path: 'docker-compose.yml', size: 2400 },
-      { path: 'README.md', size: 8200 }
+      // JavaServer Pages
+      { path: 'web/addspace.jsp', size: 3400 },
+      { path: 'web/admin_dashboard.jsp', size: 6800 },
+      { path: 'web/book.jsp', size: 4500 },
+      { path: 'web/connection.jsp', size: 1800 },
+      { path: 'web/editspace.jsp', size: 3200 },
+      { path: 'web/history.jsp', size: 4100 },
+      { path: 'web/home.jsp', size: 5200 },
+      { path: 'web/login.jsp', size: 3600 },
+      { path: 'web/logout.jsp', size: 900 },
+      { path: 'web/profile.jsp', size: 3800 },
+      { path: 'web/receipt.jsp', size: 2900 },
+      { path: 'web/register.jsp', size: 4200 },
+      { path: 'web/spaces.jsp', size: 4800 },
+      // SQL Database
+      { path: 'db/01_schema.sql', size: 5400 },
+      { path: 'db/02_seed.sql', size: 4200 },
+      { path: 'db/03_reset.sql', size: 1200 },
+      { path: 'schema.sql', size: 5400 },
+      // CSS Styling
+      { path: 'web/newcss.css', size: 6800 },
+      // XML Configuration
+      { path: 'build.xml', size: 3100 },
+      { path: 'web/WEB-INF/web.xml', size: 1900 },
+      { path: 'nbproject/project.xml', size: 2400 },
+      { path: 'nbproject/project.properties', size: 1600 },
+      { path: 'README.md', size: 2800 }
     ];
     const rawTree = files.map(f => ({ path: f.path, type: 'blob', size: f.size }));
     return this.processTreeData('sadmandied/CoworkingSpaceBookingSystem', { description: 'Smart Coworking & Desk Reservation Ecosystem' }, rawTree);
-  }
-
-  getExpressDataset() {
-    const files = [
-      { path: 'lib/express.js', size: 6200 },
-      { path: 'lib/application.js', size: 22400 },
-      { path: 'lib/request.js', size: 16800 },
-      { path: 'lib/response.js', size: 28900 },
-      { path: 'lib/router/index.js', size: 24500 },
-      { path: 'lib/router/route.js', size: 9800 },
-      { path: 'lib/router/layer.js', size: 5400 },
-      { path: 'lib/middleware/init.js', size: 2400 },
-      { path: 'Readme.md', size: 8200 },
-      { path: 'package.json', size: 2400 }
-    ];
-    const rawTree = files.map(f => ({ path: f.path, type: 'blob', size: f.size }));
-    return this.processTreeData('expressjs/express', { description: 'Fast, unopinionated, minimalist web framework' }, rawTree);
   }
 }
 

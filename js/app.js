@@ -1,11 +1,10 @@
 /**
  * GitPie! — Main Application Orchestrator
- * Coordinates the Cuphead Cartoon Pie Canvas, GitHub API recipe fetcher, and ragtime audio.
+ * Coordinates the Cuphead Cartoon Pie Canvas, GitHub API recipe fetcher, and user repository dropdown.
  */
 
 import { gitHubService } from './github_api.js';
 import { PieCanvasEngine } from './pie_canvas.js';
-import { cartoonAudio } from './audio.js';
 
 class GitPieApp {
   constructor() {
@@ -13,6 +12,7 @@ class GitPieApp {
     this.pieEngine = null;
     this.currentData = null;
     this.selectedSlice = null;
+    this.userRepos = [];
   }
 
   async init() {
@@ -22,16 +22,58 @@ class GitPieApp {
     // 2. Setup Event Listeners
     this.setupEventListeners();
 
-    // 3. Load Default Showcase Repository
+    // 3. Load Sadman's Repositories into the Dropdown
+    await this.loadUserRepositories();
+
+    // 4. Load Default Showcase Repository (CoworkingSpaceBookingSystem)
     const defaultRepo = 'sadmandied/CoworkingSpaceBookingSystem';
     await this.bakeRepository(defaultRepo);
 
-    // 4. Start 60fps Cartoon Render Loop
+    // 5. Start 60fps Cartoon Render Loop
     this.loop();
   }
 
+  async loadUserRepositories() {
+    const listContainer = document.getElementById('repos-list');
+    listContainer.innerHTML = '<div style="padding: 10px; color: #795548; font-family: var(--font-hand);">Fetching repositories...</div>';
+
+    try {
+      this.userRepos = await gitHubService.fetchUserRepositories('sadmandied');
+      listContainer.innerHTML = '';
+
+      this.userRepos.forEach(repo => {
+        const item = document.createElement('button');
+        item.className = 'dropdown-repo-item';
+        if (repo.name === 'CoworkingSpaceBookingSystem') {
+          item.classList.add('active');
+        }
+
+        item.innerHTML = `
+          <span class="repo-item-name">${repo.name}</span>
+          <span class="repo-item-lang">${repo.language}</span>
+        `;
+
+        item.addEventListener('click', () => {
+          document.querySelectorAll('.dropdown-repo-item').forEach(el => el.classList.remove('active'));
+          item.classList.add('active');
+
+          document.getElementById('selected-repo-label').textContent = repo.name;
+          document.getElementById('repos-menu').classList.add('hidden');
+
+          const repoSlug = repo.fullName || `sadmandied/${repo.name}`;
+          document.getElementById('repo-input').value = repoSlug;
+          this.bakeRepository(repoSlug);
+        });
+
+        listContainer.appendChild(item);
+      });
+    } catch (e) {
+      console.warn('Error populating repositories dropdown:', e);
+    }
+  }
+
   async bakeRepository(repoSlug) {
-    this.showBakingOverlay(true, `Mixing GitHub code ingredients for ${repoSlug}...`);
+    this.showBakingOverlay(true, `Mixing code ingredients for ${repoSlug}...`);
 
     try {
       const data = await gitHubService.fetchRepository(repoSlug);
@@ -46,6 +88,10 @@ class GitPieApp {
       document.getElementById('stat-total-kb').textContent = data.totalKB.toLocaleString();
       document.getElementById('recipe-repo-tag').textContent = `Repo: ${data.repoSlug}`;
 
+      // Update dropdown label if matching
+      const shortName = repoSlug.includes('/') ? repoSlug.split('/')[1] : repoSlug;
+      document.getElementById('selected-repo-label').textContent = shortName;
+
       // Auto-select largest pie slice for the chalkboard
       if (data.slices.length > 0) {
         this.onSliceSelected(data.slices[0]);
@@ -53,9 +99,7 @@ class GitPieApp {
 
       setTimeout(() => {
         this.showBakingOverlay(false);
-        cartoonAudio.playDing();
-        cartoonAudio.playRagtimeChime();
-      }, 500);
+      }, 450);
 
     } catch (err) {
       console.error('Baking failed:', err);
@@ -102,14 +146,13 @@ class GitPieApp {
   }
 
   setupEventListeners() {
-    // 1. Bake input & button
+    // 1. Bake input & button (for manual entry if desired)
     const input = document.getElementById('repo-input');
     const btnBake = document.getElementById('btn-bake');
 
     const handleBake = () => {
       const val = input.value.trim();
       if (val) {
-        document.querySelectorAll('.stamp-btn').forEach(b => b.classList.remove('active'));
         this.bakeRepository(val);
       }
     };
@@ -119,15 +162,19 @@ class GitPieApp {
       if (e.key === 'Enter') handleBake();
     });
 
-    // 2. Preset Recipe Stamps
-    document.querySelectorAll('.stamp-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.stamp-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const repo = btn.getAttribute('data-repo');
-        input.value = repo;
-        this.bakeRepository(repo);
-      });
+    // 2. Dropdown Menu Toggle
+    const btnDropdown = document.getElementById('btn-repos-dropdown');
+    const menuDropdown = document.getElementById('repos-menu');
+
+    btnDropdown.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menuDropdown.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!menuDropdown.contains(e.target) && e.target !== btnDropdown) {
+        menuDropdown.classList.add('hidden');
+      }
     });
 
     // 3. Spin The Pie Wheel button

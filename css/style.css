@@ -136,47 +136,146 @@ html, body {
   margin-left: 6px;
 }
 
-/* Quick Recipe Stamps */
-.recipe-stamps {
-  display: flex;
+/* Sadman's Repositories Dropdown (Circled Header Section) */
+.my-repos-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.cartoon-dropdown-btn {
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   background: #fff;
-  border: 3px solid var(--ink-black);
+  border: 3.5px solid var(--ink-black);
   border-radius: 20px;
-  padding: 6px 14px;
-  box-shadow: 3px 3px 0px var(--ink-black);
-}
-
-.stamps-label {
+  padding: 8px 18px;
   font-family: var(--font-title);
-  font-size: 0.85rem;
+  font-size: 1.15rem;
   letter-spacing: 1px;
-  color: #a04000;
-}
-
-.stamp-btn {
-  background: #fdf6e2;
-  border: 2px solid var(--ink-black);
-  border-radius: 12px;
-  padding: 4px 10px;
-  font-family: var(--font-comic);
-  font-size: 0.76rem;
   color: var(--ink-black);
   cursor: pointer;
-  box-shadow: 2px 2px 0px var(--ink-black);
-  transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 4px 4px 0px var(--ink-black);
+  transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s;
 }
 
-.stamp-btn:hover {
+.cartoon-dropdown-btn:hover {
   background: var(--cartoon-yellow);
-  transform: translateY(-2px) scale(1.05);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 6px 6px 0px var(--ink-black);
 }
 
-.stamp-btn.active {
-  background: var(--cartoon-red);
-  color: #fff;
+.cartoon-dropdown-btn:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow: 2px 2px 0px var(--ink-black);
+}
+
+.dropdown-icon {
+  font-size: 1.2rem;
+}
+
+.dropdown-arrow {
+  font-size: 0.85rem;
+  color: #795548;
+  margin-left: 4px;
+}
+
+.cartoon-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  width: 340px;
+  background: #fffbf0;
+  border: 4px solid var(--ink-black);
+  border-radius: 20px;
+  padding: 10px;
+  box-shadow: 8px 8px 0px var(--ink-black);
+  z-index: 250;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-header {
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  letter-spacing: 1.5px;
+  color: #a04000;
+  padding: 6px 10px;
+  border-bottom: 2px dashed #bcaaa4;
+  margin-bottom: 8px;
+}
+
+.dropdown-items {
+  max-height: 270px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-right: 4px;
+}
+
+.dropdown-items::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdown-items::-webkit-scrollbar-thumb {
+  background: #bcaaa4;
+  border-radius: 3px;
+}
+
+.dropdown-repo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.12s ease;
+}
+
+.dropdown-repo-item:hover {
+  background: var(--cartoon-yellow);
   border-color: var(--ink-black);
+  transform: translateX(4px);
+}
+
+.dropdown-repo-item.active {
+  background: var(--cartoon-red);
+  border-color: var(--ink-black);
+  color: #fff;
+}
+
+.dropdown-repo-item.active .repo-item-name {
+  color: #fff;
+}
+
+.dropdown-repo-item.active .repo-item-lang {
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--cartoon-yellow);
+}
+
+.repo-item-name {
+  font-family: var(--font-typewriter);
+  font-size: 0.82rem;
+  font-weight: bold;
+  color: var(--ink-black);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+.repo-item-lang {
+  font-family: var(--font-comic);
+  font-size: 0.7rem;
+  background: rgba(36, 26, 20, 0.08);
+  padding: 2px 7px;
+  border-radius: 6px;
+  color: #5d4037;
+  white-space: nowrap;
 }
 
 /* Header Tools & Buttons */

@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka+One&family=Patrick+Hand&family=Special+Elite&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=3.1">
+  <link rel="stylesheet" href="css/style.css?v=3.2">
 </head>
 <body>
   <!-- Vintage 1930s Film Grain & Projector Scratches Overlay -->
@@ -30,18 +30,19 @@
         <div class="brand-tagline">THE 1930s CODEBASE BAKERY &amp; PIE PARLOR</div>
       </div>
 
-      <!-- Quick Recipe Stamps (Presets) -->
-      <div class="recipe-stamps">
-        <span class="stamps-label">CHEF'S SPECIALS:</span>
-        <button class="stamp-btn active" data-repo="sadmandied/CoworkingSpaceBookingSystem">
-          <span>Java Coworking Tart</span>
+      <!-- Sadman's Repositories Dropdown (Circled Header Section) -->
+      <div class="my-repos-dropdown">
+        <button id="btn-repos-dropdown" class="cartoon-dropdown-btn" title="Choose from your repositories">
+          <span class="dropdown-icon">📂</span>
+          <span id="selected-repo-label">CoworkingSpaceBookingSystem</span>
+          <span class="dropdown-arrow">▼</span>
         </button>
-        <button class="stamp-btn" data-repo="expressjs/express">
-          <span>Express.js Pie</span>
-        </button>
-        <button class="stamp-btn" data-repo="facebook/react">
-          <span>React Mega-Cobbler</span>
-        </button>
+        <div id="repos-menu" class="cartoon-dropdown-menu hidden">
+          <div class="dropdown-header">SADMAN'S REPOSITORIES:</div>
+          <div id="repos-list" class="dropdown-items">
+            <!-- Dynamically filled with sadmandied repositories -->
+          </div>
+        </div>
       </div>
 
       <!-- Header Tools -->
@@ -147,6 +148,6 @@
   </div>
 
   <!-- Main Application Script (ES Module) -->
-  <script type="module" src="js/app.js?v=3.1"></script>
+  <script type="module" src="js/app.js?v=3.2"></script>
 </body>
 </html>
