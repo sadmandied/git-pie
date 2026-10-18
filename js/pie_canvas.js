@@ -370,43 +370,37 @@ export class PieCanvasEngine {
   drawPorcelainPlate(ctx) {
     const cx = this.centerX;
     const cy = this.centerY;
-    const r = this.radius + 32;
+    const r = this.radius + 28;
 
-    // Ambient plate shadow
+    // Ambient plate shadow - soft and luminous
     ctx.beginPath();
-    ctx.arc(cx, cy + 8, r + 2, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(28, 19, 13, 0.15)';
+    ctx.arc(cx, cy + 6, r + 4, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(35, 25, 15, 0.05)';
     ctx.fill();
 
     // Warm ivory porcelain plate body
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.fillStyle = '#fdfaf2';
+    ctx.fillStyle = '#ffffff';
     ctx.fill();
-    ctx.lineWidth = 3.5;
-    ctx.strokeStyle = '#1c130d';
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = '#e2dcd3';
     ctx.stroke();
 
-    // Classic 1930s diner cobalt pinstripes
+    // Subtle artisan gold accent pinstripe
     ctx.beginPath();
-    ctx.arc(cx, cy, r - 7, 0, Math.PI * 2);
-    ctx.lineWidth = 2.5;
-    ctx.strokeStyle = '#1e3799';
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(cx, cy, r - 12, 0, Math.PI * 2);
+    ctx.arc(cx, cy, r - 6, 0, Math.PI * 2);
     ctx.lineWidth = 1.2;
-    ctx.strokeStyle = '#4a69bd';
+    ctx.strokeStyle = 'rgba(194, 120, 3, 0.25)';
     ctx.stroke();
 
     // Inner plate well
     ctx.beginPath();
-    ctx.arc(cx, cy, r - 20, 0, Math.PI * 2);
-    ctx.fillStyle = '#f6f0e2';
+    ctx.arc(cx, cy, r - 16, 0, Math.PI * 2);
+    ctx.fillStyle = '#faf7f2';
     ctx.fill();
-    ctx.lineWidth = 1.5;
-    ctx.strokeStyle = '#ded4be';
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#ebe4da';
     ctx.stroke();
   }
 
@@ -635,33 +629,33 @@ export class PieCanvasEngine {
     const pct = (slice.percentage * 100).toFixed(0);
     const text = `${slice.lang.name} ${pct}%`;
 
-    ctx.font = '700 13px "Fredoka One", cursive, sans-serif';
+    ctx.font = '600 11px "Plus Jakarta Sans", sans-serif';
     const textWidth = ctx.measureText(text).width;
-    const badgeW = Math.max(76, textWidth + 18);
-    const badgeH = 24;
+    const badgeW = Math.max(70, textWidth + 16);
+    const badgeH = 22;
 
-    // Solid badge shadow
-    ctx.fillStyle = 'rgba(28, 19, 13, 0.25)';
+    // Soft subtle badge shadow
+    ctx.fillStyle = 'rgba(35, 25, 15, 0.08)';
     ctx.beginPath();
-    if (ctx.roundRect) ctx.roundRect(-badgeW / 2 + 2, -badgeH / 2 + 2, badgeW, badgeH, 12);
-    else ctx.rect(-badgeW / 2 + 2, -badgeH / 2 + 2, badgeW, badgeH);
+    if (ctx.roundRect) ctx.roundRect(-badgeW / 2 + 1, -badgeH / 2 + 2, badgeW, badgeH, 11);
+    else ctx.rect(-badgeW / 2 + 1, -badgeH / 2 + 2, badgeW, badgeH);
     ctx.fill();
 
-    // Solid white comic pill badge
+    // Pristine white pill badge
     ctx.fillStyle = '#ffffff';
-    ctx.strokeStyle = '#1c130d';
-    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = '#d2c8bc';
+    ctx.lineWidth = 1;
 
     ctx.beginPath();
-    if (ctx.roundRect) ctx.roundRect(-badgeW / 2, -badgeH / 2, badgeW, badgeH, 12);
+    if (ctx.roundRect) ctx.roundRect(-badgeW / 2, -badgeH / 2, badgeW, badgeH, 11);
     else ctx.rect(-badgeW / 2, -badgeH / 2, badgeW, badgeH);
     ctx.fill();
     ctx.stroke();
 
-    // High contrast black text
+    // Clean dark espresso text
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#1c130d';
+    ctx.fillStyle = '#1a1614';
     ctx.fillText(text, 0, 1);
 
     ctx.restore();

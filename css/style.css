@@ -1,24 +1,23 @@
-/* GitPie! — Authentic 1930s Fleischer / Cuphead Theatrical Confectionery (v6.0) */
+/* GitPie — Minimal & Elegant Codebase Visualizer (v7.0) */
 
 :root {
-  --ink-black: #1c130d;
-  --paper-cream: #faf5ea;
-  --paper-warm: #f3e9d2;
-  --paper-aged: #e8d7ba;
-  --diner-check-bg: #fffdf5;
-  --diner-rule: rgba(180, 210, 185, 0.45);
-  --stamp-red: #c0392b;
-  --stamp-blue: #1e3799;
-  --stamp-black: #1c130d;
-  --cartoon-red: #c0392b;
-  --cartoon-yellow: #f1c40f;
-  --cartoon-gold: #f39c12;
-  --wood-counter: #4e342e;
-  --brass-trim: #d4af37;
-  --font-title: 'Bangers', cursive, sans-serif;
-  --font-comic: 'Fredoka One', cursive, sans-serif;
-  --font-hand: 'Patrick Hand', cursive, sans-serif;
-  --font-typewriter: 'Special Elite', monospace;
+  --ink-primary: #1a1614;
+  --ink-secondary: #57534e;
+  --ink-tertiary: #44403c;
+  --bg-canvas: #faf8f5;
+  --bg-surface: #ffffff;
+  --bg-subtle: #f5f2eb;
+  --border-subtle: #e7e2d8;
+  --border-strong: #d3ccc0;
+  
+  --accent-gold: #854d0e;
+  --accent-gold-soft: #fef9c3;
+  --accent-crimson: #b91c1c;
+  --accent-crimson-soft: #fee2e2;
+
+  --font-serif: 'Spectral', Georgia, serif;
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
 * {
@@ -33,17 +32,16 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: #24130c;
-  color: var(--ink-black);
-  font-family: var(--font-hand);
+  background-color: var(--bg-canvas);
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
   line-height: 1.5;
-  letter-spacing: normal;
   user-select: none;
 }
 
 /* Accessible Global Focus States */
 :focus-visible {
-  outline: 3px solid var(--cartoon-gold);
+  outline: 2px solid var(--accent-gold);
   outline-offset: 2px;
 }
 
@@ -52,158 +50,114 @@ button {
   border: none;
   background: none;
   font-family: inherit;
+  color: inherit;
 }
 
-/* 1930s Film Vignette & Stage Spotlight */
-.vintage-vignette {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 99;
-  background: radial-gradient(circle at 50% 32%, transparent 52%, rgba(15, 7, 4, 0.72) 100%);
-}
-
-/* Main Theater Stage (The Physical 1930s Bakery Counter) */
-.theater-stage {
+/* Master App Layout (Generous, Balanced Breathing Room) */
+.app-layout {
   position: relative;
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 10px 20px;
-  background:
-    /* Golden Warm Spotlight on the Pie */
-    radial-gradient(ellipse at 42% 40%, rgba(243, 156, 18, 0.22) 0%, transparent 65%),
-    /* Theatrical Wall transitioning to Polished Mahogany Bakery Counter */
-    linear-gradient(
-      180deg,
-      #2c150c 0%,
-      #1e0d06 60%,
-      #8a5d1b 60.5%,
-      #5c3826 61%,
-      #4e301d 72%,
-      #2b180d 100%
-    );
-  z-index: 10;
+  padding: 16px 28px 12px;
+  background-color: var(--bg-canvas);
   overflow: visible;
 }
 
-/* Marquee Header */
-.stage-header {
+/* Minimal Top Navigation */
+.app-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 20px;
   flex-shrink: 0;
-  padding-bottom: 4px;
+  padding-bottom: 8px;
 }
 
-.brand-marquee {
+.brand {
   display: flex;
-  flex-direction: column;
-}
-
-.brand-ribbon {
-  display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 8px;
-  background: var(--cartoon-red);
-  color: #ffffff;
-  padding: 3px 18px;
-  border-radius: 26px;
-  border: 3.5px solid var(--ink-black);
-  box-shadow: 0 4px 0 var(--ink-black);
-  transform: rotate(-1deg);
-  transition-property: transform, box-shadow;
-  transition-duration: 150ms;
-  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.brand-ribbon:hover {
-  transform: scale(1.03) rotate(0.5deg);
-  box-shadow: 0 6px 0 var(--ink-black);
-}
-
-.ribbon-star {
-  font-size: 1.1rem;
-  color: var(--cartoon-yellow);
-  text-shadow: 1px 1px 0 var(--ink-black);
 }
 
 .brand-title {
-  font-family: var(--font-title);
-  font-size: 2.1rem;
-  letter-spacing: 0.04em;
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink-primary);
   line-height: 1;
-  text-shadow: 2px 2px 0 var(--ink-black);
-  text-wrap: balance;
 }
 
-.brand-tagline {
-  font-family: var(--font-title);
-  font-size: 0.82rem;
-  letter-spacing: 0.05em;
-  color: #ffffff;
-  text-shadow: 1px 1px 0 var(--ink-black);
-  margin-top: 3px;
-  margin-left: 6px;
-  text-wrap: pretty;
+.brand-tag {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--accent-gold);
+  background: var(--accent-gold-soft);
+  padding: 2px 8px;
+  border-radius: 12px;
 }
 
-/* Sadman's Repositories Pantry Dropdown */
+/* Repository Selector Dropdown */
 .pantry-dropdown-wrapper {
   position: relative;
 }
 
-.pantry-dropdown-btn {
+.dropdown-trigger-btn {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  background: #ffffff;
-  border: 3px solid var(--ink-black);
-  border-radius: 22px;
-  padding: 6px 18px;
-  box-shadow: 0 4px 0 var(--ink-black);
+  gap: 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  padding: 6px 16px;
+  box-shadow: 0 1px 3px rgba(35, 25, 15, 0.04);
   cursor: pointer;
-  outline: none;
-  font-family: var(--font-comic);
-  font-size: 0.95rem;
-  color: var(--ink-black);
-  min-height: 44px;
-  transition-property: transform, background-color, box-shadow;
+  min-height: 40px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ink-primary);
+  transition-property: background-color, border-color, box-shadow, transform;
   transition-duration: 150ms;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.pantry-dropdown-btn:hover {
-  background-color: #fff9e6;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 0 var(--ink-black);
+.dropdown-trigger-btn:hover {
+  background-color: var(--bg-subtle);
+  border-color: var(--accent-gold);
 }
 
-.pantry-dropdown-btn:active {
-  transform: translateY(3px) scale(0.97);
-  box-shadow: 0 1px 0 var(--ink-black);
+.dropdown-trigger-btn:active {
+  transform: scale(0.98);
+}
+
+.trigger-icon {
+  color: var(--ink-secondary);
+}
+
+.dropdown-prefix {
+  color: var(--ink-secondary);
+  font-size: 0.82rem;
 }
 
 .selected-repo-name {
-  font-weight: 700;
-  max-width: 250px;
+  font-weight: 600;
+  max-width: 260px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .arrow-svg {
-  color: #795548;
+  color: var(--ink-secondary);
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.pantry-dropdown-btn[aria-expanded="true"] .arrow-svg {
+.dropdown-trigger-btn[aria-expanded="true"] .arrow-svg {
   transform: rotate(180deg);
 }
 
@@ -212,10 +166,10 @@ button {
   top: calc(100% + 8px);
   left: 0;
   min-width: 320px;
-  background: #fffef8;
-  border: 3.5px solid var(--ink-black);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
   border-radius: 16px;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 30px rgba(35, 25, 15, 0.1);
   z-index: 1000;
   overflow: hidden;
 }
@@ -225,20 +179,20 @@ button {
 }
 
 .pantry-menu-title {
-  background: #f4e5cb;
+  background: var(--bg-subtle);
   padding: 8px 14px;
-  font-family: var(--font-title);
-  font-size: 0.9rem;
-  letter-spacing: 1.2px;
-  color: #5d4037;
-  border-bottom: 2.5px solid var(--ink-black);
-  text-align: center;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .pantry-menu-items {
-  max-height: 260px;
+  max-height: 250px;
   overflow-y: auto;
-  padding: 6px;
+  padding: 4px;
 }
 
 .dropdown-repo-item {
@@ -247,27 +201,24 @@ button {
   align-items: center;
   justify-content: space-between;
   padding: 8px 12px;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   border-radius: 10px;
   background: transparent;
   cursor: pointer;
   text-align: left;
-  min-height: 40px;
-  transition-property: background-color, border-color, transform;
+  min-height: 38px;
+  transition-property: background-color, border-color;
   transition-duration: 120ms;
-  transition-timing-function: ease-out;
 }
 
 .dropdown-repo-item:hover {
-  background: #fff3c9;
-  border-color: var(--ink-black);
-  transform: translateX(2px);
+  background: var(--bg-subtle);
 }
 
 .dropdown-repo-item.active {
-  background: #ffeaa7;
-  border-color: var(--ink-black);
-  font-weight: 700;
+  background: var(--accent-gold-soft);
+  border-color: rgba(194, 120, 3, 0.2);
+  font-weight: 600;
 }
 
 .repo-item-main {
@@ -277,243 +228,119 @@ button {
 }
 
 .repo-item-star {
-  color: #e58e26;
-  font-size: 1rem;
+  color: var(--accent-gold);
+  font-size: 0.9rem;
 }
 
 .repo-item-name {
-  font-family: var(--font-comic);
-  font-size: 0.92rem;
-  color: var(--ink-black);
+  font-size: 0.88rem;
+  color: var(--ink-primary);
 }
 
 .repo-item-lang {
-  font-family: var(--font-hand);
-  font-size: 0.85rem;
-  color: #5d4037;
-  background: #f0e3cc;
+  font-size: 0.76rem;
+  color: var(--ink-secondary);
+  background: var(--bg-subtle);
   padding: 2px 8px;
   border-radius: 10px;
-  font-weight: 700;
 }
 
-/* Stage Action Buttons */
-.stage-btn {
+/* Header Spin Button */
+.minimal-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 20px;
-  border: 3px solid var(--ink-black);
-  border-radius: 22px;
-  cursor: pointer;
-  font-family: var(--font-title);
-  font-size: 1.15rem;
-  letter-spacing: 0.8px;
-  min-height: 44px;
-  box-shadow: 0 4px 0 var(--ink-black);
-  transition-property: transform, box-shadow, background-color;
+  gap: 6px;
+  padding: 6px 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-primary);
+  min-height: 40px;
+  box-shadow: 0 1px 2px rgba(35, 25, 15, 0.04);
+  transition-property: background-color, border-color, box-shadow, transform;
   transition-duration: 150ms;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-  outline: none;
 }
 
-.stage-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 0 var(--ink-black);
+.minimal-btn:hover {
+  background-color: var(--bg-subtle);
+  border-color: var(--accent-gold);
+  transform: translateY(-1px);
 }
 
-.stage-btn:active {
-  transform: translateY(3px) scale(0.97);
-  box-shadow: 0 1px 0 var(--ink-black);
+.minimal-btn:active {
+  transform: scale(0.97);
 }
 
-.stage-btn.primary {
-  background: var(--cartoon-red);
-  color: #ffffff;
-  text-shadow: 1px 1px 0 var(--ink-black);
-}
-
-.stage-btn.secondary {
-  background: var(--cartoon-yellow);
-  color: var(--ink-black);
-}
-
-/* Main Content Stage */
-.stage-content {
+/* Main Workspace: Spacious 2-Column Grid */
+.app-main {
   display: flex;
-  gap: 20px;
+  gap: 28px;
   flex: 1;
   min-height: 0;
-  margin: 4px 0;
+  margin: 6px 0;
 }
 
-/* Left: Pie Arena (The Open Bakery Counter Stage) */
-.pie-arena {
-  flex: 1.25;
+/* Left: Pie Stage Section */
+.pie-stage-section {
+  flex: 1.35;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 10px;
+  padding: 8px 16px;
   position: relative;
 }
 
-/* Recipe Mode Toggle Ribbon */
+/* Minimal Segmented Control */
 .mode-ribbon-bar {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: #f5edd8;
-  border: 3px solid var(--ink-black);
-  border-radius: 24px;
-  padding: 3px 6px;
-  box-shadow: 0 3px 0 var(--ink-black);
-  z-index: 25;
+  gap: 2px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 3px;
+  z-index: 20;
 }
 
 .mode-pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 14px;
-  border: 2px solid transparent;
-  border-radius: 18px;
-  background: transparent;
-  font-family: var(--font-title);
-  font-size: 0.98rem;
-  letter-spacing: 0.6px;
-  color: var(--ink-black);
+  padding: 5px 16px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-secondary);
   cursor: pointer;
-  min-height: 38px;
-  transition-property: background-color, border-color, color, transform;
+  min-height: 32px;
+  transition-property: background-color, color, box-shadow, transform;
   transition-duration: 120ms;
-  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .mode-pill:hover {
-  background: #ffffff;
-  border-color: var(--ink-black);
-  transform: translateY(-1px);
+  color: var(--ink-primary);
 }
 
 .mode-pill.active {
-  background: var(--cartoon-red);
-  color: #ffffff;
-  border-color: var(--ink-black);
-  text-shadow: 1px 1px 0 var(--ink-black);
-  box-shadow: 0 2px 0 var(--ink-black);
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(35, 25, 15, 0.08);
 }
 
-.mode-icon-svg {
-  flex-shrink: 0;
-}
-
-/* Arena Centerpiece: Platter + Chef */
-.arena-centerpiece {
-  position: relative;
+/* Center Pie Canvas Container */
+.pie-canvas-container {
   width: 100%;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 0;
-}
-
-/* Chef Git Actor Grounded on the Counter */
-.chef-actor {
-  position: absolute;
-  left: 10px;
-  bottom: 4px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 20;
-  pointer-events: none;
-}
-
-.chef-speech-bubble {
   position: relative;
-  max-width: 190px;
-  background: #fffdf5;
-  border: 3px solid var(--ink-black);
-  border-radius: 16px;
-  padding: 7px 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  margin-bottom: 6px;
-  font-family: var(--font-hand);
-  font-size: 0.92rem;
-  line-height: 1.35;
-  color: var(--ink-black);
-  text-align: center;
-  text-wrap: balance;
-}
-
-.chef-speech-bubble p {
-  text-wrap: balance;
-}
-
-.bubble-arrow {
-  position: absolute;
-  bottom: -9px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-top: 9px solid var(--ink-black);
-}
-
-.bubble-arrow::after {
-  content: '';
-  position: absolute;
-  bottom: 3px;
-  left: -6px;
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 7px solid #fffdf5;
-}
-
-.speech-pop {
-  animation: speechPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes speechPop {
-  0% { transform: scale(0.85); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-.chef-svg {
-  animation: chefIdle 1.4s steps(4) infinite;
-  transform-origin: bottom center;
-}
-
-@keyframes chefIdle {
-  0%, 100% { transform: scale(1, 1); }
-  50% { transform: scale(1.03, 0.96) translateY(2px); }
-}
-
-/* Rolling pin gentle sway */
-#chef-rolling-pin {
-  transform-origin: 124px 85px;
-  animation: pinSway 2.2s ease-in-out infinite alternate;
-}
-
-@keyframes pinSway {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(10deg); }
-}
-
-/* Pie Canvas Stage */
-.pie-canvas-stage {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 60px;
 }
 
 #pie-canvas {
@@ -522,12 +349,13 @@ button {
   display: block;
 }
 
-/* Flavor Ribbon */
+/* Flavor Legend Ribbon */
 .flavor-ribbon-container {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 2px;
+  margin-top: 8px;
+  margin-bottom: 4px;
 }
 
 .flavor-ribbon {
@@ -537,10 +365,10 @@ button {
   justify-content: center;
   gap: 6px;
   max-width: 98%;
-  max-height: 64px;
+  max-height: 70px;
   overflow-y: hidden;
   overflow-x: auto;
-  padding: 2px;
+  padding: 2px 4px;
   scrollbar-width: none;
 }
 
@@ -552,79 +380,60 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #ffffff;
-  border: 2.5px solid var(--ink-black);
-  border-radius: 16px;
-  padding: 4px 12px;
-  box-shadow: 0 3px 0 var(--ink-black);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 4px 10px;
+  box-shadow: 0 1px 2px rgba(35, 25, 15, 0.03);
   cursor: pointer;
-  font-family: var(--font-comic);
-  font-size: 0.84rem;
-  color: var(--ink-black);
-  min-height: 34px;
-  transition-property: transform, background-color, box-shadow;
+  font-size: 0.78rem;
+  color: var(--ink-primary);
+  min-height: 30px;
+  transition-property: transform, background-color, border-color;
   transition-duration: 120ms;
-  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .flavor-pill:hover {
-  background-color: #fff9e6;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 0 var(--ink-black);
-}
-
-.flavor-pill:active {
-  transform: translateY(2px) scale(0.97);
-  box-shadow: 0 1px 0 var(--ink-black);
+  background-color: var(--bg-subtle);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
 }
 
 .flavor-pill.active {
-  background-color: #ffeaa7;
-  border-color: var(--ink-black);
-  box-shadow: 0 3px 0 var(--ink-black);
-  font-weight: 700;
+  background-color: var(--bg-subtle);
+  border-color: var(--accent-gold);
+  font-weight: 600;
 }
 
 .flavor-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  border: 1.5px solid var(--ink-black);
   flex-shrink: 0;
 }
 
 .flavor-name {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .flavor-stat {
-  color: #5d4037;
-  font-size: 0.8rem;
+  color: var(--ink-secondary);
+  font-size: 0.76rem;
   font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
 }
 
 .stage-footer-hint {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-family: var(--font-hand);
-  font-size: 0.95rem;
-  color: #ffffff;
-  text-shadow: 1px 1px 0 #1c130d;
+  font-size: 0.8rem;
+  color: var(--ink-tertiary);
   text-align: center;
-  margin-top: 3px;
+  margin-top: 4px;
   text-wrap: pretty;
 }
 
-.hint-hand-svg {
-  color: var(--cartoon-yellow);
-  flex-shrink: 0;
-}
-
-/* Right Column: Authentic 1930s Diner Guest Check */
+/* Right Column: Minimalist Recipe Inspection Card */
 .guest-check-panel {
-  flex: 0.85;
+  flex: 0.88;
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -633,90 +442,83 @@ button {
 .diner-check {
   width: 100%;
   height: 100%;
-  background-color: var(--diner-check-bg);
-  border: 3.5px solid var(--ink-black);
-  border-radius: 16px;
-  padding: 12px 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 18px 22px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 20px rgba(35, 25, 15, 0.04);
   position: relative;
   overflow: hidden;
 }
 
-/* Perforated receipt edge */
-.check-perforation {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 6px;
-  border-top: 4px dotted #8395a7;
-}
-
+/* Card Header */
 .check-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px dashed #8395a7;
-  padding-bottom: 5px;
-  margin-top: 4px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 8px;
 }
 
 .check-stamp-red {
-  font-family: var(--font-title);
-  font-size: 1.25rem;
-  letter-spacing: 0.05em;
-  color: var(--stamp-red);
-  border: 2px solid var(--stamp-red);
-  padding: 1px 8px;
-  border-radius: 6px;
-  transform: rotate(-2deg);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  background: var(--accent-gold-soft);
+  padding: 3px 8px;
+  border-radius: 8px;
 }
 
 .check-table-stamp {
-  font-family: var(--font-typewriter);
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: #374151;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--ink-secondary);
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Recipe Title Block */
+.check-title-block {
+  text-align: center;
+  margin: 6px 0;
 }
 
 .check-recipe-title {
-  font-family: var(--font-title);
-  font-size: 1.65rem;
-  letter-spacing: 0.04em;
-  color: var(--ink-black);
-  text-align: center;
-  line-height: 1.15;
-  margin-top: 5px;
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink-primary);
+  line-height: 1.2;
   text-wrap: balance;
 }
 
 .check-recipe-flavor {
-  font-family: var(--font-hand);
-  font-size: 0.95rem;
-  line-height: 1.35;
-  color: #5d4037;
-  text-align: center;
-  margin-bottom: 5px;
+  font-size: 0.85rem;
+  color: var(--ink-secondary);
+  margin-top: 2px;
   text-wrap: pretty;
 }
 
-/* Stamped Stats Row (Ledger Columns, Zero Nested Cards!) */
+/* Stamped Stats Grid */
 .check-stamp-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-  border-top: 1.5px dashed #8395a7;
-  border-bottom: 1.5px dashed #8395a7;
-  padding: 6px 0;
-  margin-bottom: 6px;
+  gap: 12px;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 10px 0;
+  margin: 4px 0;
 }
 
 .stamp-box {
-  background: transparent;
-  padding: 2px 4px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -724,35 +526,29 @@ button {
   justify-content: center;
 }
 
-.stamp-box:not(:last-child) {
-  border-right: 1.5px dashed #b2bec3;
-}
-
-.stamp-box.red .stamp-val { color: var(--stamp-red); }
-.stamp-box.black .stamp-val { color: var(--stamp-black); }
-.stamp-box.blue .stamp-val { color: var(--stamp-blue); }
-
 .stamp-val {
-  font-family: var(--font-comic);
-  font-size: 1.35rem;
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
   line-height: 1.1;
   font-weight: 700;
+  color: var(--ink-primary);
   font-variant-numeric: tabular-nums;
 }
 
 .stamp-label {
-  font-family: var(--font-title);
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  color: #5d4037;
-  margin-top: 2px;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  margin-top: 3px;
 }
 
-/* Diner Action Buttons */
+/* Inspection Actions */
 .check-actions {
   display: flex;
-  gap: 8px;
-  margin-bottom: 6px;
+  gap: 10px;
+  margin: 4px 0;
 }
 
 .diner-btn {
@@ -761,102 +557,102 @@ button {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 6px 12px;
-  background: #ffffff;
-  border: 2.5px solid var(--ink-black);
+  padding: 7px 14px;
+  background: var(--ink-primary);
+  color: #ffffff;
   border-radius: 12px;
-  font-family: var(--font-title);
-  font-size: 1rem;
-  letter-spacing: 0.04em;
-  color: var(--ink-black);
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
-  min-height: 40px;
-  box-shadow: 0 3px 0 var(--ink-black);
-  transition-property: transform, background-color, box-shadow;
+  min-height: 38px;
+  box-shadow: 0 1px 3px rgba(35, 25, 15, 0.1);
+  transition-property: background-color, transform, box-shadow;
   transition-duration: 120ms;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .diner-btn:hover {
-  background-color: #fff9e6;
+  background: #2d2621;
   transform: translateY(-1px);
-  box-shadow: 0 4px 0 var(--ink-black);
 }
 
 .diner-btn:active {
-  transform: translateY(2px) scale(0.97);
-  box-shadow: 0 1px 0 var(--ink-black);
+  transform: scale(0.98);
 }
 
-/* Baker's Handwritten Note */
+.diner-btn.secondary {
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+  border: 1px solid var(--border-strong);
+}
+
+.diner-btn.secondary:hover {
+  background: var(--bg-subtle);
+  border-color: var(--ink-primary);
+}
+
+/* Baker's Note */
 .baker-handwritten-note {
-  position: relative;
-  background: transparent;
-  padding: 2px 4px;
-  margin-bottom: 4px;
-  font-family: var(--font-hand);
-  font-size: 0.92rem;
-  line-height: 1.35;
-  color: #3e2723;
-  font-style: italic;
-  display: flex;
-  align-items: flex-start;
-  gap: 4px;
+  background: var(--bg-subtle);
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin: 4px 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--ink-secondary);
 }
 
 .baker-handwritten-note p {
   text-wrap: pretty;
 }
 
-.note-quote {
-  font-family: var(--font-title);
-  font-size: 1.25rem;
-  color: var(--cartoon-red);
-  line-height: 1;
-}
-
-/* Line Items (Ingredients / Files) */
+/* Line Items (Files) */
 .check-items-section {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 0;
-  border-top: 2px dashed #8395a7;
-  padding-top: 5px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 8px;
 }
 
 .check-search-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 
 .check-section-title {
-  font-family: var(--font-title);
-  font-size: 0.85rem;
-  letter-spacing: 0.8px;
-  color: #4e342e;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
 }
 
 .check-search-box {
   display: flex;
   align-items: center;
-  gap: 4px;
-  background: #ffffff;
-  border: 2px solid var(--ink-black);
-  border-radius: 12px;
-  padding: 2px 8px;
+  gap: 6px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 4px 8px;
+}
+
+.check-search-box svg {
+  color: var(--ink-tertiary);
 }
 
 .check-search-box input {
   background: transparent;
   border: none;
   outline: none;
-  color: var(--ink-black);
-  font-family: var(--font-typewriter);
-  font-size: 0.82rem;
-  width: 95px;
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  width: 100px;
 }
 
 .receipt-items-list {
@@ -867,22 +663,27 @@ button {
 }
 
 .receipt-items-list::-webkit-scrollbar {
-  width: 5px;
+  width: 4px;
 }
 .receipt-items-list::-webkit-scrollbar-thumb {
-  background: #d4b996;
-  border-radius: 3px;
+  background: var(--border-strong);
+  border-radius: 2px;
 }
 
 .ingredient-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 3px 4px;
-  border-bottom: 1px dotted #b2bec3;
-  font-family: var(--font-typewriter);
-  font-size: 0.82rem;
-  color: var(--ink-black);
+  padding: 5px 6px;
+  border-bottom: 1px solid var(--bg-subtle);
+  font-size: 0.8rem;
+  color: var(--ink-primary);
+  border-radius: 6px;
+  transition: background-color 0.1s ease;
+}
+
+.ingredient-item:hover {
+  background-color: var(--bg-subtle);
 }
 
 .ingredient-name-col {
@@ -892,26 +693,30 @@ button {
 }
 
 .file-name {
-  color: var(--ink-black);
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--ink-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 185px;
+  max-width: 190px;
 }
 
 .file-dir {
-  font-size: 0.72rem;
-  color: #4e342e;
+  font-size: 0.75rem;
+  color: var(--ink-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 185px;
+  max-width: 190px;
 }
 
 .file-loc {
-  color: var(--stamp-red);
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--accent-gold);
+  font-weight: 600;
   flex-shrink: 0;
   margin-left: 8px;
   font-variant-numeric: tabular-nums;
@@ -919,63 +724,44 @@ button {
 
 .empty-hint {
   text-align: center;
-  color: #5d4037;
-  font-style: italic;
-  padding: 14px 6px;
+  color: var(--ink-secondary);
+  font-size: 0.82rem;
+  padding: 16px 8px;
 }
 
 .check-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  border-top: 2px dashed #8395a7;
-  padding-top: 5px;
-  margin-top: 3px;
-}
-
-.check-repo-tag {
-  font-family: var(--font-typewriter);
-  font-size: 0.74rem;
-  color: #374151;
-  font-weight: 700;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 6px;
+  margin-top: 4px;
 }
 
 .check-paid-stamp {
-  font-family: var(--font-title);
-  font-size: 0.95rem;
-  letter-spacing: 1px;
-  color: var(--stamp-red);
-  border: 1.5px solid var(--stamp-red);
-  padding: 1px 6px;
-  border-radius: 4px;
-  transform: rotate(-3deg);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-secondary);
 }
 
-/* Bottom Stage Bakery Order Counter (Brass & Mahogany Register) */
-.stage-footer {
+/* Bottom Status & Custom Repo Bar */
+.app-footer {
   flex-shrink: 0;
-  margin-top: 3px;
+  margin-top: 4px;
 }
 
 .counter-console {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  background: #ffffff;
-  border: 3.5px solid var(--ink-black);
-  border-radius: 18px;
-  padding: 6px 18px;
-  box-shadow: 0 4px 0 var(--ink-black);
-}
-
-.counter-label {
-  font-family: var(--font-title);
-  font-size: 1.05rem;
-  letter-spacing: 0.8px;
-  color: var(--ink-black);
-  white-space: nowrap;
-  text-wrap: balance;
+  gap: 20px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 8px 18px;
+  box-shadow: 0 1px 3px rgba(35, 25, 15, 0.03);
 }
 
 .counter-input-row {
@@ -983,37 +769,69 @@ button {
   display: flex;
   align-items: center;
   gap: 8px;
-  max-width: 580px;
+  max-width: 520px;
+}
+
+.counter-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  white-space: nowrap;
 }
 
 #repo-input {
   flex: 1;
-  padding: 6px 14px;
-  background: #fdfbf7;
-  border: 2px solid var(--ink-black);
-  border-radius: 14px;
-  font-family: var(--font-comic);
-  font-size: 0.92rem;
-  color: var(--ink-black);
+  padding: 5px 12px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--ink-primary);
   outline: none;
-  min-height: 40px;
+  min-height: 34px;
+  transition: border-color 0.15s ease;
 }
 
 #repo-input:focus {
-  border-color: var(--cartoon-red);
+  border-color: var(--accent-gold);
+  background: var(--bg-surface);
+}
+
+.bake-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  background: var(--ink-primary);
+  color: #ffffff;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 34px;
+  transition-property: background-color, transform;
+  transition-duration: 120ms;
+}
+
+.bake-btn:hover {
+  background: #2d2621;
+}
+
+.bake-btn:active {
+  transform: scale(0.97);
 }
 
 .counter-stats {
-  font-family: var(--font-comic);
-  font-size: 0.9rem;
-  color: #4e342e;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--ink-secondary);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
 
 .stat-num {
   font-weight: 700;
-  color: var(--cartoon-red);
+  color: var(--ink-primary);
 }
 
 /* Comic "CHOMP!" Popup Effect */
@@ -1022,16 +840,16 @@ button {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0);
-  background: var(--cartoon-yellow);
-  color: var(--cartoon-red);
-  font-family: var(--font-title);
-  font-size: 3.5rem;
-  letter-spacing: 3px;
-  padding: 10px 32px;
-  border: 5px solid var(--ink-black);
-  border-radius: 28px;
-  box-shadow: 0 12px 32px rgba(28, 19, 13, 0.45);
-  text-shadow: 2.5px 2.5px 0 var(--ink-black);
+  background: var(--accent-gold-soft);
+  color: var(--accent-crimson);
+  font-family: var(--font-serif);
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 12px 36px;
+  border: 2px solid var(--accent-crimson);
+  border-radius: 20px;
+  box-shadow: 0 12px 32px rgba(35, 25, 15, 0.2);
   pointer-events: none;
   z-index: 500;
 }
@@ -1041,10 +859,10 @@ button {
 }
 
 @keyframes chompZoom {
-  0% { transform: translate(-50%, -50%) scale(0.4) rotate(-8deg); opacity: 0; }
-  40% { transform: translate(-50%, -50%) scale(1.1) rotate(4deg); opacity: 1; }
-  70% { transform: translate(-50%, -50%) scale(1) rotate(-2deg); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(1.3) rotate(0); opacity: 0; }
+  0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
+  40% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+  70% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0; }
 }
 
 /* Baking Loading Overlay */
@@ -1054,7 +872,8 @@ button {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(28, 19, 13, 0.65);
+  background: rgba(30, 25, 20, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1066,56 +885,58 @@ button {
 }
 
 .baking-card {
-  background: #ffffff;
-  border: 4px solid var(--ink-black);
-  border-radius: 22px;
-  padding: 24px 36px;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 28px 36px;
+  box-shadow: 0 16px 40px rgba(35, 25, 15, 0.15);
   text-align: center;
-  max-width: 360px;
+  max-width: 340px;
 }
 
-.stove-circle {
-  display: inline-block;
-  animation: potSpin 0.9s ease-in-out infinite alternate;
+.spinner-circle {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border-subtle);
+  border-top-color: var(--accent-gold);
+  border-radius: 50%;
+  margin: 0 auto 12px;
+  animation: spinLoader 0.8s linear infinite;
 }
 
-@keyframes potSpin {
-  0% { transform: rotate(-8deg); }
-  100% { transform: rotate(8deg); }
+@keyframes spinLoader {
+  to { transform: rotate(360deg); }
 }
 
 .baking-title {
-  font-family: var(--font-title);
-  font-size: 1.8rem;
-  letter-spacing: 1.5px;
-  color: var(--cartoon-red);
-  margin-top: 10px;
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--ink-primary);
+  margin-top: 6px;
   text-wrap: balance;
 }
 
 .baking-desc {
-  font-family: var(--font-hand);
-  font-size: 1.05rem;
-  color: #5d4037;
+  font-size: 0.88rem;
+  color: var(--ink-secondary);
   margin-top: 4px;
   text-wrap: pretty;
 }
 
-/* Cartoon Toast Alert */
+/* Toast Notification */
 .cartoon-toast {
   position: fixed;
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--cartoon-yellow);
-  color: var(--ink-black);
-  border: 3.5px solid var(--ink-black);
-  border-radius: 18px;
-  padding: 8px 24px;
-  font-family: var(--font-comic);
-  font-size: 0.95rem;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  background: var(--ink-primary);
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  box-shadow: 0 6px 18px rgba(35, 25, 15, 0.18);
   z-index: 2000;
   animation: toastPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -1136,9 +957,7 @@ button {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .chef-svg,
-  #chef-rolling-pin,
-  .stove-circle {
+  .spinner-circle {
     animation: none !important;
   }
 }
@@ -1148,20 +967,15 @@ button {
   html, body {
     overflow-y: auto;
   }
-  .theater-stage {
+  .app-layout {
     height: auto;
     min-height: 100vh;
   }
-  .stage-content {
+  .app-main {
     flex-direction: column;
   }
-  .pie-canvas-stage {
-    margin-left: 0;
-    min-height: 380px;
-  }
-  .chef-actor {
-    position: static;
-    margin-bottom: 10px;
+  .pie-stage-section {
+    min-height: 420px;
   }
   .guest-check-panel {
     min-height: 520px;
