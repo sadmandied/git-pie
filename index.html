@@ -71,15 +71,30 @@
       <!-- Left Column: The Grand Pie Platter & Mascot -->
       <section class="pie-arena">
         <!-- Recipe Mode Switcher -->
-        <div class="mode-ribbon-bar">
-          <button class="mode-pill active" data-mode="languages" title="Slice by programming languages (Hotkey: 1)">
-            <span>🥧 Languages</span>
+        <div class="mode-ribbon-bar" role="tablist" aria-label="Pie Slice Display Modes">
+          <button class="mode-pill active" data-mode="languages" role="tab" aria-selected="true" title="Slice by programming languages (Hotkey: 1)">
+            <svg class="mode-icon-svg" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 21a9 9 0 0 0 9-9h-9v9z" fill="#d63031"/>
+              <path d="M12 3a9 9 0 0 0-9 9 9 9 0 0 0 9 9V12z" fill="#fbc531"/>
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.2" fill="none"/>
+            </svg>
+            <span>Languages</span>
           </button>
-          <button class="mode-pill" data-mode="folders" title="Slice by folder directories (Hotkey: 2)">
-            <span>📁 Folders</span>
+          <button class="mode-pill" data-mode="folders" role="tab" aria-selected="false" title="Slice by folder directories (Hotkey: 2)">
+            <svg class="mode-icon-svg" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" fill="#f5cd79"/>
+              <path d="M2 10h20"/>
+            </svg>
+            <span>Folders</span>
           </button>
-          <button class="mode-pill" data-mode="files" title="Slice by top individual files (Hotkey: 3)">
-            <span>📄 Top Files</span>
+          <button class="mode-pill" data-mode="files" role="tab" aria-selected="false" title="Slice by top individual files (Hotkey: 3)">
+            <svg class="mode-icon-svg" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" fill="#fffdf5"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            <span>Top Files</span>
           </button>
         </div>
 
@@ -92,7 +107,7 @@
               <p id="chef-speech-text">Welcome to the Bakery, Sadman! Let's slice this codebase!</p>
             </div>
 
-            <svg class="chef-svg" id="chef-mascot-svg" viewBox="0 0 160 210" width="125" height="165" aria-label="Chef Git mascot">
+            <svg class="chef-svg" id="chef-mascot-svg" viewBox="0 0 160 210" width="115" height="150" aria-label="Chef Git mascot">
               <!-- Legs -->
               <path d="M 64 150 Q 58 175 52 188" fill="none" stroke="#1c130d" stroke-width="8" stroke-linecap="round"/>
               <path d="M 96 150 Q 102 175 108 188" fill="none" stroke="#1c130d" stroke-width="8" stroke-linecap="round"/>
@@ -130,10 +145,12 @@
               <path d="M 59 63 L 101 63 L 98 70 L 62 70 Z" fill="#f5f6fa" stroke="#1c130d" stroke-width="2.5"/>
               <!-- Right Arm Holding Rolling Pin -->
               <path d="M 102 118 Q 124 118 126 98" fill="none" stroke="#1c130d" stroke-width="7" stroke-linecap="round"/>
-              <rect x="118" y="48" width="12" height="74" rx="5" fill="#e58e26" stroke="#1c130d" stroke-width="2.8" transform="rotate(18 124 85)"/>
-              <rect x="122" y="36" width="5" height="16" rx="2" fill="#b06713" stroke="#1c130d" stroke-width="2" transform="rotate(18 124 85)"/>
-              <rect x="122" y="118" width="5" height="16" rx="2" fill="#b06713" stroke="#1c130d" stroke-width="2" transform="rotate(18 124 85)"/>
-              <circle cx="126" cy="98" r="8" fill="#ffffff" stroke="#1c130d" stroke-width="2.8"/>
+              <g id="chef-rolling-pin">
+                <rect x="118" y="48" width="12" height="74" rx="5" fill="#e58e26" stroke="#1c130d" stroke-width="2.8" transform="rotate(18 124 85)"/>
+                <rect x="122" y="36" width="5" height="16" rx="2" fill="#b06713" stroke="#1c130d" stroke-width="2" transform="rotate(18 124 85)"/>
+                <rect x="122" y="118" width="5" height="16" rx="2" fill="#b06713" stroke="#1c130d" stroke-width="2" transform="rotate(18 124 85)"/>
+                <circle cx="126" cy="98" r="8" fill="#ffffff" stroke="#1c130d" stroke-width="2.8"/>
+              </g>
             </svg>
           </div>
 
@@ -151,7 +168,10 @@
         </div>
 
         <div class="stage-footer-hint">
-          <span>👉 Hover or click any slice &bull; Drag to spin the wheel &bull; Spacebar = Spin &bull; B = Take a Bite!</span>
+          <svg class="hint-hand-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <path d="M21 11l-7-7-1.4 1.4 4.6 4.6H3v2h14.2l-4.6 4.6 1.4 1.4 7-7z"/>
+          </svg>
+          <span>Hover or click any slice &bull; Drag to spin &bull; Spacebar = Spin &bull; B = Take a Bite!</span>
         </div>
       </section>
 
@@ -262,7 +282,15 @@
   <!-- Baking Loading Overlay -->
   <div id="baking-overlay" class="baking-overlay hidden" role="status" aria-live="polite">
     <div class="baking-card">
-      <div class="stove-circle">🥧</div>
+      <div class="stove-circle" aria-hidden="true">
+        <svg class="baking-oven-svg" viewBox="0 0 64 64" width="60" height="60">
+          <ellipse cx="32" cy="44" rx="26" ry="14" fill="#f39c12" stroke="#1c130d" stroke-width="3"/>
+          <ellipse cx="32" cy="40" rx="20" ry="10" fill="#d63031" stroke="#1c130d" stroke-width="2"/>
+          <path d="M 22 28 Q 18 18 24 10" fill="none" stroke="#e8d7ba" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 32 26 Q 36 16 30 8" fill="none" stroke="#e8d7ba" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 42 28 Q 46 18 40 10" fill="none" stroke="#e8d7ba" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
       <h2 class="baking-title">MIXING THE BATTER!</h2>
       <p id="baking-status" class="baking-desc">Gathering GitHub code ingredients from the pantry...</p>
     </div>

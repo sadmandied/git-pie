@@ -97,6 +97,8 @@ class GitPieApp {
 
       this.userRepos.forEach(repo => {
         const item = document.createElement('button');
+        item.setAttribute('type', 'button');
+        item.setAttribute('role', 'menuitem');
         item.className = 'dropdown-repo-item';
         if (repo.name === 'CoworkingSpaceBookingSystem') {
           item.classList.add('active');
@@ -186,11 +188,13 @@ class GitPieApp {
 
     slices.forEach((slice, idx) => {
       const pill = document.createElement('button');
+      pill.setAttribute('type', 'button');
       pill.className = 'flavor-pill';
       if (slice === this.selectedSlice || idx === 0) pill.classList.add('active');
 
       const pct = (slice.percentage * 100).toFixed(0);
       const loc = slice.loc.toLocaleString();
+      pill.setAttribute('aria-label', `${slice.lang.name}: ${pct}%, ${loc} lines of code`);
 
       pill.innerHTML = `
         <span class="flavor-dot" style="background-color: ${slice.lang.color};"></span>
@@ -208,6 +212,10 @@ class GitPieApp {
           this.pieEngine.hoveredSlice = null;
           this.updateRecipeChalkboard(this.selectedSlice, false);
         }
+      });
+
+      pill.addEventListener('focus', () => {
+        this.pieEngine.selectSlice(slice);
       });
 
       pill.addEventListener('click', () => {
@@ -297,7 +305,7 @@ class GitPieApp {
     const filtered = files.filter(f => !cleanQuery || f.path.toLowerCase().includes(cleanQuery));
 
     if (filtered.length === 0) {
-      listEl.innerHTML = `<li class="empty-hint" style="text-align: center; color: #a8e6cf;">No ingredients matching "${query}"!</li>`;
+      listEl.innerHTML = `<li class="empty-hint">No ingredients matching "${query}"!</li>`;
       return;
     }
 
@@ -391,7 +399,7 @@ class GitPieApp {
       const repoSlug = this.currentData ? this.currentData.repoSlug : 'sadmandied/CoworkingSpaceBookingSystem';
       const badgeMarkdown = `[![Baked with GitPie](https://img.shields.io/badge/Baked%20with-GitPie%20🥧-d63031?style=for-the-badge)](https://sadmandied.github.io/git-pie/)`;
       navigator.clipboard.writeText(badgeMarkdown).then(() => {
-        this.showToast('📋 Markdown Badge Copied!');
+        this.showToast('Markdown Badge Copied to Clipboard!');
       });
     });
 
@@ -409,7 +417,13 @@ class GitPieApp {
     window.addEventListener('keydown', (e) => {
       if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
 
-      if (e.code === 'Space') {
+      if (e.key === 'Escape') {
+        if (!menuDropdown.classList.contains('hidden')) {
+          menuDropdown.classList.add('hidden');
+          btnDropdown.setAttribute('aria-expanded', 'false');
+          btnDropdown.focus();
+        }
+      } else if (e.code === 'Space') {
         e.preventDefault();
         this.pieEngine.angularVelocity = 0.32 + Math.random() * 0.25;
         this.setChefSpeech(this.chefQuotes.spin);

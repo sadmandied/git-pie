@@ -6,7 +6,7 @@
   --paper-warm: #f3e9d2;
   --paper-aged: #e8d7ba;
   --diner-check-bg: #fffdf5;
-  --diner-rule: #d5e8d4;
+  --diner-rule: rgba(180, 210, 185, 0.45);
   --stamp-red: #c0392b;
   --stamp-blue: #1e3799;
   --stamp-black: #1c130d;
@@ -14,6 +14,7 @@
   --cartoon-yellow: #f1c40f;
   --cartoon-gold: #f39c12;
   --wood-counter: #4e342e;
+  --brass-trim: #d4af37;
   --font-title: 'Bangers', cursive, sans-serif;
   --font-comic: 'Fredoka One', cursive, sans-serif;
   --font-hand: 'Patrick Hand', cursive, sans-serif;
@@ -25,6 +26,7 @@
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html, body {
@@ -34,9 +36,22 @@ html, body {
   background-color: #24130c;
   color: var(--ink-black);
   font-family: var(--font-hand);
-  line-height: 1.55;
+  line-height: 1.5;
   letter-spacing: normal;
   user-select: none;
+}
+
+/* Accessible Global Focus States */
+:focus-visible {
+  outline: 3px solid var(--cartoon-gold);
+  outline-offset: 2px;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
 }
 
 /* 1930s Film Vignette & Stage Spotlight */
@@ -48,10 +63,10 @@ html, body {
   height: 100vh;
   pointer-events: none;
   z-index: 99;
-  background: radial-gradient(circle at 50% 35%, transparent 55%, rgba(15, 7, 4, 0.75) 100%);
+  background: radial-gradient(circle at 50% 32%, transparent 52%, rgba(15, 7, 4, 0.72) 100%);
 }
 
-/* Main Theater Stage */
+/* Main Theater Stage (The Physical 1930s Bakery Counter) */
 .theater-stage {
   position: relative;
   width: 100vw;
@@ -59,11 +74,22 @@ html, body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 12px 22px;
+  padding: 10px 20px;
   background:
-    radial-gradient(ellipse at 50% 30%, rgba(243, 156, 18, 0.15) 0%, transparent 70%),
-    linear-gradient(180deg, #321910 0%, #200f08 60%, #150905 100%);
+    /* Golden Warm Spotlight on the Pie */
+    radial-gradient(ellipse at 42% 40%, rgba(243, 156, 18, 0.22) 0%, transparent 65%),
+    /* Theatrical Wall transitioning to Polished Mahogany Bakery Counter */
+    linear-gradient(
+      180deg,
+      #2c150c 0%,
+      #1e0d06 60%,
+      #8a5d1b 60.5%,
+      #5c3826 61%,
+      #4e301d 72%,
+      #2b180d 100%
+    );
   z-index: 10;
+  overflow: visible;
 }
 
 /* Marquee Header */
@@ -86,22 +112,26 @@ html, body {
   align-items: center;
   gap: 8px;
   background: var(--cartoon-red);
-  color: #fff;
+  color: #ffffff;
   padding: 3px 18px;
   border-radius: 26px;
   border: 3.5px solid var(--ink-black);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 0 var(--ink-black);
   transform: rotate(-1deg);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-property: transform, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .brand-ribbon:hover {
   transform: scale(1.03) rotate(0.5deg);
+  box-shadow: 0 6px 0 var(--ink-black);
 }
 
 .ribbon-star {
   font-size: 1.1rem;
   color: var(--cartoon-yellow);
+  text-shadow: 1px 1px 0 var(--ink-black);
 }
 
 .brand-title {
@@ -110,16 +140,18 @@ html, body {
   letter-spacing: 0.04em;
   line-height: 1;
   text-shadow: 2px 2px 0 var(--ink-black);
+  text-wrap: balance;
 }
 
 .brand-tagline {
   font-family: var(--font-title);
   font-size: 0.82rem;
-  letter-spacing: 0.04em;
-  color: #f5cd79;
+  letter-spacing: 0.05em;
+  color: #ffffff;
   text-shadow: 1px 1px 0 var(--ink-black);
   margin-top: 3px;
   margin-left: 6px;
+  text-wrap: pretty;
 }
 
 /* Sadman's Repositories Pantry Dropdown */
@@ -134,28 +166,33 @@ html, body {
   background: #ffffff;
   border: 3px solid var(--ink-black);
   border-radius: 22px;
-  padding: 6px 16px;
-  box-shadow: 0 4px 10px rgba(28, 19, 13, 0.12);
+  padding: 6px 18px;
+  box-shadow: 0 4px 0 var(--ink-black);
   cursor: pointer;
   outline: none;
   font-family: var(--font-comic);
   font-size: 0.95rem;
   color: var(--ink-black);
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease;
+  min-height: 44px;
+  transition-property: transform, background-color, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .pantry-dropdown-btn:hover {
   background-color: #fff9e6;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--ink-black);
 }
 
 .pantry-dropdown-btn:active {
-  transform: translateY(1px);
+  transform: translateY(3px) scale(0.97);
+  box-shadow: 0 1px 0 var(--ink-black);
 }
 
 .selected-repo-name {
   font-weight: 700;
-  max-width: 240px;
+  max-width: 250px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -163,7 +200,7 @@ html, body {
 
 .arrow-svg {
   color: #795548;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .pantry-dropdown-btn[aria-expanded="true"] .arrow-svg {
@@ -172,13 +209,13 @@ html, body {
 
 .pantry-menu {
   position: absolute;
-  top: calc(100% + 6px);
+  top: calc(100% + 8px);
   left: 0;
-  min-width: 310px;
+  min-width: 320px;
   background: #fffef8;
-  border: 3px solid var(--ink-black);
-  border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(28, 19, 13, 0.2);
+  border: 3.5px solid var(--ink-black);
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
   z-index: 1000;
   overflow: hidden;
 }
@@ -189,19 +226,19 @@ html, body {
 
 .pantry-menu-title {
   background: #f4e5cb;
-  padding: 6px 12px;
+  padding: 8px 14px;
   font-family: var(--font-title);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   letter-spacing: 1.2px;
   color: #5d4037;
-  border-bottom: 2px solid var(--ink-black);
+  border-bottom: 2.5px solid var(--ink-black);
   text-align: center;
 }
 
 .pantry-menu-items {
-  max-height: 250px;
+  max-height: 260px;
   overflow-y: auto;
-  padding: 4px;
+  padding: 6px;
 }
 
 .dropdown-repo-item {
@@ -211,46 +248,53 @@ html, body {
   justify-content: space-between;
   padding: 8px 12px;
   border: 2px solid transparent;
-  border-radius: 8px;
+  border-radius: 10px;
   background: transparent;
   cursor: pointer;
   text-align: left;
-  transition: background-color 0.12s ease;
+  min-height: 40px;
+  transition-property: background-color, border-color, transform;
+  transition-duration: 120ms;
+  transition-timing-function: ease-out;
 }
 
 .dropdown-repo-item:hover {
   background: #fff3c9;
   border-color: var(--ink-black);
+  transform: translateX(2px);
 }
 
 .dropdown-repo-item.active {
   background: #ffeaa7;
   border-color: var(--ink-black);
+  font-weight: 700;
 }
 
 .repo-item-main {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .repo-item-star {
   color: #e58e26;
+  font-size: 1rem;
 }
 
 .repo-item-name {
   font-family: var(--font-comic);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   color: var(--ink-black);
 }
 
 .repo-item-lang {
   font-family: var(--font-hand);
-  font-size: 0.82rem;
-  color: #795548;
+  font-size: 0.85rem;
+  color: #5d4037;
   background: #f0e3cc;
-  padding: 1px 7px;
+  padding: 2px 8px;
   border-radius: 10px;
+  font-weight: 700;
 }
 
 /* Stage Action Buttons */
@@ -258,25 +302,29 @@ html, body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 7px 18px;
+  padding: 6px 20px;
   border: 3px solid var(--ink-black);
   border-radius: 22px;
   cursor: pointer;
   font-family: var(--font-title);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   letter-spacing: 0.8px;
-  box-shadow: 0 4px 10px rgba(28, 19, 13, 0.12);
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 44px;
+  box-shadow: 0 4px 0 var(--ink-black);
+  transition-property: transform, box-shadow, background-color;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   outline: none;
 }
 
 .stage-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(28, 19, 13, 0.18);
+  box-shadow: 0 6px 0 var(--ink-black);
 }
 
 .stage-btn:active {
-  transform: translateY(1px);
+  transform: translateY(3px) scale(0.97);
+  box-shadow: 0 1px 0 var(--ink-black);
 }
 
 .stage-btn.primary {
@@ -290,13 +338,13 @@ html, body {
   color: var(--ink-black);
 }
 
-/* Main Content Area */
+/* Main Content Stage */
 .stage-content {
   display: flex;
   gap: 20px;
   flex: 1;
   min-height: 0;
-  margin: 6px 0;
+  margin: 4px 0;
 }
 
 /* Left: Pie Arena (The Open Bakery Counter Stage) */
@@ -306,7 +354,7 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 12px;
+  padding: 4px 10px;
   position: relative;
 }
 
@@ -316,30 +364,36 @@ html, body {
   align-items: center;
   gap: 6px;
   background: #f5edd8;
-  border: 2.5px solid var(--ink-black);
+  border: 3px solid var(--ink-black);
   border-radius: 24px;
   padding: 3px 6px;
+  box-shadow: 0 3px 0 var(--ink-black);
+  z-index: 25;
 }
 
 .mode-pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 14px;
+  padding: 5px 14px;
   border: 2px solid transparent;
   border-radius: 18px;
   background: transparent;
   font-family: var(--font-title);
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   letter-spacing: 0.6px;
   color: var(--ink-black);
   cursor: pointer;
-  transition: all 0.12s ease;
+  min-height: 38px;
+  transition-property: background-color, border-color, color, transform;
+  transition-duration: 120ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .mode-pill:hover {
   background: #ffffff;
   border-color: var(--ink-black);
+  transform: translateY(-1px);
 }
 
 .mode-pill.active {
@@ -347,6 +401,11 @@ html, body {
   color: #ffffff;
   border-color: var(--ink-black);
   text-shadow: 1px 1px 0 var(--ink-black);
+  box-shadow: 0 2px 0 var(--ink-black);
+}
+
+.mode-icon-svg {
+  flex-shrink: 0;
 }
 
 /* Arena Centerpiece: Platter + Chef */
@@ -360,11 +419,11 @@ html, body {
   min-height: 0;
 }
 
-/* Chef Git Actor */
+/* Chef Git Actor Grounded on the Counter */
 .chef-actor {
   position: absolute;
-  left: 8px;
-  bottom: 8px;
+  left: 10px;
+  bottom: 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -374,42 +433,47 @@ html, body {
 
 .chef-speech-bubble {
   position: relative;
-  max-width: 170px;
-  background: #ffffff;
-  border: 2.5px solid var(--ink-black);
-  border-radius: 14px;
-  padding: 6px 10px;
-  box-shadow: 0 4px 10px rgba(28, 19, 13, 0.12);
-  margin-bottom: 4px;
+  max-width: 190px;
+  background: #fffdf5;
+  border: 3px solid var(--ink-black);
+  border-radius: 16px;
+  padding: 7px 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  margin-bottom: 6px;
   font-family: var(--font-hand);
-  font-size: 0.95rem;
-  line-height: 1.45;
+  font-size: 0.92rem;
+  line-height: 1.35;
   color: var(--ink-black);
   text-align: center;
+  text-wrap: balance;
+}
+
+.chef-speech-bubble p {
+  text-wrap: balance;
 }
 
 .bubble-arrow {
   position: absolute;
-  bottom: -8px;
+  bottom: -9px;
   left: 50%;
   transform: translateX(-50%);
   width: 0;
   height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 8px solid var(--ink-black);
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 9px solid var(--ink-black);
 }
 
 .bubble-arrow::after {
   content: '';
   position: absolute;
-  bottom: 2px;
-  left: -5px;
+  bottom: 3px;
+  left: -6px;
   width: 0;
   height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 6px solid #ffffff;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 7px solid #fffdf5;
 }
 
 .speech-pop {
@@ -422,13 +486,24 @@ html, body {
 }
 
 .chef-svg {
-  animation: chefIdle 1.3s steps(4) infinite;
+  animation: chefIdle 1.4s steps(4) infinite;
   transform-origin: bottom center;
 }
 
 @keyframes chefIdle {
   0%, 100% { transform: scale(1, 1); }
   50% { transform: scale(1.03, 0.96) translateY(2px); }
+}
+
+/* Rolling pin gentle sway */
+#chef-rolling-pin {
+  transform-origin: 124px 85px;
+  animation: pinSway 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes pinSway {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(10deg); }
 }
 
 /* Pie Canvas Stage */
@@ -438,7 +513,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 70px;
+  margin-left: 60px;
 }
 
 #pie-canvas {
@@ -452,6 +527,7 @@ html, body {
   width: 100%;
   display: flex;
   justify-content: center;
+  margin-top: 2px;
 }
 
 .flavor-ribbon {
@@ -460,10 +536,16 @@ html, body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  max-width: 95%;
-  max-height: 56px;
-  overflow-y: auto;
+  max-width: 98%;
+  max-height: 64px;
+  overflow-y: hidden;
+  overflow-x: auto;
   padding: 2px;
+  scrollbar-width: none;
+}
+
+.flavor-ribbon::-webkit-scrollbar {
+  display: none;
 }
 
 .flavor-pill {
@@ -471,26 +553,36 @@ html, body {
   align-items: center;
   gap: 6px;
   background: #ffffff;
-  border: 2px solid var(--ink-black);
-  border-radius: 14px;
-  padding: 3px 10px;
-  box-shadow: 0 2px 6px rgba(28, 19, 13, 0.08);
+  border: 2.5px solid var(--ink-black);
+  border-radius: 16px;
+  padding: 4px 12px;
+  box-shadow: 0 3px 0 var(--ink-black);
   cursor: pointer;
   font-family: var(--font-comic);
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   color: var(--ink-black);
-  transition: transform 0.12s ease, background-color 0.12s ease;
+  min-height: 34px;
+  transition-property: transform, background-color, box-shadow;
+  transition-duration: 120ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .flavor-pill:hover {
   background-color: #fff9e6;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 var(--ink-black);
+}
+
+.flavor-pill:active {
+  transform: translateY(2px) scale(0.97);
+  box-shadow: 0 1px 0 var(--ink-black);
 }
 
 .flavor-pill.active {
-  background-color: #fff2a8;
-  border-width: 2.5px;
-  transform: scale(1.04);
+  background-color: #ffeaa7;
+  border-color: var(--ink-black);
+  box-shadow: 0 3px 0 var(--ink-black);
+  font-weight: 700;
 }
 
 .flavor-dot {
@@ -506,17 +598,28 @@ html, body {
 }
 
 .flavor-stat {
-  color: #6d4c41;
-  font-size: 0.78rem;
+  color: #5d4037;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
 }
 
 .stage-footer-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   font-family: var(--font-hand);
   font-size: 0.95rem;
-  color: #ffeaa7;
+  color: #ffffff;
   text-shadow: 1px 1px 0 #1c130d;
   text-align: center;
-  margin-top: 4px;
+  margin-top: 3px;
+  text-wrap: pretty;
+}
+
+.hint-hand-svg {
+  color: var(--cartoon-yellow);
+  flex-shrink: 0;
 }
 
 /* Right Column: Authentic 1930s Diner Guest Check */
@@ -533,11 +636,11 @@ html, body {
   background-color: var(--diner-check-bg);
   border: 3.5px solid var(--ink-black);
   border-radius: 16px;
-  padding: 14px 18px;
+  padding: 12px 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 8px 24px rgba(28, 19, 13, 0.15);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
   position: relative;
   overflow: hidden;
 }
@@ -548,66 +651,72 @@ html, body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 4px;
-  border-top: 3px dotted #b2bec3;
+  height: 6px;
+  border-top: 4px dotted #8395a7;
 }
 
 .check-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px dashed #b2bec3;
-  padding-bottom: 6px;
+  border-bottom: 2px dashed #8395a7;
+  padding-bottom: 5px;
   margin-top: 4px;
 }
 
 .check-stamp-red {
   font-family: var(--font-title);
   font-size: 1.25rem;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: var(--stamp-red);
+  border: 2px solid var(--stamp-red);
+  padding: 1px 8px;
+  border-radius: 6px;
   transform: rotate(-2deg);
 }
 
 .check-table-stamp {
   font-family: var(--font-typewriter);
-  font-size: 0.9rem;
-  color: #636e72;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #374151;
 }
 
 .check-recipe-title {
   font-family: var(--font-title);
-  font-size: 1.7rem;
+  font-size: 1.65rem;
   letter-spacing: 0.04em;
   color: var(--ink-black);
   text-align: center;
-  line-height: 1.2;
-  margin-top: 6px;
+  line-height: 1.15;
+  margin-top: 5px;
+  text-wrap: balance;
 }
 
 .check-recipe-flavor {
   font-family: var(--font-hand);
   font-size: 0.95rem;
-  line-height: 1.45;
-  color: #6d4c41;
+  line-height: 1.35;
+  color: #5d4037;
   text-align: center;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
+  text-wrap: pretty;
 }
 
-/* Stamped Stats Row (Ledger Table, Zero Nested Cards!) */
+/* Stamped Stats Row (Ledger Columns, Zero Nested Cards!) */
 .check-stamp-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0;
-  border-top: 1px dashed #b2bec3;
-  border-bottom: 1px dashed #b2bec3;
+  border-top: 1.5px dashed #8395a7;
+  border-bottom: 1.5px dashed #8395a7;
   padding: 6px 0;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .stamp-box {
   background: transparent;
-  padding: 4px 6px;
+  padding: 2px 4px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -616,7 +725,7 @@ html, body {
 }
 
 .stamp-box:not(:last-child) {
-  border-right: 1px dashed #dcdde1;
+  border-right: 1.5px dashed #b2bec3;
 }
 
 .stamp-box.red .stamp-val { color: var(--stamp-red); }
@@ -628,13 +737,14 @@ html, body {
   font-size: 1.35rem;
   line-height: 1.1;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .stamp-label {
   font-family: var(--font-title);
   font-size: 0.72rem;
   letter-spacing: 0.04em;
-  color: #795548;
+  color: #5d4037;
   margin-top: 2px;
 }
 
@@ -651,46 +761,58 @@ html, body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 6px 10px;
+  padding: 6px 12px;
   background: #ffffff;
-  border: 2px solid var(--ink-black);
+  border: 2.5px solid var(--ink-black);
   border-radius: 12px;
   font-family: var(--font-title);
-  font-size: 0.98rem;
+  font-size: 1rem;
   letter-spacing: 0.04em;
   color: var(--ink-black);
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(28, 19, 13, 0.08);
-  transition: transform 0.12s ease, background-color 0.12s ease;
+  min-height: 40px;
+  box-shadow: 0 3px 0 var(--ink-black);
+  transition-property: transform, background-color, box-shadow;
+  transition-duration: 120ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .diner-btn:hover {
   background-color: #fff9e6;
   transform: translateY(-1px);
+  box-shadow: 0 4px 0 var(--ink-black);
 }
 
 .diner-btn:active {
-  transform: translateY(1px);
+  transform: translateY(2px) scale(0.97);
+  box-shadow: 0 1px 0 var(--ink-black);
 }
 
 /* Baker's Handwritten Note */
 .baker-handwritten-note {
   position: relative;
   background: transparent;
-  padding: 4px 6px;
-  margin-bottom: 6px;
+  padding: 2px 4px;
+  margin-bottom: 4px;
   font-family: var(--font-hand);
-  font-size: 0.95rem;
-  line-height: 1.45;
-  color: #4a2c1d;
+  font-size: 0.92rem;
+  line-height: 1.35;
+  color: #3e2723;
   font-style: italic;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.baker-handwritten-note p {
+  text-wrap: pretty;
 }
 
 .note-quote {
   font-family: var(--font-title);
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   color: var(--cartoon-red);
-  margin-right: 4px;
+  line-height: 1;
 }
 
 /* Line Items (Ingredients / Files) */
@@ -699,22 +821,22 @@ html, body {
   display: flex;
   flex-direction: column;
   min-height: 0;
-  border-top: 2px dashed #b2bec3;
-  padding-top: 6px;
+  border-top: 2px dashed #8395a7;
+  padding-top: 5px;
 }
 
 .check-search-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 .check-section-title {
   font-family: var(--font-title);
   font-size: 0.85rem;
   letter-spacing: 0.8px;
-  color: #5d4037;
+  color: #4e342e;
 }
 
 .check-search-box {
@@ -722,7 +844,7 @@ html, body {
   align-items: center;
   gap: 4px;
   background: #ffffff;
-  border: 1.5px solid var(--ink-black);
+  border: 2px solid var(--ink-black);
   border-radius: 12px;
   padding: 2px 8px;
 }
@@ -734,7 +856,7 @@ html, body {
   color: var(--ink-black);
   font-family: var(--font-typewriter);
   font-size: 0.82rem;
-  width: 90px;
+  width: 95px;
 }
 
 .receipt-items-list {
@@ -745,7 +867,7 @@ html, body {
 }
 
 .receipt-items-list::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 .receipt-items-list::-webkit-scrollbar-thumb {
   background: #d4b996;
@@ -756,8 +878,8 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 6px;
-  border-bottom: 1px dotted #dcdde1;
+  padding: 3px 4px;
+  border-bottom: 1px dotted #b2bec3;
   font-family: var(--font-typewriter);
   font-size: 0.82rem;
   color: var(--ink-black);
@@ -775,16 +897,16 @@ html, body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 180px;
+  max-width: 185px;
 }
 
 .file-dir {
-  font-size: 0.7rem;
-  color: #795548;
+  font-size: 0.72rem;
+  color: #4e342e;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 180px;
+  max-width: 185px;
 }
 
 .file-loc {
@@ -792,28 +914,30 @@ html, body {
   font-weight: 700;
   flex-shrink: 0;
   margin-left: 8px;
+  font-variant-numeric: tabular-nums;
 }
 
 .empty-hint {
   text-align: center;
-  color: #795548;
+  color: #5d4037;
   font-style: italic;
-  padding: 16px 8px;
+  padding: 14px 6px;
 }
 
 .check-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 2px dashed #b2bec3;
-  padding-top: 6px;
-  margin-top: 4px;
+  border-top: 2px dashed #8395a7;
+  padding-top: 5px;
+  margin-top: 3px;
 }
 
 .check-repo-tag {
   font-family: var(--font-typewriter);
-  font-size: 0.72rem;
-  color: #636e72;
+  font-size: 0.74rem;
+  color: #374151;
+  font-weight: 700;
 }
 
 .check-paid-stamp {
@@ -821,13 +945,16 @@ html, body {
   font-size: 0.95rem;
   letter-spacing: 1px;
   color: var(--stamp-red);
+  border: 1.5px solid var(--stamp-red);
+  padding: 1px 6px;
+  border-radius: 4px;
   transform: rotate(-3deg);
 }
 
-/* Bottom Stage Apron */
+/* Bottom Stage Bakery Order Counter (Brass & Mahogany Register) */
 .stage-footer {
   flex-shrink: 0;
-  margin-top: 4px;
+  margin-top: 3px;
 }
 
 .counter-console {
@@ -838,8 +965,8 @@ html, body {
   background: #ffffff;
   border: 3.5px solid var(--ink-black);
   border-radius: 18px;
-  padding: 6px 16px;
-  box-shadow: 0 4px 12px rgba(28, 19, 13, 0.1);
+  padding: 6px 18px;
+  box-shadow: 0 4px 0 var(--ink-black);
 }
 
 .counter-label {
@@ -848,6 +975,7 @@ html, body {
   letter-spacing: 0.8px;
   color: var(--ink-black);
   white-space: nowrap;
+  text-wrap: balance;
 }
 
 .counter-input-row {
@@ -860,14 +988,15 @@ html, body {
 
 #repo-input {
   flex: 1;
-  padding: 5px 14px;
+  padding: 6px 14px;
   background: #fdfbf7;
   border: 2px solid var(--ink-black);
   border-radius: 14px;
   font-family: var(--font-comic);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   color: var(--ink-black);
   outline: none;
+  min-height: 40px;
 }
 
 #repo-input:focus {
@@ -876,9 +1005,10 @@ html, body {
 
 .counter-stats {
   font-family: var(--font-comic);
-  font-size: 0.88rem;
-  color: #6d4c41;
+  font-size: 0.9rem;
+  color: #4e342e;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .stat-num {
@@ -900,7 +1030,7 @@ html, body {
   padding: 10px 32px;
   border: 5px solid var(--ink-black);
   border-radius: 28px;
-  box-shadow: 0 12px 32px rgba(28, 19, 13, 0.35);
+  box-shadow: 0 12px 32px rgba(28, 19, 13, 0.45);
   text-shadow: 2.5px 2.5px 0 var(--ink-black);
   pointer-events: none;
   z-index: 500;
@@ -924,7 +1054,7 @@ html, body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(28, 19, 13, 0.6);
+  background: rgba(28, 19, 13, 0.65);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -939,35 +1069,37 @@ html, body {
   background: #ffffff;
   border: 4px solid var(--ink-black);
   border-radius: 22px;
-  padding: 22px 32px;
-  box-shadow: 0 12px 32px rgba(28, 19, 13, 0.3);
+  padding: 24px 36px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
   text-align: center;
   max-width: 360px;
 }
 
 .stove-circle {
-  font-size: 3rem;
-  animation: potSpin 0.8s ease-in-out infinite alternate;
+  display: inline-block;
+  animation: potSpin 0.9s ease-in-out infinite alternate;
 }
 
 @keyframes potSpin {
-  0% { transform: rotate(-6deg); }
-  100% { transform: rotate(6deg); }
+  0% { transform: rotate(-8deg); }
+  100% { transform: rotate(8deg); }
 }
 
 .baking-title {
   font-family: var(--font-title);
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   letter-spacing: 1.5px;
   color: var(--cartoon-red);
-  margin-top: 8px;
+  margin-top: 10px;
+  text-wrap: balance;
 }
 
 .baking-desc {
   font-family: var(--font-hand);
   font-size: 1.05rem;
-  color: #6d4c41;
+  color: #5d4037;
   margin-top: 4px;
+  text-wrap: pretty;
 }
 
 /* Cartoon Toast Alert */
@@ -978,12 +1110,12 @@ html, body {
   transform: translateX(-50%);
   background: var(--cartoon-yellow);
   color: var(--ink-black);
-  border: 3px solid var(--ink-black);
+  border: 3.5px solid var(--ink-black);
   border-radius: 18px;
-  padding: 7px 22px;
+  padding: 8px 24px;
   font-family: var(--font-comic);
   font-size: 0.95rem;
-  box-shadow: 0 6px 16px rgba(28, 19, 13, 0.2);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
   z-index: 2000;
   animation: toastPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -995,4 +1127,43 @@ html, body {
 @keyframes toastPop {
   0% { transform: translate(-50%, 15px); opacity: 0; }
   100% { transform: translate(-50%, 0); opacity: 1; }
+}
+
+/* Motion Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .chef-svg,
+  #chef-rolling-pin,
+  .stove-circle {
+    animation: none !important;
+  }
+}
+
+/* Responsive Layout */
+@media (max-width: 1080px) {
+  html, body {
+    overflow-y: auto;
+  }
+  .theater-stage {
+    height: auto;
+    min-height: 100vh;
+  }
+  .stage-content {
+    flex-direction: column;
+  }
+  .pie-canvas-stage {
+    margin-left: 0;
+    min-height: 380px;
+  }
+  .chef-actor {
+    position: static;
+    margin-bottom: 10px;
+  }
+  .guest-check-panel {
+    min-height: 520px;
+  }
 }
