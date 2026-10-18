@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
 [![HTML5 Canvas](https://img.shields.io/badge/Canvas-Rubber--Hose%20Physics-f1c40f.svg)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
 [![Audio](https://img.shields.io/badge/WebAudio-Cartoon%20Ragtime-0984e3.svg)](#)
-[![GitHub Pages](https://img.shields.io/badge/Deployment-GitHub%20Pages-brightgreen.svg)](https://sadmandied.github.io/git-city-3d/)
+[![GitHub Pages](https://img.shields.io/badge/Deployment-GitHub%20Pages-brightgreen.svg)](https://sadmandied.github.io/git-pie/)
 
 > **Say goodbye to boring dark-mode boxes and futuristic neon clichés!**  
 > **GitPie** transforms any GitHub repository into a delicious, interactive 1930s rubber-hose cartoon pie parlor inspired by the indie hit **Cuphead** and vintage Fleischer Studios cartoons.
@@ -42,12 +42,12 @@
 ## 🚀 Quick Start
 
 ### 1. Explore Live on GitHub Pages
-👉 **[https://sadmandied.github.io/git-city-3d/](https://sadmandied.github.io/git-city-3d/)**
+👉 **[https://sadmandied.github.io/git-pie/](https://sadmandied.github.io/git-pie/)**
 
 ### 2. Run Locally
 ```bash
-git clone https://github.com/sadmandied/git-city-3d.git
-cd git-city-3d
+git clone https://github.com/sadmandied/git-pie.git
+cd git-pie
 python main.py
 ```
 *Opens automatically in your browser on `http://localhost:8080`.*
